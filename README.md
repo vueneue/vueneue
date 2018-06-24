@@ -14,9 +14,9 @@
 ## Planned plugins
 
 - @vueneue/pwa: Add PWA powers to your application
-- @vueneue/docker: Base files to run VueNeue app in Docker
 - @vueneue/a11y: Plugin to add accessibility tools
 - @vueneue/vueclass: Simple shortcut file to easly use Vue class components
+- @vueneue/critical: Add Critical CSS to your app
 
 ## Use starter preset
 
