@@ -11,12 +11,6 @@
   vue add @vueneue/ssr
   ```
 
-## Planned plugins
-
-- @vueneue/a11y: Plugin to add accessibility tools
-- @vueneue/vueclass: Simple shortcut file to easly use Vue class components
-- @vueneue/critical: Add Critical CSS to your app
-
 ## Use starter preset
 
 ```bash
