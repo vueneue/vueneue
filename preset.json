@@ -2,7 +2,9 @@
   "useConfigFiles": true,
   "plugins": {
     "@vue/cli-plugin-babel": {},
-    "@vueneue/vue-cli-plugin-ssr": {}
+    "@vueneue/vue-cli-plugin-ssr": {
+      "version": "^0.1.13"
+    }
   },
   "router": true,
   "vuex": true
