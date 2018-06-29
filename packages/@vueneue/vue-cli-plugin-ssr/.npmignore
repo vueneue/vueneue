@@ -1,0 +1,9 @@
+node_modules/
+docs/
+tests/
+.babelrc
+.eslintignore
+.eslintrc.js
+.editorconfig
+.prettierrc
+package-lock.json

@@ -1,0 +1,46 @@
+{
+  "name": "@vueneue/vue-cli-plugin-ssr",
+  "version": "0.1.13",
+  "description": "vue cli 3 plugin to build SSR (Server side rendered) applications",
+  "main": "index.js",
+  "types": "template/src/vueneue/types.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vueneue/vueneue.git"
+  },
+  "scripts": {
+    "lint": "eslint --ext .js,.vue --ignore-path .eslintignore .",
+    "lint:fix": "eslint --ext .js,.vue --fix --ignore-path .eslintignore .",
+    "format": "prettier --ignore-path .gitignore --write ./**/*.{js,vue}",
+    "prepublishOnly": "cd ui-addon && npm run lint --no-fix && npm run build -- --dest ../ui-addon-dist"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "cli",
+    "plugin",
+    "ssr",
+    "vueneue"
+  ],
+  "author": "Simon Babay <simon@babay.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vueneue/vueneue/issues"
+  },
+  "homepage": "https://github.com/vueneue/vueneue#readme",
+  "devDependencies": {
+    "@vue/cli-service": "^3.0.0-rc.3",
+    "@vue/eslint-config-prettier": "^3.0.0-rc.3",
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-vue": "^4.5.0",
+    "prettier": "^1.13.5",
+    "vue-eslint-parser": "^2.0.3"
+  },
+  "dependencies": {
+    "fs-extra": "^6.0.1",
+    "portfinder": "^1.0.13"
+  }
+}
