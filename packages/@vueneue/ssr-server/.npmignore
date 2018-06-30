@@ -1,6 +1,5 @@
 node_modules/
 .babelrc
-.eslintignore
 .eslintrc.js
 .editorconfig
 .prettierrc

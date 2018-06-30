@@ -1,7 +1,7 @@
 {
-  "scripts": {
-    "test": "node tests/e2e"
-  },
+	"scripts": {
+		"test": "node tests/e2e"
+	},
 	"devDependencies": {
 		"@vue/cli": "^3.0.0-rc.3",
 		"@vue/eslint-config-prettier": "^3.0.0-rc.3",

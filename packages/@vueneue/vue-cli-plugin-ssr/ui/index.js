@@ -13,7 +13,6 @@ module.exports = api => {
 
   let firstRun = true;
   let hadFailed = false;
-  let modernMode = false;
 
   function resetSharedData(key) {
     setSharedData(`${key}-status`, null);
@@ -37,19 +36,8 @@ module.exports = api => {
           const value = await fs.readJson(statsFile);
           setSharedData(`${type}-${data.type}`, value);
           await fs.remove(statsFile);
-        } else if (
-          type.indexOf('ssr-build') !== -1 &&
-          modernMode &&
-          data.type === 'progress'
-        ) {
-          // Progress is shared between 'build' and 'build-modern'
-          // 'build' first and then 'build-modern'
-          const value =
-            type === 'ssr-build' ? data.value / 2 : (data.value + 1) / 2;
-          // We display the same progress bar for both
-          for (const t of ['ssr-build']) {
-            setSharedData(`${t}-${data.type}`, value);
-          }
+        } else if (data.type === 'progress') {
+          setSharedData(`${type}-${data.type}`, data.value);
         } else {
           setSharedData(`${type}-${data.type}`, data.value);
 

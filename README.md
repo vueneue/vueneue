@@ -14,6 +14,34 @@
 - `@vueneue/vue-cli-plugin-ssr`: Vue CLI plugin to quick start a SSR application
 - `@vueneue/ssr-server`: Koa server used by SSR plugin to render pages
 
+## Quick start
+
+**Install**
+
+```bash
+vue add @vueneue/ssr
+```
+
+This plugins add 3 commands to run or build your application in SSR mode:
+
+**Start a development server with HMR**
+
+```bash
+npm run ssr:serve
+```
+
+**Build for production**
+
+```bash
+npm run ssr:build
+```
+
+**Start in production mode** (need a `npm run ssr:build` before)
+
+```bash
+npm run ssr:start
+```
+
 ## License
 
 **MIT**: see LICENSE file
