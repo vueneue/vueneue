@@ -34,7 +34,7 @@ const run = require('./scripts/run');
   await copyPackages(projectPath);
 
   // Run server and start cypress
-  await run(projectPath);
+  await run(projectPath, 'run');
 })().catch(err => {
   console.error(err.stack || err.message || err);
 });

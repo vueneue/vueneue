@@ -5,7 +5,7 @@
 </p>
 
 ![npm (scoped)](https://img.shields.io/npm/v/@vueneue/vue-cli-plugin-ssr.svg?style=flat-square)
-![Travis](https://img.shields.io/travis/vueneue/ssr.svg?style=flat-square)
+![Travis](https://img.shields.io/travis/vueneue/vueneue.svg?style=flat-square)
 
 ## Documentation
 
