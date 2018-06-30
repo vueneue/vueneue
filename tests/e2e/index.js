@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+const argv = require('yargs').argv;
 const fs = require('fs-extra');
 const { join } = require('path');
 const createProject = require('./scripts/createProject');
@@ -10,7 +12,7 @@ const run = require('./scripts/run');
   const projectPath = join(__dirname, `../../${projectName}`);
 
   // vue create
-  if (process.argv[2] !== 'quick') {
+  if (!argv.quick) {
     await createProject(
       projectName,
       {
@@ -33,8 +35,13 @@ const run = require('./scripts/run');
   // Use current sources to tests project
   await copyPackages(projectPath);
 
+  if (argv.quick && argv.invoke) {
+    // vue invoke
+    await invoke(projectPath);
+  }
+
   // Run server and start cypress
-  await run(projectPath, 'run');
+  await run(projectPath, argv.open ? 'open' : 'run');
 })().catch(err => {
   console.error(err.stack || err.message || err);
 });
