@@ -1,0 +1,80 @@
+import Vue from 'vue';
+import { resolveComponentsAsyncData } from '../utils/asyncData';
+import { handleMiddlewares } from '../utils/middlewares';
+import errorHandler from '../utils/errorHandler';
+
+/**
+ * Start application
+ */
+export default async context => {
+  const { app, router, store, ctx, url, ssr } = context;
+
+  /**
+   * Define redirect function
+   */
+  context.redirect = location => {
+    const routerResult = router.resolve(location, router.currentRoute);
+    if (routerResult) {
+      ctx.redirect(routerResult.href);
+    } else {
+      ctx.redirect(location);
+    }
+    ssr.redirected = true;
+  };
+
+  Vue.prototype.$redirect = context.redirect;
+
+  return new Promise((resolve, reject) => {
+    // Attach meta for SSR
+    if (app.$meta) ssr.meta = app.$meta();
+
+    // Http asyncData
+    ssr.asyncData = {};
+
+    // Send router for SSR/Pre-rendering
+    ssr.router = router;
+
+    // Send url to router
+    router.push(url);
+
+    router.onReady(async () => {
+      try {
+        // Middlewares
+        await handleMiddlewares(router.currentRoute, context);
+
+        // Store init function
+        await context.store.dispatch('onHttpRequest', {
+          ...context,
+          route: context.router.currentRoute,
+          params: context.router.currentRoute.params,
+          query: context.router.currentRoute.query,
+        });
+
+        if (router.currentRoute.name === 'pageNotFound') {
+          const error = new Error('Page not found');
+          error.statusCode = 404;
+          throw error;
+        }
+
+        const data = await resolveComponentsAsyncData(
+          router.currentRoute,
+          router.getMatchedComponents(),
+          context,
+        );
+
+        ssr.asyncData = data;
+        ssr.state = store.state;
+        resolve(app);
+      } catch (error) {
+        errorHandler(context, {
+          error: error.stack || error.message || error,
+          statusCode: error.statusCode || 500,
+        });
+
+        ssr.asyncData = [];
+        ssr.state = store.state;
+        resolve(app);
+      }
+    }, reject);
+  });
+};

@@ -1,0 +1,44 @@
+{
+  "name": "@vueneue/ssr-server",
+  "version": "0.2.0",
+  "description": "VueNeue SSR server with Koa",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint 'lib/**/*.js'",
+    "format": "prettier --ignore-path .gitignore --write './**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vueneue/vueneue.git"
+  },
+  "keywords": [
+    "vueneue",
+    "ssr",
+    "server"
+  ],
+  "author": "Simon Babay <simon@babay.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vueneue/vueneue/issues"
+  },
+  "homepage": "https://github.com/vueneue/vueneue#readme",
+  "dependencies": {
+    "fast-safe-stringify": "^2.0.4",
+    "fs-extra": "^6.0.1",
+    "koa": "^2.5.1",
+    "koa-mount": "^3.0.0",
+    "koa-static": "^5.0.0",
+    "koa-webpack": "^5.0.2",
+    "lru-cache": "^4.1.3",
+    "memory-fs": "^0.4.1",
+    "vue-server-renderer": "^2.5.16",
+    "webpack": "^4.12.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.5",
+    "eslint": "^5.0.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.1",
+    "prettier": "^1.13.6"
+  }
+}
