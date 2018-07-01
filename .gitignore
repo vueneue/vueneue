@@ -1,3 +1,4 @@
 node_modules/
-tests-project/
 lerna-debug.log
+packages/dev
+packages/tests

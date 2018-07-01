@@ -14,8 +14,7 @@ module.exports = async projectPath => {
 
   // Update project package
   const projectPackage = require(`${projectPath}/package.json`);
-  projectPackage.dependencies['@vueneue/ssr-server'] = '^0.1.0';
-  projectPackage.dependencies['@vueneue/vue-cli-plugin-ssr'] = '^0.1.0';
+  projectPackage.dependencies['@vueneue/vue-cli-plugin-ssr'] = '^0.2.0';
   await fs.writeFile(
     `${projectPath}/package.json`,
     JSON.stringify(projectPackage, null, 2),

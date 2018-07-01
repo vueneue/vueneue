@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+const execa = require('execa');
+const argv = require('yargs').argv;
+
+(async () => {
+  const projectName = argv.tests ? 'tests' : 'dev';
+
+  // Create project
+  await execa(
+    '../node_modules/.bin/vue',
+    [
+      'create',
+      '--inlinePreset',
+      JSON.stringify({
+        plugins: {
+          '@vue/cli-plugin-babel': {},
+        },
+      }),
+      '--force',
+      '--git',
+      'false',
+      argv.tests ? 'tests' : 'dev',
+    ],
+    {
+      cwd: 'packages',
+      stdio: 'inherit',
+    },
+  );
+
+  // Add VueNeue plugin
+  await execa('../../node_modules/.bin/vue', ['add', '@vueneue/ssr'], {
+    cwd: `packages/${projectName}`,
+    stdio: 'inherit',
+  });
+})();
