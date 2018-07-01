@@ -7,12 +7,12 @@ const invoke = require('./scripts/invoke');
 const run = require('./scripts/run');
 
 (async () => {
-  const projectName = 'dev';
+  const projectName = 'tests';
   const projectPath = join(__dirname, `../../packages/${projectName}`);
 
   // vue create
   if (!argv.quick) {
-    await execa(join(__dirname, '../../dev.sh'), {
+    await execa(join(__dirname, '../../init'), ['--tests'], {
       stdio: 'inherit',
     });
   }
