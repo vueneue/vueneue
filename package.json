@@ -4,8 +4,8 @@
     "packages/@vueneue/*"
   ],
   "scripts": {
-    "test": "tests/e2e/index.js",
-    "test:dev": "tests/e2e/index.js --quick --open"
+    "test": "tests/run",
+    "test:dev": "tests/run --quick --open"
   },
   "devDependencies": {
     "@vue/cli": "^3.0.0-rc.3",

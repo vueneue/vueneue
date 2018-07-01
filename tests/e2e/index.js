@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 const argv = require('yargs').argv;
 const fs = require('fs-extra');
 const { join } = require('path');
@@ -8,13 +7,13 @@ const invoke = require('./scripts/invoke');
 const run = require('./scripts/run');
 
 (async () => {
-  const projectName = 'tests-project';
-  const projectPath = join(__dirname, `../../${projectName}`);
+  const projectName = 'project';
+  const projectPath = join(__dirname, `../${projectName}`);
 
   // vue create
   if (!argv.quick) {
     await createProject(
-      projectName,
+      projectPath,
       {
         plugins: {
           '@vue/cli-plugin-babel': {},
@@ -30,7 +29,7 @@ const run = require('./scripts/run');
   // ---/---
 
   // Copy mocks
-  await fs.copy('tests/e2e/mocks', 'tests-project');
+  await fs.copy('tests/e2e/mocks', 'tests/project');
 
   // Use current sources to tests project
   await copyPackages(projectPath);

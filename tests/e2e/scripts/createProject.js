@@ -1,11 +1,12 @@
+const path = require('path');
 const execa = require('execa');
 
-module.exports = async (name, preset, cwd) => {
+module.exports = async (projectPath, preset) => {
   const cliBinPath = require.resolve('@vue/cli/bin/vue');
 
   const args = [
     'create',
-    name,
+    path.basename(projectPath),
     '--force',
     '--inlinePreset',
     JSON.stringify(preset),
@@ -13,5 +14,8 @@ module.exports = async (name, preset, cwd) => {
     'false',
   ];
 
-  return execa(cliBinPath, args, { cwd, stdio: 'inherit' });
+  return execa(cliBinPath, args, {
+    cwd: path.dirname(projectPath),
+    stdio: 'inherit',
+  });
 };
