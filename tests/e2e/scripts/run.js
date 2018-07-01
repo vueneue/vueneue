@@ -16,9 +16,13 @@ module.exports = async (projectPath, mode = 'open') => {
     timeout: 60 * 1000,
   });
 
-  const cypress = execa('node_modules/.bin/cypress', [mode], {
-    stdio: 'inherit',
-  });
+  const cypress = execa(
+    'node_modules/.bin/cypress',
+    ['--config', 'video=false', mode],
+    {
+      stdio: 'inherit',
+    },
+  );
 
   cypress.on('exit', exitCode => {
     serve.kill();
