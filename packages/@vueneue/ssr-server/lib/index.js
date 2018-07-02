@@ -8,7 +8,7 @@ const createRenderer = require('./createRenderer');
 const renderRoute = require('./renderRoute');
 
 module.exports = async opts => {
-  const { dist, host, port, ssr, https } = opts;
+  const { dist, host, port, ssr } = opts;
 
   const app = new Koa();
   const isProduction = process.env.NODE_ENV === 'production';
@@ -70,6 +70,8 @@ module.exports = async opts => {
   });
 
   let httpServer;
+
+  const { https } = ssr;
   if (https && https.key && https.cert) {
     httpServer = require('https').createServer(https, app.callback());
   } else {
