@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint 'lib/**/*.js'",
+    "lint:fix": "eslint --fix 'lib/**/*.js'",
     "format": "prettier --ignore-path .gitignore --write './**/*.js'"
   },
   "repository": {

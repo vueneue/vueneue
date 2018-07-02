@@ -61,13 +61,10 @@ module.exports = (api, options) => {
       }
 
       await startServer({
-        api,
         host,
         port,
-        ssr: {
-          directives: api.resolve('ssr/directives.js'),
-          server: api.resolve('ssr/server.js'),
-        },
+        dist: api.resolve(options.outputDir),
+        ssr: options.pluginOptions ? options.pluginOptions.ssr : undefined,
         configs: {
           client: clientConfig,
           server: serverConfig,

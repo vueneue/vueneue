@@ -1,4 +1,4 @@
-module.exports = api => {
+module.exports = (api, options) => {
   const packageOverride = {
     dependencies: {
       vuex: '^3.0.1',
@@ -24,6 +24,10 @@ module.exports = api => {
   api.extendPackage(packageOverride);
 
   api.render('./template');
+
+  if (options.docker) {
+    require('./docker')(api, options);
+  }
 
   // TypeScript support
   if (api.invoking && api.hasPlugin('typescript')) {

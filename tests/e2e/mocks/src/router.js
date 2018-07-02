@@ -1,6 +1,9 @@
-import { asyncTest } from './utils';
-
+import Vue from 'vue';
 import Router from 'vue-router';
+import { asyncTest } from './utils';
+import IsMounted from './components/IsMounted';
+
+Vue.component('is-mounted', IsMounted);
 
 export default () => {
   return new Router({
@@ -9,6 +12,10 @@ export default () => {
       {
         path: '/',
         component: () => import('./components/Home'),
+      },
+      {
+        path: '/on-http-request-error',
+        component: () => import('./components/OnHttpRequestError'),
       },
       {
         path: '/async-data',

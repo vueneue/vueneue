@@ -6,6 +6,7 @@
     >
       action
     </button>
+    <is-mounted/>
   </div>
 </template>
 

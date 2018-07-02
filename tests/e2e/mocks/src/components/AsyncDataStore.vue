@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="value">{{ $store.state.value }}</div>
+    <is-mounted/>
   </div>
 </template>
 
