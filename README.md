@@ -4,8 +4,8 @@
   <strong>A new start to build SSR (Server-side rendered) applications with Vue CLI 3.x</strong>
 </p>
 
-![npm (scoped)](https://img.shields.io/npm/v/@vueneue/vue-cli-plugin-ssr.svg?style=flat-square)
-[![Travis](https://img.shields.io/travis/vueneue/vueneue.svg)](https://travis-ci.org/vueneue/vueneue)
+[![npm (scoped)](https://img.shields.io/npm/v/@vueneue/vue-cli-plugin-ssr.svg?style=flat-square)](https://www.npmjs.com/package/@vueneue/vue-cli-plugin-ssr)
+[![Travis](https://img.shields.io/travis/vueneue/vueneue.svg?style=flat-square)](https://travis-ci.org/vueneue/vueneue)
 
 ## Documentation
 

@@ -69,10 +69,19 @@ module.exports = async opts => {
     }
   });
 
-  const instance = app.listen(port, host, () => {
+  let httpServer;
+
+  const { https } = ssr || {};
+  if (https && https.key && https.cert) {
+    httpServer = require('https').createServer(https, app.callback());
+  } else {
+    httpServer = require('http').createServer(app.callback());
+  }
+
+  httpServer.listen(port, host, () => {
     // eslint-disable-next-line
     console.log(`Server started at http://${host}:${port}`);
   });
 
-  return instance;
+  return httpServer;
 };

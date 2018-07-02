@@ -18,7 +18,13 @@ describe('SSR', () => {
   });
 
   it('Display onHttpRequest data correctly', () => {
+    cy.contains('#mounted', 'true');
     cy.contains('#value', valueToCheck);
+  });
+
+  it('Can display error with onHttpRequest action', () => {
+    cy.visit('/on-http-request-error', { failOnStatusCode: false });
+    cy.contains('h1', 'Error 500');
   });
 
   it('Call asyncData() and inject to component', () => {
@@ -31,6 +37,7 @@ describe('SSR', () => {
   });
 
   it('Display asyncData() data correctly', () => {
+    cy.contains('#mounted', 'true');
     cy.contains('#value', valueToCheck);
   });
 
@@ -44,6 +51,7 @@ describe('SSR', () => {
   });
 
   it('Display asyncData() store data correctly', () => {
+    cy.contains('#mounted', 'true');
     cy.contains('#value', valueToCheck);
   });
 
@@ -86,6 +94,7 @@ describe('SSR', () => {
   });
 
   it('Display global middlewares data correctly', () => {
+    cy.contains('#mounted', 'true');
     cy.contains('#value', valueToCheck);
   });
 
@@ -99,6 +108,7 @@ describe('SSR', () => {
   });
 
   it('Display route middlewares data correctly', () => {
+    cy.contains('#mounted', 'true');
     cy.contains('#value', valueToCheck);
   });
 
@@ -132,11 +142,22 @@ describe('SSR', () => {
     });
   });
 
+  it('Nested routes with correct data displayed', () => {
+    cy.contains('#mounted', 'true');
+    cy.contains('#parent-value', 'parent');
+    cy.contains('#value', 'child');
+  });
+
   it('Nested routes middlewares', () => {
     readSSRData(cy).then(data => {
       const { state } = data;
       expect(state.parent).to.be.equal('parent');
       expect(state.middleware).to.be.equal('child');
     });
+  });
+
+  it('Nested routes with correct data displayed from middlewares', () => {
+    cy.contains('#parent', 'parent');
+    cy.contains('#middleware', 'child');
   });
 });

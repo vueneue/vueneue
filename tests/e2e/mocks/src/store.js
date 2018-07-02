@@ -25,7 +25,10 @@ export default () => {
     },
 
     actions: {
-      async onHttpRequest({ commit }) {
+      async onHttpRequest({ commit }, { url }) {
+        if (url === '/on-http-request-error') {
+          throw new Error('onHttpREquest error');
+        }
         commit('setHttpRequest', 'onHttpRequest');
       },
     },

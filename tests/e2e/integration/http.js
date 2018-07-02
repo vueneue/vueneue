@@ -16,6 +16,15 @@ describe('HTTP status codes', () => {
     });
   });
 
+  it('500 on onHttpRequest error', () => {
+    cy.request({
+      url: '/on-http-request-error',
+      failOnStatusCode: false,
+    }).then(response => {
+      expect(response.status).to.be.equal(500);
+    });
+  });
+
   it('500 on asyncData error', () => {
     cy.request({
       url: '/async-data-error',

@@ -4,6 +4,7 @@
     <div id="parent-value">{{ value }}</div>
     <div id="parent">{{ $store.state.parent }}</div>
     <router-view/>
+    <is-mounted/>
   </div>
 </template>
 
