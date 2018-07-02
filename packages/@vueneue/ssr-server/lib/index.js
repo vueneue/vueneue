@@ -71,7 +71,7 @@ module.exports = async opts => {
 
   let httpServer;
 
-  const { https } = ssr;
+  const { https } = ssr || {};
   if (https && https.key && https.cert) {
     httpServer = require('https').createServer(https, app.callback());
   } else {
