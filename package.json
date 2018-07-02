@@ -5,9 +5,11 @@
     "packages/dev"
   ],
   "scripts": {
+    "init": "./init && ./init --tests",
     "test": "tests/run",
     "test:dev": "tests/run --quick --open",
     "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix",
     "format": "lerna run format"
   },
   "devDependencies": {
