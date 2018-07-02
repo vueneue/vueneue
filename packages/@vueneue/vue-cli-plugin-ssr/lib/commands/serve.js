@@ -64,10 +64,7 @@ module.exports = (api, options) => {
         host,
         port,
         dist: api.resolve(options.outputDir),
-        ssr: {
-          directives: api.resolve('ssr/directives.js'),
-          server: api.resolve('ssr/server.js'),
-        },
+        ssr: options.pluginOptions.ssr || {},
         configs: {
           client: clientConfig,
           server: serverConfig,
