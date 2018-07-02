@@ -6,7 +6,9 @@
   ],
   "scripts": {
     "test": "tests/run",
-    "test:dev": "tests/run --quick --open"
+    "test:dev": "tests/run --quick --open",
+    "lint": "lerna run lint",
+    "format": "lerna run format"
   },
   "devDependencies": {
     "@vue/cli": "^3.0.0-rc.3",
