@@ -15,7 +15,6 @@ ENV NODE_ENV production
 
 RUN yarn ssr:build && \
   yarn --production && \
-  yarn add @vue/cli-service && \
   yarn cache clean
 
 #######################################################
@@ -32,4 +31,4 @@ RUN chown -R node:node /home/node/app
 USER node
 WORKDIR /home/node/app
 
-CMD ["./node_modules/.bin/vue-cli-service", "ssr:start"]
+CMD ["node", "./start.js"]
