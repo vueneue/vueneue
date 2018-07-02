@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="value">{{ value }}</div>
+    <is-mounted/>
   </div>
 </template>
 
