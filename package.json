@@ -2,7 +2,8 @@
   "private": true,
   "workspaces": [
     "packages/@vueneue/*",
-    "packages/dev"
+    "packages/dev",
+    "packages/tests"
   ],
   "scripts": {
     "test": "tests/run --prod",

@@ -23,7 +23,7 @@ const run = require('./scripts/run');
   await fs.copy('tests/e2e/mocks', projectPath);
 
   // Use current sources to tests project
-  await copyPackages(projectPath);
+  // await copyPackages(projectPath); // Managed with Yarn
 
   if (argv.quick && argv.invoke) {
     // vue invoke
