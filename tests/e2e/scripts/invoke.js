@@ -23,7 +23,7 @@ module.exports = async projectPath => {
   // Invoke cli plugin
   await execa(
     'node_modules/@vue/cli/bin/vue.js',
-    ['invoke', '@vueneue/vue-cli-plugin-ssr'],
+    ['invoke', '@vueneue/vue-cli-plugin-ssr', '--docker', '0'],
     {
       cwd: projectPath,
       stdio: 'inherit',

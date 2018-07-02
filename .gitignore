@@ -2,3 +2,4 @@ node_modules/
 lerna-debug.log
 packages/dev
 packages/tests
+yarn-error.log

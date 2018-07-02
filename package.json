@@ -5,7 +5,6 @@
     "packages/dev"
   ],
   "scripts": {
-    "init": "./init && ./init --tests",
     "test": "tests/run",
     "test:dev": "tests/run --quick --open",
     "lint": "lerna run lint",
