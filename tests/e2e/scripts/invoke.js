@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const execa = require('execa');
 const copyPackages = require('./copyPackages');
+const invokeArgs = require('../invokeArgs');
 
 module.exports = async projectPath => {
   // Copy Vue CLI
@@ -23,7 +24,7 @@ module.exports = async projectPath => {
   // Invoke cli plugin
   await execa(
     'node_modules/@vue/cli/bin/vue.js',
-    ['invoke', '@vueneue/vue-cli-plugin-ssr', '--docker', '0'],
+    ['invoke', '@vueneue/ssr', ...invokeArgs],
     {
       cwd: projectPath,
       stdio: 'inherit',

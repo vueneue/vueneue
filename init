@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const execa = require('execa');
 const argv = require('yargs').argv;
+const invokeArgs = require('./tests/invokeArgs');
 
 (async () => {
   const projectName = argv.tests ? 'tests' : 'dev';
@@ -28,8 +29,12 @@ const argv = require('yargs').argv;
   );
 
   // Add VueNeue plugin
-  await execa('../../node_modules/.bin/vue', ['add', '@vueneue/ssr'], {
-    cwd: `packages/${projectName}`,
-    stdio: 'inherit',
-  });
+  await execa(
+    '../../node_modules/.bin/vue',
+    ['add', '@vueneue/ssr', ...invokeArgs],
+    {
+      cwd: `packages/${projectName}`,
+      stdio: 'inherit',
+    },
+  );
 })();
