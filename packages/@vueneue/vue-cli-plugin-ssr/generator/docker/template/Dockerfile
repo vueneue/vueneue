@@ -15,6 +15,7 @@ ENV NODE_ENV production
 
 RUN yarn ssr:build && \
   yarn --production && \
+  yarn add core-js regenerator-runtime && \
   yarn cache clean
 
 #######################################################
