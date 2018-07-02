@@ -1,20 +1,19 @@
 
 FROM node:10 as builder
 
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 
 COPY package.json /home/node/app
-RUN yarn
+RUN yarn --production=false
 
 COPY . /home/node/app
 
-ENV NODE_ENV production
-
 RUN yarn ssr:build && \
   yarn --production && \
+  yarn add core-js regenerator-runtime && \
   yarn cache clean
 
 #######################################################
