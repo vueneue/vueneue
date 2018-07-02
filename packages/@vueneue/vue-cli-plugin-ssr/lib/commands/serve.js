@@ -61,9 +61,9 @@ module.exports = (api, options) => {
       }
 
       await startServer({
-        api,
         host,
         port,
+        dist: api.resolve(options.outputDir),
         ssr: {
           directives: api.resolve('ssr/directives.js'),
           server: api.resolve('ssr/server.js'),
