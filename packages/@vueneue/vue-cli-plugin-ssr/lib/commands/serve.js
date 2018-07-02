@@ -64,7 +64,7 @@ module.exports = (api, options) => {
         host,
         port,
         dist: api.resolve(options.outputDir),
-        ssr: options.pluginOptions.ssr || {},
+        ssr: options.pluginOptions ? options.pluginOptions.ssr : undefined,
         configs: {
           client: clientConfig,
           server: serverConfig,
