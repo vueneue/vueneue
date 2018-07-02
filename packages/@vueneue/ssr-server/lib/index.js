@@ -8,7 +8,7 @@ const createRenderer = require('./createRenderer');
 const renderRoute = require('./renderRoute');
 
 module.exports = async opts => {
-  const { dist, host, port, ssr } = opts;
+  const { dist, host, port, ssr, https } = opts;
 
   const app = new Koa();
   const isProduction = process.env.NODE_ENV === 'production';
@@ -69,10 +69,17 @@ module.exports = async opts => {
     }
   });
 
-  const instance = app.listen(port, host, () => {
+  let httpServer;
+  if (https && https.key && https.cert) {
+    httpServer = require('https').createServer(https, app.callback());
+  } else {
+    httpServer = require('http').createServer(app.callback());
+  }
+
+  httpServer.listen(port, host, () => {
     // eslint-disable-next-line
     console.log(`Server started at http://${host}:${port}`);
   });
 
-  return instance;
+  return httpServer;
 };

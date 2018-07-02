@@ -49,6 +49,7 @@ module.exports = (api, options) => {
         port,
         dist: api.resolve(options.outputDir),
         ssr: options.pluginOptions.ssr || {},
+        https: options.pluginOptions.https,
       });
     },
   );
