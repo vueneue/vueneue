@@ -45,9 +45,9 @@ module.exports = (api, options) => {
       const port = await portfinder.getPortPromise();
 
       startServer({
-        api,
         host,
         port,
+        dist: api.resolve(options.outputDir),
         ssr: {
           directives: api.resolve('ssr/directives.js'),
           server: api.resolve('ssr/server.js'),
