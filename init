@@ -4,7 +4,9 @@ const argv = require('yargs').argv;
 const invokeArgs = require('./tests/e2e/invokeArgs');
 
 (async () => {
-  const projectName = argv.tests ? 'tests' : 'dev';
+  let projectName = 'dev';
+  if (argv.tests) projectName = 'tests';
+  if (argv.base) projectName = 'base';
 
   // Create project
   await execa(
@@ -16,11 +18,13 @@ const invokeArgs = require('./tests/e2e/invokeArgs');
         plugins: {
           '@vue/cli-plugin-babel': {},
         },
+        router: true,
+        vuex: true,
       }),
       '--force',
       '--git',
       'false',
-      argv.tests ? 'tests' : 'dev',
+      projectName,
     ],
     {
       cwd: 'packages',
@@ -29,12 +33,14 @@ const invokeArgs = require('./tests/e2e/invokeArgs');
   );
 
   // Add VueNeue plugin
-  await execa(
-    '../../node_modules/.bin/vue',
-    ['add', '@vueneue/ssr', ...invokeArgs],
-    {
-      cwd: `packages/${projectName}`,
-      stdio: 'inherit',
-    },
-  );
+  if (!argv.base) {
+    await execa(
+      '../../node_modules/.bin/vue',
+      ['add', '@vueneue/ssr', ...invokeArgs],
+      {
+        cwd: `packages/${projectName}`,
+        stdio: 'inherit',
+      },
+    );
+  }
 })();
