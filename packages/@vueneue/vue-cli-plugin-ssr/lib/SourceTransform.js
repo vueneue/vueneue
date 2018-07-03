@@ -5,7 +5,7 @@ const babelParser = {
   parse: source =>
     babel.parse(source, {
       sourceType: 'module',
-      plugins: ['objectRestSpread'],
+      plugins: ['objectRestSpread', 'typescript'],
     }),
 };
 
