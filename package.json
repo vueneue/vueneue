@@ -8,6 +8,7 @@
   "scripts": {
     "test": "tests/run --prod",
     "test:dev": "tests/run --quick --open",
+    "test:cy": "cypress open",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
     "format": "lerna run format"
