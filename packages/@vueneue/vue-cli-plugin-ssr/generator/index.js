@@ -46,7 +46,7 @@ module.exports = (api, options) => {
     for (const file in files) {
       if (file.indexOf('src/router.') == 0) {
         // Router file
-        const fileContent = readFileSync(api.resolve(file));
+        const fileContent = files[file];
         const st = new SourceTranform(fileContent);
         st.removeImport('vue');
         st.removeVueUse('Router');
@@ -58,14 +58,14 @@ module.exports = (api, options) => {
         files[file] = st.print();
       } else if (file.indexOf('src/store.') == 0) {
         // Store file
-        const st = new SourceTranform(readFileSync(api.resolve(file)));
+        const st = new SourceTranform(files[file]);
         st.removeImport('vue');
         st.removeVueUse('Vuex');
         st.replaceExportNewToArrow('Store');
         files[file] = st.print();
       } else if (file.indexOf('src/main.') == 0) {
         // Main file
-        let fileContent = readFileSync(api.resolve(file), 'utf-8');
+        let fileContent = files[file];
 
         // initApp
         if (!/export\s(async\s)?function\sinitApp/.test(fileContent)) {
