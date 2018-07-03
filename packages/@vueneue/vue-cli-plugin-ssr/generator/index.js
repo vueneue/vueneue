@@ -72,6 +72,14 @@ module.exports = (api, options) => {
           fileContent += `\nexport async function initApp() {}`;
         }
 
+        // PWA plugin
+        if (api.hasPlugin('pwa')) {
+          fileContent = fileContent.replace(
+            `import './registerServiceWorker'`,
+            `if (process.client) require('./registerServiceWorker')`,
+          );
+        }
+
         // Remove mount
         fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
