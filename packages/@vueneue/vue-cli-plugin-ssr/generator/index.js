@@ -73,7 +73,7 @@ module.exports = (api, options) => {
         }
 
         // Remove mount
-        fileContent = fileContent.replace(/\.\$mount\([^\)]*\)/, '');
+        fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
         const st = new SourceTranform(fileContent);
         st.removeImport('./router');
