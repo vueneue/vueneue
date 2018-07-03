@@ -95,7 +95,8 @@ class SourceTransform {
         const parentNode = parentPath.node;
 
         if (
-          node.callee.name === className &&
+          (node.callee.name === className ||
+            node.callee.property.name === className) &&
           parentNode.type === 'ExportDefaultDeclaration'
         ) {
           const returnStatement = builder.returnStatement(node);
