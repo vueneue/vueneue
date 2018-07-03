@@ -1,22 +1,24 @@
 const recast = require('recast');
 const babel = require('@babel/parser');
 
+const babelParser = {
+  parse: source =>
+    babel.parse(source, {
+      sourceType: 'module',
+      plugins: ['objectRestSpread'],
+    }),
+};
+
 /**
  * Class to transform easly Vue base files (main.js, router.js, store.js)
  */
 class SourceTransform {
-  constructor(source) {
+  constructor(source, customParser = null) {
     this.source = source;
 
     // Use babel parser to support rest/spread
     this.ast = recast.parse(source, {
-      parser: {
-        parse: source =>
-          babel.parse(source, {
-            sourceType: 'module',
-            plugins: ['objectRestSpread'],
-          }),
-      },
+      parser: customParser || babelParser,
     });
   }
 
@@ -112,7 +114,7 @@ class SourceTransform {
    * @param {string} code
    * @param {int} index
    */
-  addtoNew(className, code, index = 0) {
+  addToNew(className, code, toEnd = false) {
     const toProperty = i => {
       return recast.parse(`({${i}})`).program.body[0].expression.properties;
     };
@@ -122,11 +124,11 @@ class SourceTransform {
           const options = node.arguments[0];
           if (options && options.type === 'ObjectExpression') {
             const props = options.properties;
-            options.properties = [
-              ...props.slice(0, props.length + index),
-              ...[].concat(toProperty(code)),
-              ...props.slice(props.length + index),
-            ];
+            if (!toEnd) {
+              options.properties = [...[].concat(toProperty(code)), ...props];
+            } else {
+              options.properties = [...props, ...[].concat(toProperty(code))];
+            }
           }
         }
         return false;
