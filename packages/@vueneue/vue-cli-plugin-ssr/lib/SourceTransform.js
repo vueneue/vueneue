@@ -137,6 +137,37 @@ class SourceTransform {
     });
   }
 
+  /**
+   * Relace new Vue() in main.js by an export function
+   */
+  replaceVueCreation() {
+    const builder = recast.types.builders;
+    const createFunction = recast.parse(`
+export function createApp({ router, store }) {
+  return;
+}
+`).program.body[0];
+
+    recast.types.visit(this.ast, {
+      visitNewExpression(nodePath) {
+        const { node } = nodePath;
+
+        const { parentPath } = nodePath;
+        const parentNode = parentPath.node;
+
+        if (node.callee.name === 'Vue') {
+          if (parentNode.type === 'ExpressionStatement') {
+            createFunction.declaration.body.body[0] = builder.returnStatement(
+              node,
+            );
+            parentPath.replace(createFunction);
+          }
+        }
+        return false;
+      },
+    });
+  }
+
   print() {
     return recast.print(this.ast).code;
   }

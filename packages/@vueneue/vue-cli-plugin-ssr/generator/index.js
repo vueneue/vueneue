@@ -33,15 +33,11 @@ module.exports = (api, options) => {
     api.render('./docker');
   }
 
-  let stParser = null;
-
   // TypeScript support
   if (api.invoking && api.hasPlugin('typescript')) {
     /* eslint-disable-next-line node/no-extraneous-require */
     const convertFiles = require('@vue/cli-plugin-typescript/generator/convert');
     convertFiles(api);
-
-    // TODO: use ts parser for postProcessFiles
   }
 
   // Post process files
@@ -49,8 +45,9 @@ module.exports = (api, options) => {
     // Transform existing files
     for (const file in files) {
       if (file.indexOf('src/router.') == 0) {
+        // Router file
         const fileContent = readFileSync(api.resolve(file));
-        const st = new SourceTranform(fileContent, stParser);
+        const st = new SourceTranform(fileContent);
         st.removeImport('vue');
         st.removeVueUse('Router');
         st.replaceExportNewToArrow('Router');
@@ -60,38 +57,47 @@ module.exports = (api, options) => {
 
         files[file] = st.print();
       } else if (file.indexOf('src/store.') == 0) {
-        const st = new SourceTranform(
-          readFileSync(api.resolve(file)),
-          stParser,
-        );
+        // Store file
+        const st = new SourceTranform(readFileSync(api.resolve(file)));
         st.removeImport('vue');
         st.removeVueUse('Vuex');
         st.replaceExportNewToArrow('Store');
+        files[file] = st.print();
+      } else if (file.indexOf('src/main.') == 0) {
+        // Main file
+        let fileContent = readFileSync(api.resolve(file), 'utf-8');
+
+        // initApp
+        if (!/export\s(async\s)?function\sinitApp/.test(fileContent)) {
+          fileContent += `\nexport async function initApp() {}`;
+        }
+
+        // Remove mount
+        fileContent = fileContent.replace(/\.\$mount\([^\)]*\)/, '');
+
+        const st = new SourceTranform(fileContent);
+        st.removeImport('./router');
+        st.removeImport('./store');
+        st.replaceVueCreation();
+
         files[file] = st.print();
       }
     }
 
     // Add missing files
+    const filesExt = api.hasPlugin('typescript') ? 'ts' : 'js';
+    if (!files[`src/router.${filesExt}`]) {
+      files[`src/router.${filesExt}`] = readFileSync(
+        join(__dirname, 'router.js'),
+        'utf-8',
+      );
+    }
 
-    // JavaScript
-    if (!api.hasPlugin('typescript')) {
-      if (!files['src/router.js']) {
-        files['src/router.js'] = readFileSync(
-          join(__dirname, 'router.js'),
-          'utf-8',
-        );
-      }
-
-      if (!files['src/store.js']) {
-        files['src/store.js'] = readFileSync(
-          join(__dirname, 'store.js'),
-          'utf-8',
-        );
-      }
-
-      // TypeScript
-    } else {
-      // TODO
+    if (!files[`src/store.${filesExt}`]) {
+      files[`src/store.${filesExt}`] = readFileSync(
+        join(__dirname, 'store.js'),
+        'utf-8',
+      );
     }
   });
 };
