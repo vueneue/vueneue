@@ -43,4 +43,6 @@ const invokeArgs = require('./tests/e2e/invokeArgs');
       },
     );
   }
+
+  await execa('./node_modules/.bin/lerna', ['link']);
 })();
