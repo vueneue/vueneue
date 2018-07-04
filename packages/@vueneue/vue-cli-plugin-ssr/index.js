@@ -25,6 +25,7 @@ module.exports = api => {
   require('./lib/commands/serve')(api, api.service.projectOptions);
   require('./lib/commands/build')(api, api.service.projectOptions);
   require('./lib/commands/start')(api, api.service.projectOptions);
+  require('./lib/commands/generate')(api, api.service.projectOptions);
 };
 
 module.exports.defaultModes = {
