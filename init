@@ -32,17 +32,25 @@ const invokeArgs = require('./tests/e2e/invokeArgs');
     },
   );
 
-  // Add VueNeue plugin
+  // Yarn add plugin
+  await execa('yarn', ['add', '@vueneue/vue-cli-plugin-ssr'], {
+    cwd: `packages/${projectName}`,
+    stdio: 'inherit',
+  });
+
+  await execa('./node_modules/.bin/lerna', ['link'], {
+    stdio: 'inherit',
+  });
+
+  // Invoke VueNeue plugin
   if (!argv.base) {
     await execa(
       '../../node_modules/.bin/vue',
-      ['add', '@vueneue/ssr', ...invokeArgs],
+      ['invoke', '@vueneue/ssr', ...invokeArgs],
       {
         cwd: `packages/${projectName}`,
         stdio: 'inherit',
       },
     );
   }
-
-  await execa('./node_modules/.bin/lerna', ['link']);
 })();
