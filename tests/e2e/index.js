@@ -31,4 +31,5 @@ const run = require('./scripts/run');
   await run(projectPath, argv.open ? 'open' : 'run');
 })().catch(err => {
   console.error(err.stack || err.message || err);
+  process.exit(1);
 });
