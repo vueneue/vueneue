@@ -6,7 +6,7 @@ module.exports = api => {
     config.entryPoints
       .get('app')
       .clear()
-      .add('./src/vueneue/entries/client');
+      .add(require.resolve('@vueneue/ssr-core/client'));
   });
 
   api.configureWebpack(() => {
