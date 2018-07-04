@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint 'lib/**/*.js'",
     "lint:fix": "eslint --fix 'lib/**/*.js'",
-    "format": "prettier --ignore-path .gitignore --write './**/*.js'"
+    "format": "prettier --ignore-path .gitignore --write 'lib/**/*.js'"
   },
   "repository": {
     "type": "git",
