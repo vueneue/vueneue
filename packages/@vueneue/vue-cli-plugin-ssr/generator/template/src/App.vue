@@ -15,7 +15,7 @@ replace:
 
 <%# REPLACE %>
 <script>
-import MainView from './vueneue/components/MainView';
+import MainView from './vueneue/MainView';
 
 export default {
   components: {

@@ -13,7 +13,7 @@ module.exports = (api, options = {}) => {
 
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    args[0].template = api.resolve('src/vueneue/ssr-template.html');
+    args[0].template = api.resolve('src/vueneue/index.html');
     args[0].filename = 'index.ssr.html';
     return args;
   });
