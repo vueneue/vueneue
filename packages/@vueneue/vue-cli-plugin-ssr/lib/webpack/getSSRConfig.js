@@ -27,7 +27,7 @@ module.exports = (api, options = {}) => {
 
   if (client) {
     config = merge(config, {
-      entry: './src/vueneue/entries/client',
+      entry: require.resolve('@vueneue/ssr-core/client'),
       plugins: [
         new VueSSRClientPlugin({
           filename: 'client-manifest.json',
@@ -36,7 +36,7 @@ module.exports = (api, options = {}) => {
     });
   } else {
     config = merge(config, {
-      entry: './src/vueneue/entries/server',
+      entry: require.resolve('@vueneue/ssr-core/server'),
       target: 'node',
       externals: nodeExternals({
         whitelist: [

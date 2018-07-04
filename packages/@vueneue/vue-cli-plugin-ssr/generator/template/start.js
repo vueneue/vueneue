@@ -1,3 +1,8 @@
+/**
+ * Simple script to start SSR server in production
+ * Used in Dockerfile
+ */
+
 const { existsSync } = require('fs');
 const path = require('path');
 const serverStart = require('@vueneue/ssr-server');

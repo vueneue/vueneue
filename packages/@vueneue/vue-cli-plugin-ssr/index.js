@@ -6,7 +6,7 @@ module.exports = api => {
     config.entryPoints
       .get('app')
       .clear()
-      .add('./src/vueneue/entries/client');
+      .add(require.resolve('@vueneue/ssr-core/client'));
   });
 
   api.configureWebpack(() => {
@@ -18,13 +18,12 @@ module.exports = api => {
     };
   });
 
-  api.service.projectOptions.transpileDependencies.push(
-    /@vueneue\/vue-cli-plugin-ssr\/lib/,
-  );
+  api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
   require('./lib/commands/serve')(api, api.service.projectOptions);
   require('./lib/commands/build')(api, api.service.projectOptions);
   require('./lib/commands/start')(api, api.service.projectOptions);
+  require('./lib/commands/generate')(api, api.service.projectOptions);
 };
 
 module.exports.defaultModes = {

@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs-extra');
 const { join } = require('path');
-const SourceTranform = require('../lib/SourceTransform');
+const SourceTranform = require('./SourceTransform');
 
 module.exports = (api, options) => {
   const packageOverride = {
@@ -13,6 +13,7 @@ module.exports = (api, options) => {
       'vuex-class': '^0.3.1',
       'vue-no-ssr': '^0.2.2',
       '@vueneue/ssr-server': '^0.2.0',
+      '@vueneue/ssr-core': '^0.2.0',
     },
     devDependencies: {
       'webpack-node-externals': '^1.7.2',
@@ -22,15 +23,14 @@ module.exports = (api, options) => {
       'ssr:serve': 'vue-cli-service ssr:serve',
       'ssr:build': 'vue-cli-service ssr:build',
       'ssr:start': 'vue-cli-service ssr:start',
+      generate: 'vue-cli-service generate',
     },
     vue: {
-      pwa: {
-        workboxOptions: {
-          templatedUrls: {
-            '/': 'index.ssr.html',
-          },
-        },
+      pluginOptions: {
+        ssr: { server: null, directives: {} },
+        generate: { scanRouter: true, params: {}, paths: [] },
       },
+      pwa: { workboxOptions: { templatedUrls: { '/': 'index.ssr.html' } } },
     },
   };
 
@@ -40,15 +40,6 @@ module.exports = (api, options) => {
 
   if (options.docker) {
     api.render('./docker');
-  }
-
-  // TypeScript support
-  if (api.invoking && api.hasPlugin('typescript')) {
-    api.render('./typescript');
-
-    /* eslint-disable-next-line node/no-extraneous-require */
-    const convertFiles = require('@vue/cli-plugin-typescript/generator/convert');
-    convertFiles(api);
   }
 
   // Post process files
@@ -83,14 +74,6 @@ module.exports = (api, options) => {
           fileContent += `\nexport async function initApp() {}`;
         }
 
-        // PWA plugin
-        if (api.hasPlugin('pwa')) {
-          fileContent = fileContent.replace(
-            `import './registerServiceWorker'`,
-            `if (process.client) require('./registerServiceWorker')`,
-          );
-        }
-
         // Remove mount
         fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
@@ -119,4 +102,10 @@ module.exports = (api, options) => {
       );
     }
   });
+
+  // Plugins
+  const cliPlugins = ['typescript', 'pwa', 'i18n'];
+  for (const pluginName of cliPlugins) {
+    require(`./plugins/${pluginName}`)(api);
+  }
 };
