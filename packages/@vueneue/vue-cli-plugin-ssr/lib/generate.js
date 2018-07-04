@@ -41,21 +41,25 @@ module.exports = async (api, options) => {
     });
   };
 
-  const getRoutesPaths = (paths, routes, parentPath = '') => {
+  const getRoutesPaths = (routes, parentPath = '') => {
+    let results = [];
+
     for (const route of routes) {
-      const routePath = /^\//.test(route.path)
+      let routePath = /^\//.test(route.path)
         ? route.path
         : `${parentPath}/${route.path}`;
 
-      if (paths && paths.findIndex(item => routePath == item) < 0) {
-        if (route.path === '*') route.path = '/404';
-        paths.push(routePath);
+      if (route.path === '*' && parentPath === '') routePath = '/404';
 
-        if (route.children) {
-          getRoutesPaths(route.children, routePath);
-        }
+      const finalPath = routePath.replace(/.+\/$/, '');
+      if (finalPath !== '') results.push(finalPath);
+
+      if (route.children) {
+        results = [...results, ...getRoutesPaths(route.children, routePath)];
       }
     }
+
+    return results;
   };
 
   const ctx = createKoaContext();
@@ -63,22 +67,33 @@ module.exports = async (api, options) => {
   if (generate.scanRouter) {
     const firstContext = await callRenderer({ url: '/', ctx });
     const routes = firstContext.router.options.routes;
-    getRoutesPaths(generate.paths, routes);
+    generate.paths = getRoutesPaths(routes);
   }
+
+  // Dedupe array
+  generate.paths = [...new Set(generate.paths)];
 
   if (generate.params) {
     for (const paramName in generate.params) {
       const paramValues = generate.params[paramName];
-      generate.paths.forEach((pagePath, index) => {
+      const newPaths = [];
+
+      generate.paths.forEach(pagePath => {
         const regexp = new RegExp(`/:${paramName}`);
         if (regexp.exec(pagePath)) {
-          const newPaths = [];
           for (const value of paramValues) {
-            newPaths.push(pagePath.replace(regexp, value ? `/${value}` : ''));
+            const finalPath = pagePath.replace(
+              regexp,
+              value ? `/${value}` : '',
+            );
+            if (finalPath !== '') newPaths.push(finalPath);
           }
-          generate.paths.splice(1, index, ...newPaths);
+        } else {
+          newPaths.push(pagePath);
         }
       });
+
+      generate.paths = [...newPaths];
     }
   }
 
@@ -108,5 +123,5 @@ module.exports = async (api, options) => {
     );
   }
 
-  await fs.remove('${options.outputDir}/index.ssr.html');
+  await fs.remove(`${options.outputDir}/index.ssr.html`);
 };
