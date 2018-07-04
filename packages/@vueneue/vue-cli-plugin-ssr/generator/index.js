@@ -23,8 +23,13 @@ module.exports = (api, options) => {
       'ssr:serve': 'vue-cli-service ssr:serve',
       'ssr:build': 'vue-cli-service ssr:build',
       'ssr:start': 'vue-cli-service ssr:start',
+      generate: 'vue-cli-service generate',
     },
     vue: {
+      pluginOptions: {
+        ssr: { server: null, directives: {} },
+        generate: { scanRouter: true, params: {}, paths: [] },
+      },
       pwa: { workboxOptions: { templatedUrls: { '/': 'index.ssr.html' } } },
     },
   };
