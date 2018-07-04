@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import ErrorPage from './ErrorPage';
-
+import ErrorPage from './ErrorPage.vue';
 export default {
   components: {
     ErrorPage,

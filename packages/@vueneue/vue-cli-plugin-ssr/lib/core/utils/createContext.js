@@ -1,7 +1,7 @@
 import './vuePlugins';
 import createRouter from '@/router';
 import createStore from '@/store';
-import ErrorPage from '@/vueneue/components/ErrorPage';
+import ErrorPage from '@/vueneue/ErrorPage';
 import errorStore from './errorStore';
 import Vue from 'vue';
 import errorHandler from './errorHandler';

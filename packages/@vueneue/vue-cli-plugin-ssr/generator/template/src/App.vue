@@ -1,11 +1,21 @@
+---
+extend: '@vue/cli-service/generator/template/src/App.vue'
+replace:
+  - !!js/regexp /<template>[^]*?<\/template>/
+  - !!js/regexp /<script>[^]*?<\/script>/
+---
+
+<%# REPLACE %>
 <template>
   <div id="app">
     <main-view/>
   </div>
 </template>
+<%# END_REPLACE %>
 
+<%# REPLACE %>
 <script>
-import MainView from './vueneue/components/MainView';
+import MainView from './vueneue/MainView';
 
 export default {
   components: {
@@ -26,35 +36,4 @@ export default {
   },
 };
 </script>
-
-<style>
-body,
-html {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
-nav {
-  padding: 10px;
-}
-
-.page {
-  text-align: center;
-}
-</style>
+<%# END_REPLACE %>
