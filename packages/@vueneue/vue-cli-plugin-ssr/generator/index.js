@@ -23,6 +23,15 @@ module.exports = (api, options) => {
       'ssr:build': 'vue-cli-service ssr:build',
       'ssr:start': 'vue-cli-service ssr:start',
     },
+    vue: {
+      pwa: {
+        workboxOptions: {
+          templatedUrls: {
+            '/': 'index.ssr.html',
+          },
+        },
+      },
+    },
   };
 
   api.extendPackage(packageOverride);
