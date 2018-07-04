@@ -18,9 +18,7 @@ module.exports = api => {
     };
   });
 
-  api.service.projectOptions.transpileDependencies.push(
-    /@vueneue\/vue-cli-plugin-ssr\/lib/,
-  );
+  api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
   require('./lib/commands/serve')(api, api.service.projectOptions);
   require('./lib/commands/build')(api, api.service.projectOptions);

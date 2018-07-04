@@ -1,2 +1,1 @@
-export default require('@vueneue/vue-cli-plugin-ssr/lib/core/server/entry')
-  .default;
+export default require('@vueneue/ssr-core/server').default;

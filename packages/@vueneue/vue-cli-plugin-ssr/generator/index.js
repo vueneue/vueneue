@@ -13,6 +13,7 @@ module.exports = (api, options) => {
       'vuex-class': '^0.3.1',
       'vue-no-ssr': '^0.2.2',
       '@vueneue/ssr-server': '^0.2.0',
+      '@vueneue/ssr-core': '^0.2.0',
     },
     devDependencies: {
       'webpack-node-externals': '^1.7.2',
@@ -24,13 +25,7 @@ module.exports = (api, options) => {
       'ssr:start': 'vue-cli-service ssr:start',
     },
     vue: {
-      pwa: {
-        workboxOptions: {
-          templatedUrls: {
-            '/': 'index.ssr.html',
-          },
-        },
-      },
+      pwa: { workboxOptions: { templatedUrls: { '/': 'index.ssr.html' } } },
     },
   };
 
