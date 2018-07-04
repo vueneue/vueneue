@@ -43,12 +43,14 @@ export default async context => {
         await handleMiddlewares(router.currentRoute, context);
 
         // Store init function
-        await context.store.dispatch('onHttpRequest', {
-          ...context,
-          route: context.router.currentRoute,
-          params: context.router.currentRoute.params,
-          query: context.router.currentRoute.query,
-        });
+        if (store._actions.onHttpRequest) {
+          await store.dispatch('onHttpRequest', {
+            ...context,
+            route: router.currentRoute,
+            params: router.currentRoute.params,
+            query: router.currentRoute.query,
+          });
+        }
 
         if (router.currentRoute.name === 'pageNotFound') {
           const error = new Error('Page not found');

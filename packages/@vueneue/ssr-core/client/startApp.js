@@ -65,12 +65,14 @@ export default async context => {
       if (!process.ssr) {
         try {
           // Store init function on SPA Mode
-          await store.dispatch('onHttpRequest', {
-            ...context,
-            route: router.currentRoute,
-            params: router.currentRoute.params,
-            query: router.currentRoute.query,
-          });
+          if (store._actions.onHttpRequest) {
+            await store.dispatch('onHttpRequest', {
+              ...context,
+              route: router.currentRoute,
+              params: router.currentRoute.params,
+              query: router.currentRoute.query,
+            });
+          }
 
           // first call => asyncData
           await resolveComponentsAsyncData(
