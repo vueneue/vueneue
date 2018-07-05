@@ -2,7 +2,7 @@ const SourceTranform = require('../SourceTransform');
 const { getFilePath } = require('./utils');
 
 module.exports = api => {
-  if (api.hasPlugin('i18n')) {
+  if (api.hasPlugin('vue-cli-plugin-i18n')) {
     let mainPath = getFilePath(api, 'src/main');
     let i18nPath = getFilePath(api, 'src/i18n');
 

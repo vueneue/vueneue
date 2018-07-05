@@ -14,7 +14,8 @@ https://vueneue.github.io/docs/
 ## Packages
 
 - `@vueneue/vue-cli-plugin-ssr`: Vue CLI plugin to quick start a SSR application
-- `@vueneue/ssr-server`: Koa server used by SSR plugin to render pages
+- `@vueneue/ssr-core`: Contain main sources for SSR
+- `@vueneue/ssr-server`: Koa server used to render pages
 
 ## Quick start
 
@@ -42,6 +43,12 @@ npm run ssr:build
 
 ```bash
 npm run ssr:start
+```
+
+**Generate static website**
+
+```bash
+npm run generate
 ```
 
 ## License

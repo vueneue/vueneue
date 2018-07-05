@@ -1,12 +1,12 @@
 {
   "name": "@vueneue/ssr-server",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "VueNeue SSR server with Koa",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint 'lib/**/*.js'",
     "lint:fix": "eslint --fix 'lib/**/*.js'",
-    "format": "prettier --ignore-path .gitignore --write './**/*.js'"
+    "format": "prettier --ignore-path .gitignore --write 'lib/**/*.js'"
   },
   "repository": {
     "type": "git",

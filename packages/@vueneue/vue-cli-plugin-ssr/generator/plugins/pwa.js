@@ -1,7 +1,7 @@
 const { getFilePath } = require('./utils');
 
 module.exports = api => {
-  if (api.hasPlugin('pwa')) {
+  if (api.hasPlugin('@vue/cli-plugin-pwa')) {
     let mainPath = getFilePath(api, 'src/main');
 
     // Post process files

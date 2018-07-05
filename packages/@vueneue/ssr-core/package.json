@@ -1,11 +1,11 @@
 {
   "name": "@vueneue/ssr-core",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "VueNeue core package",
   "main": "client/index.js",
   "scripts": {
-    "lint": "eslint 'lib/**/*.js'",
-    "lint:fix": "eslint --fix 'lib/**/*.js'",
+    "lint": "eslint './**/*.js'",
+    "lint:fix": "eslint --fix './**/*.js'",
     "format": "prettier --ignore-path .gitignore --write './**/*.js'"
   },
   "repository": {
