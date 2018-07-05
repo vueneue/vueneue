@@ -1,0 +1,32 @@
+const fs = require('fs-extra');
+const heapdump = require('heapdump');
+const takeSnapshot = name => {
+  return new Promise((resolve, reject) => {
+    heapdump.writeSnapshot(
+      `snapshots/${name}.heapsnapshot`,
+      (err, filename) => {
+        if (err) return reject(err);
+        resolve(filename);
+      },
+    );
+  });
+};
+
+module.exports = {
+  pluginOptions: {
+    ssr: {
+      server(app) {
+        fs.ensureDirSync('snapshots');
+
+        app.use(async (ctx, next) => {
+          if (/^\/heapdump/.test(ctx.url)) {
+            await takeSnapshot(ctx.query.name || 'tests');
+            ctx.body = 'ok';
+          } else {
+            await next();
+          }
+        });
+      },
+    },
+  },
+};
