@@ -38,6 +38,7 @@ const invokeArgs = require('./tests/e2e/invokeArgs');
     stdio: 'inherit',
   });
 
+  // Lerna links
   await execa('./node_modules/.bin/lerna', ['link'], {
     stdio: 'inherit',
   });

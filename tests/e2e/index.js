@@ -12,23 +12,24 @@ const run = require('./scripts/run');
 
   // vue create
   if (!argv.quick) {
-    await execa(join(__dirname, '../../init'), ['--tests'], {
+    await execa('./init', ['--tests'], {
       stdio: 'inherit',
+      cwd: join(__dirname, '../..'),
     });
   }
 
   // ---/---
 
   // Copy mocks
-  await fs.copy('tests/e2e/mocks', projectPath);
+  await fs.copy(join(__dirname, 'mocks'), projectPath);
 
-  if (argv.quick && argv.invoke) {
+  if (argv.invoke) {
     // vue invoke
     await invoke(projectPath);
   }
 
   // Run server and start cypress
-  await run(projectPath, argv.open ? 'open' : 'run');
+  if (!argv.noRun) await run(projectPath, argv.open ? 'open' : 'run');
 })().catch(err => {
   console.error(err.stack || err.message || err);
   process.exit(1);
