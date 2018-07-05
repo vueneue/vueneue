@@ -14,7 +14,8 @@ https://vueneue.github.io/docs/
 ## Packages
 
 - `@vueneue/vue-cli-plugin-ssr`: Vue CLI plugin to quick start a SSR application
-- `@vueneue/ssr-server`: Koa server used by SSR plugin to render pages
+- `@vueneue/ssr-code`: Contain main sources for SSR
+- `@vueneue/ssr-server`: Koa server used to render pages
 
 ## Quick start
 
