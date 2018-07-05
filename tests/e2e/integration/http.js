@@ -1,14 +1,6 @@
 /* eslint-disable */
 
 describe('HTTP status codes', () => {
-  before(() => {
-    return cy.request(`/heapdump?name=${new Date().getTime()}_http-start`);
-  });
-
-  after(() => {
-    return cy.request(`/heapdump?name=${new Date().getTime()}_http-end`);
-  });
-
   it('200 on home', () => {
     cy.request('/').then(response => {
       expect(response.status).to.be.equal(200);

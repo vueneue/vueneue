@@ -17,6 +17,7 @@
   "devDependencies": {
     "@vue/cli": "^3.0.0-rc.3",
     "@vue/eslint-config-prettier": "^3.0.0-rc.3",
+    "autocannon": "^2.4.1",
     "cypress": "^3.0.2",
     "eslint": "^5.0.1",
     "eslint-config-prettier": "^2.9.0",
