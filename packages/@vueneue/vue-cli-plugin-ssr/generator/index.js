@@ -16,6 +16,9 @@ module.exports = (api, options) => {
       '@vueneue/ssr-core': '^0.2.0',
     },
     devDependencies: {
+      recast: '^0.15.1',
+      typescript: '^2.9.2',
+      '@babel/parser': '^7.0.0-beta.51',
       'webpack-node-externals': '^1.7.2',
       webpackbar: '^2.6.1',
     },
