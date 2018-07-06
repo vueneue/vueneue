@@ -37,7 +37,7 @@ module.exports = function setupDevServer(serverContext, callback) {
     compiler: compiler.compilers[0],
     hotClient: {
       logLevel: 'warn',
-      host: process.env.HOST || '0.0.0.0',
+      host: process.env.HOST || '127.0.0.1',
     },
     devMiddleware: {
       serverSideRender: true,
