@@ -18,7 +18,7 @@ const babelParser = {
 /**
  * Class to transform easly Vue base files (main.js, router.js, store.js)
  */
-class SourceTransform {
+class Recast {
   constructor(source, customParser = null) {
     this.source = source;
 
@@ -46,6 +46,7 @@ class SourceTransform {
     delete this.ast.program.body[lastImportIndex].loc;
     const newImport = toImport(code);
     this.ast.program.body.splice(lastImportIndex + 1, 0, newImport);
+    return this;
   }
 
   /**
@@ -62,6 +63,7 @@ class SourceTransform {
         return false;
       },
     });
+    return this;
   }
 
   /**
@@ -84,6 +86,7 @@ class SourceTransform {
         return false;
       },
     });
+    return this;
   }
 
   /**
@@ -113,6 +116,7 @@ class SourceTransform {
         return false;
       },
     });
+    return this;
   }
 
   /**
@@ -141,6 +145,7 @@ class SourceTransform {
         return false;
       },
     });
+    return this;
   }
 
   /**
@@ -172,6 +177,7 @@ export function createApp({ router, store }) {
         return false;
       },
     });
+    return this;
   }
 
   print() {
@@ -179,4 +185,4 @@ export function createApp({ router, store }) {
   }
 }
 
-module.exports = SourceTransform;
+module.exports = Recast;
