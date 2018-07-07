@@ -1,0 +1,9 @@
+{
+  "default": {
+    "integration": "tests/projects/ci/integration"
+  },
+  "ci": {
+    "mocks": "tests/projects/ci/mocks",
+    "integration": "tests/projects/ci/integration"
+  }
+}

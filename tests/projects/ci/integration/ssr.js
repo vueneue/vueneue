@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { readSSRData } from '../utils';
+import { readSSRData } from '../../utils';
 
 let valueToCheck = null;
 
