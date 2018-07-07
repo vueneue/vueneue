@@ -1,0 +1,81 @@
+#!/usr/bin/env node
+const fs = require('fs-extra');
+const argv = require('yargs').argv;
+const { join } = require('path');
+const execa = require('execa');
+const waitOn = require('wait-on');
+
+const Workspace = require('./tests/utils/Workspace');
+const ws = new Workspace(__dirname);
+const projects = require('./tests/projects.json');
+
+const waitOnPromise = options => {
+  return new Promise(resolve => waitOn(options, resolve));
+};
+
+(async () => {
+  if (!(await fs.exists(join(ws.packagesPath, 'base')))) {
+    await ws.createBaseProject();
+  }
+
+  const [command, name] = argv._;
+  const project = ws.getProject(name);
+
+  switch (command) {
+    case 'create':
+      await project.create();
+      const { plugins, deps, mocks } = projects[name] || {};
+      await project.addPlugin(plugins);
+      await project.addDependency(deps);
+      await project.invokePlugin('@vueneue/ssr', ['--docker', '0']);
+      if (mocks) await fs.copy(mocks, project.path);
+      await ws.lernaLink();
+      break;
+
+    case 'serve':
+      project.cliService('ssr:serve');
+      break;
+
+    case 'build':
+      project.cliService('ssr:build');
+      break;
+
+    case 'start':
+      project.cliService('ssr:start');
+      break;
+
+    case 'cy:run':
+    case 'cy:open':
+      const cypressMode = command === 'cy:open' ? 'open' : 'run';
+      const serve = project.cliService('ssr:serve');
+
+      await waitOnPromise({
+        resources: [`tcp:localhost:8080`],
+        timeout: 60 * 1000,
+      });
+
+      let integrationPath = 'tests/projects/ci/integration';
+      if (projects[name] && projects[name].integration) {
+        integrationPath = projects[name].integration;
+      }
+
+      const configs = ['video=false', `integrationFolder=${integrationPath}`];
+
+      const cypress = execa(
+        './node_modules/.bin/cypress',
+        [cypressMode, '-c', configs.join(',')],
+        {
+          stdio: 'inherit',
+        },
+      );
+
+      cypress.on('exit', exitCode => {
+        serve.kill();
+        process.exit(exitCode);
+      });
+      break;
+  }
+})().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
