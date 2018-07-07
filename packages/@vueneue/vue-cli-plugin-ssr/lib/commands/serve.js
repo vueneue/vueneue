@@ -1,7 +1,7 @@
 const { IpcMessenger } = require('@vue/cli-shared-utils');
 
 const defaults = {
-  host: '0.0.0.0',
+  host: '127.0.0.1',
   port: 8080,
 };
 

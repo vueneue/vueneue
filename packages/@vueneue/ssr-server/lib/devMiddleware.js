@@ -4,7 +4,7 @@ const MFS = require('memory-fs');
 const koaWebpack = require('koa-webpack');
 
 module.exports = function setupDevServer(serverContext, callback) {
-  const { app, configs } = serverContext;
+  const { app, configs, host } = serverContext;
   const { client, server } = configs;
 
   let serverBundle;
@@ -36,8 +36,8 @@ module.exports = function setupDevServer(serverContext, callback) {
   koaWebpack({
     compiler: compiler.compilers[0],
     hotClient: {
+      host,
       logLevel: 'warn',
-      host: process.env.HOST || '0.0.0.0',
     },
     devMiddleware: {
       serverSideRender: true,

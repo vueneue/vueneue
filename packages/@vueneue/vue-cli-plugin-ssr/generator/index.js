@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs-extra');
 const { join } = require('path');
-const SourceTranform = require('./SourceTransform');
+const Recast = require('./recast');
 
 module.exports = (api, options) => {
   const packageOverride = {
@@ -49,7 +49,7 @@ module.exports = (api, options) => {
       if (file.indexOf('src/router.') == 0) {
         // Router file
         const fileContent = files[file];
-        const st = new SourceTranform(fileContent);
+        const st = new Recast(fileContent);
         st.removeImport('vue');
         st.removeVueUse('Router');
         st.replaceExportNewToArrow('Router');
@@ -60,7 +60,7 @@ module.exports = (api, options) => {
         files[file] = st.print();
       } else if (file.indexOf('src/store.') == 0) {
         // Store file
-        const st = new SourceTranform(files[file]);
+        const st = new Recast(files[file]);
         st.removeImport('vue');
         st.removeVueUse('Vuex');
         st.replaceExportNewToArrow('Store');
@@ -77,7 +77,7 @@ module.exports = (api, options) => {
         // Remove mount
         fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
-        const st = new SourceTranform(fileContent);
+        const st = new Recast(fileContent);
         st.removeImport('./router');
         st.removeImport('./store');
         st.replaceVueCreation();

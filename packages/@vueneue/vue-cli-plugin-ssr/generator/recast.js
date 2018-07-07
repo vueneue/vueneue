@@ -5,7 +5,13 @@ const babelParser = {
   parse: source =>
     babel.parse(source, {
       sourceType: 'module',
-      plugins: ['objectRestSpread', 'typescript'],
+      plugins: [
+        'classProperties',
+        'decorators-legacy',
+        'dynamicImport',
+        'objectRestSpread',
+        'typescript',
+      ],
     }),
 };
 
