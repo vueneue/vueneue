@@ -4,10 +4,10 @@ const argv = require('yargs').argv;
 const { join } = require('path');
 const execa = require('execa');
 const waitOn = require('wait-on');
+const Workspace = require('./utils/Workspace');
 
-const Workspace = require('./tests/utils/Workspace');
-const ws = new Workspace(__dirname);
-const projects = require('./tests/projects.json');
+const ws = new Workspace(join(__dirname, '..'));
+const projects = require('./projects.json');
 
 const waitOnPromise = options => {
   return new Promise(resolve => waitOn(options, resolve));
