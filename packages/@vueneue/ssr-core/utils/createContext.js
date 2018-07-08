@@ -2,23 +2,12 @@ import Vue from 'vue';
 import './vuePlugins';
 import createRouter from '@/router';
 import createStore from '@/store';
-import ErrorPage from '@/vueneue/ErrorPage';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
 
 export default ssrContext => {
   const router = createRouter();
   const store = createStore();
-
-  // Add Error page for 404/Not found
-  router.addRoutes([
-    {
-      path: '*',
-      name: 'pageNotFound',
-      component: ErrorPage,
-      props: { 'status-code': 404 },
-    },
-  ]);
 
   // Add errorHandler module to Vuex
   store.registerModule('errorHandler', errorStore);
