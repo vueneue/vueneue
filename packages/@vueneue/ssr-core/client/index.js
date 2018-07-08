@@ -5,7 +5,7 @@ import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
 import createContext from '../utils/createContext';
 import { createApp, initApp } from '@/main';
-import ErrorPage from '@/vueneue/ErrorPage';
+import notFound from '../utils/notFound';
 
 /**
  * Vue start
@@ -27,14 +27,7 @@ import ErrorPage from '@/vueneue/ErrorPage';
   await initApp(context);
 
   // Add Error page for 404/Not found
-  context.router.addRoutes([
-    {
-      path: '*',
-      name: 'pageNotFound',
-      component: ErrorPage,
-      props: { 'status-code': 404 },
-    },
-  ]);
+  notFound(context.router);
 
   // Start application
   return startApp(context);

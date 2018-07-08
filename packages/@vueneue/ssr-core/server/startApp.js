@@ -53,12 +53,6 @@ export default async context => {
           });
         }
 
-        if (router.currentRoute.name === 'pageNotFound') {
-          const error = new Error('Page not found');
-          error.statusCode = 404;
-          throw error;
-        }
-
         const data = await resolveComponentsAsyncData(
           router.currentRoute,
           router.getMatchedComponents(),
