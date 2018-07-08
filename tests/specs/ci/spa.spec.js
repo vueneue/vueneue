@@ -1,8 +1,4 @@
-const gotoClick = async url => {
-  const link = await page.$(`a[href="${url}"]`);
-  await link.click();
-  await page.waitForNavigation();
-};
+const { gotoClick, checkText } = require('../utils');
 
 describe('SSR features in SPA mode', () => {
   beforeAll(async () => {
@@ -11,24 +7,22 @@ describe('SSR features in SPA mode', () => {
 
   it('asyncData() is resolved', async () => {
     await gotoClick('/async-data');
-    expect(await page.$eval('#value', el => el.textContent)).toBe('asyncData');
+    await checkText('#value', 'asyncData');
   });
 
   it('asyncData() for store is resolved', async () => {
     await gotoClick('/async-data-store');
-    expect(await page.$eval('#value', el => el.textContent)).toBe(
-      'asyncDataStore',
-    );
+    await checkText('#value', 'asyncDataStore');
   });
 
   it('asyncData() can display error page', async () => {
     await gotoClick('/async-data-error');
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Error 500');
+    await checkText('h1', 'Error 500');
   });
 
   it('$redirect() is called correctly', async () => {
     await gotoClick('/redirect');
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Home');
+    await checkText('h1', 'Home');
   });
 
   it('$error() is called correctly', async () => {
@@ -37,53 +31,47 @@ describe('SSR features in SPA mode', () => {
     const button = await page.$('button');
     await button.click();
 
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Error 403');
+    await checkText('h1', 'Error 403');
   });
 
   it('404 not found page is displayed', async () => {
     await gotoClick('/not-found');
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Error 404');
+    await checkText('h1', 'Error 404');
   });
 
   it('Global middleware is called', async () => {
     await gotoClick('/global-middleware');
-    expect(await page.$eval('#value', el => el.textContent)).toBe(
-      'globalMiddleware',
-    );
+    await checkText('#value', 'globalMiddleware');
   });
 
   it('Route middleware is called', async () => {
     await gotoClick('/route-middleware');
-    expect(await page.$eval('#value', el => el.textContent)).toBe(
-      'routeMiddleware',
-    );
+    await checkText('#value', 'routeMiddleware');
   });
 
   it('Middleware can redirect', async () => {
     await gotoClick('/middleware-redirect');
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Home');
+    await checkText('h1', 'Home');
   });
 
   it('Middleware can have an error', async () => {
     await gotoClick('/middleware-error');
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Error 500');
+    await checkText('h1', 'Error 500');
   });
 
   it('Middleware can have an error with helper', async () => {
     await gotoClick('/middleware-error-func');
-    expect(await page.$eval('h1', el => el.textContent)).toBe('Error 403');
+    await checkText('h1', 'Error 403');
   });
 
   it('Nested routes asyncData()', async () => {
     await gotoClick('/nested');
-    expect(await page.$eval('#parent-value', el => el.textContent)).toBe(
-      'parent',
-    );
-    expect(await page.$eval('#value', el => el.textContent)).toBe('child');
+    await checkText('#parent-value', 'parent');
+    await checkText('#value', 'child');
   });
 
   it('Nested routes middlewares', async () => {
-    expect(await page.$eval('#parent', el => el.textContent)).toBe('parent');
-    expect(await page.$eval('#middleware', el => el.textContent)).toBe('child');
+    await checkText('#parent', 'parent');
+    await checkText('#middleware', 'child');
   });
 });
