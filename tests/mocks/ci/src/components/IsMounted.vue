@@ -1,7 +1,5 @@
 <template>
-  <div id="mounted">
-    {{ isMounted }}
-  </div>
+  <div id="mounted">{{ isMounted }}</div>
 </template>
 
 <script>
