@@ -1,6 +1,12 @@
 const fs = require('fs-extra');
+const chalk = require('chalk');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
 const renderRoute = require('@vueneue/ssr-server/lib/renderRoute');
+
+const whiteBox = str => chalk.bgWhite(chalk.black(` ${str} `));
+const greenBox = str => chalk.bgGreen(chalk.black(` ${str} `));
+const yellowBox = str => chalk.bgYellow(chalk.black(` ${str} `));
+const redBox = str => chalk.bgRed(chalk.black(` ${str} `));
 
 module.exports = async (api, options) => {
   const serverBundle = JSON.parse(
@@ -14,7 +20,10 @@ module.exports = async (api, options) => {
     'utf-8',
   );
 
-  const { generate } = options.pluginOptions;
+  const generate = Object.assign(
+    { scanRouter: true },
+    options.pluginOptions.generate || {},
+  );
 
   // Fake koa context
   const createKoaContext = () => ({
@@ -103,11 +112,15 @@ module.exports = async (api, options) => {
     ctx,
   };
 
-  for (const pagePath of generate.paths) {
-    // eslint-disable-next-line
-    console.log(`${pagePath}`);
+  process.stdout.write(
+    whiteBox(`Generating ${generate.paths.length} routes...`) + `\n`,
+  );
 
+  let count = 0;
+  for (const pagePath of generate.paths) {
     const ssrContext = { url: pagePath, ctx };
+
+    const before = new Date().getTime();
 
     let response;
     try {
@@ -120,6 +133,22 @@ module.exports = async (api, options) => {
     await fs.writeFileSync(
       `${options.outputDir}/${pagePath}/index.html`,
       response.body,
+    );
+
+    count++;
+    const generateTime = new Date().getTime() - before;
+
+    let boxFunc = greenBox;
+    if (response.status >= 300 && response.status < 400) {
+      boxFunc = yellowBox;
+    } else if (response.status >= 400) {
+      boxFunc = redBox;
+    }
+
+    process.stdout.write(
+      `${boxFunc(response.status)}\t${generateTime}ms\t${count}/${
+        generate.paths.length
+      }\t${pagePath}\n`,
     );
   }
 
