@@ -14,7 +14,7 @@ const waitOnPromise = options => {
 };
 
 (async () => {
-  if (!(await fs.exists(join(ws.packagesPath, 'base')))) {
+  if (!(await fs.exists(join(ws.packagesPath, 'base/package.json')))) {
     await ws.createBaseProject();
   }
 

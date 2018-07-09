@@ -51,7 +51,7 @@ class Workspace {
   async cloneBaseProject(name) {
     if (name === 'base') throw new Error('Wrong package name');
 
-    if (!(await fs.exists(join(this.packagesPath, 'base')))) {
+    if (!(await fs.exists(join(this.packagesPath, 'base/package.json')))) {
       await this.createBaseProject();
     }
 
