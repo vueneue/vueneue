@@ -25,7 +25,7 @@ https://vueneue.github.io/docs/
 vue add @vueneue/ssr
 ```
 
-This plugins add 3 commands to run or build your application in SSR mode:
+This plugins add 4 commands to run or build your application in SSR mode:
 
 **Start a development server with HMR**
 

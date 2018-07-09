@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/vueneue/vueneue/issues"
   },
-  "homepage": "https://github.com/vueneue/vueneue#readme",
+  "homepage": "https://vueneue.github.io/docs/",
   "devDependencies": {
     "@vue/cli-service": "^3.0.0-rc.3",
     "@vue/eslint-config-prettier": "^3.0.0-rc.3",
