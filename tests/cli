@@ -20,7 +20,8 @@ const waitOnPromise = options => {
 
   const [command, name] = argv._;
   const project = ws.getProject(name);
-  let serve;
+
+  let server;
 
   switch (command) {
     case 'create':
@@ -46,7 +47,7 @@ const waitOnPromise = options => {
       break;
 
     case 'test':
-      serve = project.cliService('ssr:serve');
+      server = project.cliService('ssr:serve');
 
       await waitOnPromise({
         resources: [`tcp:localhost:8080`],
@@ -64,7 +65,7 @@ const waitOnPromise = options => {
       );
 
       jest.on('exit', exitCode => {
-        if (serve) serve.kill();
+        if (server) server.kill();
         process.exit(exitCode);
       });
       break;
