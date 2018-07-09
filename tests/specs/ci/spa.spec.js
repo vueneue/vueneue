@@ -1,8 +1,8 @@
-const { gotoClick, checkText } = require('../utils');
+const { gotoClick, checkText, baseURL } = require('../utils');
 
 describe('SSR features in SPA mode', () => {
   beforeAll(async () => {
-    await page.goto('http://localhost:8080');
+    await page.goto(baseURL);
   });
 
   it('asyncData() is resolved', async () => {

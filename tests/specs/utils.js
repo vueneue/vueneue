@@ -1,5 +1,7 @@
 const request = require('request');
 
+const baseURL = 'http://localhost:8080';
+
 const doRequest = async (url, options) => {
   return new Promise((resolve, reject) => {
     request(
@@ -43,6 +45,7 @@ const checkText = async (selector, value) => {
 };
 
 module.exports = {
+  baseURL,
   doRequest,
   readSSRData,
   isMounted,
