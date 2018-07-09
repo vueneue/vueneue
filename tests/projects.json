@@ -1,0 +1,6 @@
+{
+  "ci": {
+    "mocks": "tests/mocks/ci",
+    "specs": "tests/specs/ci"
+  }
+}

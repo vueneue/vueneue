@@ -1,6 +1,4 @@
 node_modules/
+packages/tests/
 lerna-debug.log
-packages/dev
-packages/tests
-packages/base
 yarn-error.log

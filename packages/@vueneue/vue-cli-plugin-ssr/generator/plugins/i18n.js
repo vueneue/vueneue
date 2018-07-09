@@ -1,4 +1,4 @@
-const SourceTranform = require('../SourceTransform');
+const Recast = require('../recast');
 const { getFilePath } = require('./utils');
 
 module.exports = api => {
@@ -10,10 +10,10 @@ module.exports = api => {
     api.postProcessFiles(files => {
       // Change to i18n file
       if (files[i18nPath]) {
-        const st = new SourceTranform(files[i18nPath]);
-        st.replaceExportNewToArrow('VueI18n');
+        const r = new Recast(files[i18nPath]);
+        r.replaceExportNewToArrow('VueI18n');
 
-        files[i18nPath] = st.print();
+        files[i18nPath] = r.print();
       }
 
       // Change to main

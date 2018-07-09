@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs-extra');
 const { join } = require('path');
-const SourceTranform = require('./SourceTransform');
+const Recast = require('./recast');
 
 module.exports = (api, options) => {
   const packageOverride = {
@@ -49,22 +49,22 @@ module.exports = (api, options) => {
       if (file.indexOf('src/router.') == 0) {
         // Router file
         const fileContent = files[file];
-        const st = new SourceTranform(fileContent);
-        st.removeImport('vue');
-        st.removeVueUse('Router');
-        st.replaceExportNewToArrow('Router');
+        const r = new Recast(fileContent);
+        r.removeImport('vue')
+          .removeVueUse('Router')
+          .replaceExportNewToArrow('Router');
 
         if (fileContent.indexOf('mode:') < 0)
-          st.addToNew('Router', `mode: process.ssr ? 'history' : 'hash'`);
+          r.addToNew('Router', `mode: process.ssr ? 'history' : 'hash'`);
 
-        files[file] = st.print();
+        files[file] = r.print();
       } else if (file.indexOf('src/store.') == 0) {
         // Store file
-        const st = new SourceTranform(files[file]);
-        st.removeImport('vue');
-        st.removeVueUse('Vuex');
-        st.replaceExportNewToArrow('Store');
-        files[file] = st.print();
+        const r = new Recast(files[file]);
+        r.removeImport('vue')
+          .removeVueUse('Vuex')
+          .replaceExportNewToArrow('Store');
+        files[file] = r.print();
       } else if (file.indexOf('src/main.') == 0) {
         // Main file
         let fileContent = files[file];
@@ -77,12 +77,12 @@ module.exports = (api, options) => {
         // Remove mount
         fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
-        const st = new SourceTranform(fileContent);
-        st.removeImport('./router');
-        st.removeImport('./store');
-        st.replaceVueCreation();
+        const r = new Recast(fileContent)
+          .removeImport('./router')
+          .removeImport('./store')
+          .replaceVueCreation();
 
-        files[file] = st.print();
+        files[file] = r.print();
       }
     }
 

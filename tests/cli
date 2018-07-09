@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+const fs = require('fs-extra');
+const argv = require('yargs').argv;
+const { join } = require('path');
+const execa = require('execa');
+const waitOn = require('wait-on');
+const Workspace = require('./utils/Workspace');
+
+const ws = new Workspace(join(__dirname, '..'));
+const projects = require('./projects.json');
+
+const waitOnPromise = options => {
+  return new Promise(resolve => waitOn(options, resolve));
+};
+
+(async () => {
+  if (!(await fs.exists(join(ws.packagesPath, 'base/package.json')))) {
+    await ws.createBaseProject();
+  }
+
+  const [command, name] = argv._;
+  const project = ws.getProject(name);
+
+  let server;
+
+  switch (command) {
+    case 'create':
+      await project.create();
+      const { plugins, deps, mocks } = projects[name] || {};
+      await project.addPlugin(plugins);
+      await project.addDependency(deps);
+      await project.invokePlugin('@vueneue/ssr', ['--docker', '0']);
+      if (mocks) await fs.copy(mocks, project.path);
+      await ws.lernaLink();
+      break;
+
+    case 'serve':
+      project.cliService('ssr:serve');
+      break;
+
+    case 'build':
+      project.cliService('ssr:build');
+      break;
+
+    case 'start':
+      project.cliService('ssr:start');
+      break;
+
+    case 'test':
+      server = project.cliService('ssr:serve');
+
+      await waitOnPromise({
+        resources: [`tcp:localhost:8080`],
+        timeout: 60 * 1000,
+      });
+
+    case 'test:run':
+      const jestArgs = process.argv.slice(4);
+      const jest = execa(
+        './node_modules/.bin/jest',
+        ['--config', `tests/specs/${name}/config.js`, ...jestArgs],
+        {
+          stdio: 'inherit',
+        },
+      );
+
+      jest.on('exit', exitCode => {
+        if (server) server.kill();
+        process.exit(exitCode);
+      });
+      break;
+  }
+})().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
