@@ -54,9 +54,10 @@ const waitOnPromise = options => {
       });
 
     case 'test:run':
+      const jestArgs = process.argv.slice(4);
       const jest = execa(
         './node_modules/.bin/jest',
-        ['--config', `tests/specs/${name}/config.js`],
+        ['--config', `tests/specs/${name}/config.js`, ...jestArgs],
         {
           stdio: 'inherit',
         },
@@ -67,37 +68,6 @@ const waitOnPromise = options => {
         process.exit(exitCode);
       });
       break;
-
-    // case 'cy:run':
-    // case 'cy:open':
-    //   const cypressMode = command === 'cy:open' ? 'open' : 'run';
-    //   const serve = project.cliService('ssr:serve');
-
-    //   await waitOnPromise({
-    //     resources: [`tcp:localhost:8080`],
-    //     timeout: 60 * 1000,
-    //   });
-
-    //   let integrationPath = 'tests/projects/ci/integration';
-    //   if (projects[name] && projects[name].integration) {
-    //     integrationPath = projects[name].integration;
-    //   }
-
-    //   const configs = ['video=false', `integrationFolder=${integrationPath}`];
-
-    //   const cypress = execa(
-    //     './node_modules/.bin/cypress',
-    //     [cypressMode, '-c', configs.join(',')],
-    //     {
-    //       stdio: 'inherit',
-    //     },
-    //   );
-
-    //   cypress.on('exit', exitCode => {
-    //     serve.kill();
-    //     process.exit(exitCode);
-    //   });
-    //   break;
   }
 })().catch(err => {
   console.error(err);
