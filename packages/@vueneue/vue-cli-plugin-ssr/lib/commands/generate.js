@@ -11,6 +11,9 @@ module.exports = (api, options) => {
       usage: 'vue-cli-service generate',
     },
     async function() {
+      // Force production mode
+      process.env.NODE_ENV = 'production';
+
       const getConfig = require('../webpack/getSSRConfig');
       const clientConfig = getConfig(api);
       const serverConfig = getConfig(api, { client: false });

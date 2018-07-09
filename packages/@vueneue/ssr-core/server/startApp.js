@@ -12,14 +12,15 @@ export default async context => {
   /**
    * Define redirect function
    */
-  context.redirect = location => {
+  context.redirect = (location, statusCode = 301) => {
     const routerResult = router.resolve(location, router.currentRoute);
+    ctx.response.status = statusCode;
     if (routerResult) {
       ctx.redirect(routerResult.href);
     } else {
       ctx.redirect(location);
     }
-    ssr.redirected = true;
+    ssr.redirected = statusCode;
   };
 
   Vue.prototype.$redirect = context.redirect;
