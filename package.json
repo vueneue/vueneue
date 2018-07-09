@@ -28,6 +28,7 @@
     "lerna": "^2.11.0",
     "prettier": "^1.13.7",
     "puppeteer": "^1.5.0",
+    "request": "^2.87.0",
     "rimraf": "^2.6.2",
     "vue-eslint-parser": "^2.0.3",
     "wait-on": "^2.1.0",

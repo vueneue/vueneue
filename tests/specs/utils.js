@@ -1,4 +1,22 @@
-const doRequest = async () => {};
+const request = require('request');
+
+const doRequest = async (url, options) => {
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        url,
+        ...options,
+      },
+      (error, response, body) => {
+        resolve({
+          error,
+          response,
+          body,
+        });
+      },
+    );
+  });
+};
 
 const readSSRData = async () => {
   const scriptContent = await page.$eval(
