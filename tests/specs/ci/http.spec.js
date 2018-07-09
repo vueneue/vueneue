@@ -21,11 +21,11 @@ describe('HTTP status codes', () => {
     expect(response.statusCode).toBe(500);
   });
 
-  it('302 on redirect function', async () => {
+  it('301 on redirect function', async () => {
     const { response } = await doRequest(`${baseURL}/redirect`, {
       followRedirect: false,
     });
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(301);
   });
 
   it('500 on middleware error', async () => {

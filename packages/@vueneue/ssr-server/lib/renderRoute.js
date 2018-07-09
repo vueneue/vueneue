@@ -7,6 +7,7 @@ module.exports = (serverContext, ssrContext) => {
     ctx.set('content-type', 'text/html');
     serverContext.renderer.renderToString(ssrContext, async (err, html) => {
       if (ssrContext.redirected) {
+        ctx.response.status = ssrContext.redirected;
         return resolve(ctx);
       }
 
