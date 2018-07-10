@@ -24,7 +24,7 @@ declare module 'vue/types/options' {
 declare module 'vue/types/vue' {
   interface Vue {
     $error: (error: any, statusCode?: number) => void;
-    $redirect: (location: any) => void;
+    $redirect: (location: any, statusCode?: number) => void;
     $context: {
       app: Vue;
       router: VueRouter;
@@ -33,7 +33,7 @@ declare module 'vue/types/vue' {
       route: Route;
       query: any;
       params: any;
-      reditect: (location: any) => void;
+      reditect: (location: any, statusCode?: number) => void;
       error: (error: any, statusCode?: number) => void;
     };
   }
