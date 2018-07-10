@@ -3,6 +3,7 @@
   "version": "0.2.7",
   "description": "VueNeue core package",
   "main": "client/index.js",
+  "types": "index.d.ts",
   "scripts": {
     "lint": "eslint './**/*.js'",
     "lint:fix": "eslint --fix './**/*.js'",
