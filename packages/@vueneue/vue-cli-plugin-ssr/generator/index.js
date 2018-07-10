@@ -38,8 +38,14 @@ module.exports = (api, options) => {
 
   api.render('./template');
 
+  // Docker option
   if (options.docker) {
     api.render('./docker');
+  }
+
+  // Typescript plugin: inject definitions files
+  if (api.invoking && api.hasPlugin('@vue/cli-plugin-typescript')) {
+    api.render('./typescript');
   }
 
   // Post process files
