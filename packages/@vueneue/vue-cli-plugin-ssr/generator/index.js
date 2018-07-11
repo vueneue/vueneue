@@ -96,14 +96,14 @@ module.exports = (api, options) => {
     const filesExt = api.hasPlugin('typescript') ? 'ts' : 'js';
     if (!files[`src/router.${filesExt}`]) {
       files[`src/router.${filesExt}`] = readFileSync(
-        join(__dirname, 'router.js'),
+        join(__dirname, 'templates/router.js'),
         'utf-8',
       );
     }
 
     if (!files[`src/store.${filesExt}`]) {
       files[`src/store.${filesExt}`] = readFileSync(
-        join(__dirname, 'store.js'),
+        join(__dirname, 'templates/store.js'),
         'utf-8',
       );
     }
