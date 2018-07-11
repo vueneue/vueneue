@@ -1,6 +1,5 @@
 const { readFileSync } = require('fs-extra');
 const { join } = require('path');
-const Recast = require('../lib/recast');
 
 module.exports = (api, options) => {
   const packageOverride = {
@@ -29,6 +28,12 @@ module.exports = (api, options) => {
       pluginOptions: {
         ssr: { server: null, directives: {} },
         generate: { scanRouter: true, params: {}, paths: [] },
+        paths: {
+          main: 'src/main',
+          store: 'src/store',
+          router: 'src/router',
+          index: 'src/index.html',
+        },
       },
       pwa: { workboxOptions: { templatedUrls: { '/': 'index.ssr.html' } } },
     },
@@ -49,46 +54,15 @@ module.exports = (api, options) => {
   }
 
   // Post process files
-  api.postProcessFiles(files => {
+  api.postProcessFiles(async files => {
     // Transform existing files
     for (const file in files) {
       if (file.indexOf('src/router.') == 0) {
-        // Router file
-        const fileContent = files[file];
-        const r = new Recast(fileContent);
-        r.removeImport('vue')
-          .removeVueUse('Router')
-          .replaceExportNewToArrow('Router');
-
-        if (fileContent.indexOf('mode:') < 0)
-          r.addToNew('Router', `mode: process.ssr ? 'history' : 'hash'`);
-
-        files[file] = r.print();
+        files[file] = await require('./transform/router.js')(files[file]);
       } else if (file.indexOf('src/store.') == 0) {
-        // Store file
-        const r = new Recast(files[file]);
-        r.removeImport('vue')
-          .removeVueUse('Vuex')
-          .replaceExportNewToArrow('Store');
-        files[file] = r.print();
+        files[file] = await require('./transform/store.js')(files[file]);
       } else if (file.indexOf('src/main.') == 0) {
-        // Main file
-        let fileContent = files[file];
-
-        // initApp
-        if (!/export\s(async\s)?function\sinitApp/.test(fileContent)) {
-          fileContent += `\nexport async function initApp() {}`;
-        }
-
-        // Remove mount
-        fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
-
-        const r = new Recast(fileContent)
-          .removeImport('./router')
-          .removeImport('./store')
-          .replaceVueCreation();
-
-        files[file] = r.print();
+        files[file] = await require('./transform/main.js')(files[file]);
       }
     }
 
