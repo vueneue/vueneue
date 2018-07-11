@@ -24,7 +24,7 @@ import notFound from '../utils/notFound';
   Vue.prototype.$context = context;
 
   // Call app init
-  await initApp(context);
+  if (initApp) await initApp(context);
 
   // Add Error page for 404/Not found
   notFound(context.router);

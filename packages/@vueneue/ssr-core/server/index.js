@@ -17,7 +17,7 @@ export default async ssrContext => {
   Vue.prototype.$context = context;
 
   // Call app init
-  await initApp(context);
+  if (initApp) await initApp(context);
 
   // Add Error page for 404/Not found
   notFound(context.router);
