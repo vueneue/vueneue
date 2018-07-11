@@ -7,7 +7,7 @@ const definePlugin = require('./definePlugin');
 
 module.exports = (api, options = {}) => {
   const opts = Object.assign({ client: true, ssr: true }, options);
-  const { client, ssr } = opts;
+  const { client, ssr, vueOptions } = opts;
 
   const chainConfig = api.resolveChainableWebpackConfig();
 
@@ -106,6 +106,15 @@ module.exports = (api, options = {}) => {
   }
 
   config.plugins.unshift(new WebpackBar(webpackBarConfig));
+
+  config.module.rules.push({
+    test: /@vueneue\/ssr-core\//,
+    enforce: 'pre',
+    loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
+    options: {
+      vueOptions,
+    },
+  });
 
   return config;
 };
