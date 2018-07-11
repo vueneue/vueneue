@@ -1,4 +1,4 @@
-const Recast = require('../recast');
+const Recast = require('../../lib/recast');
 const { getFilePath } = require('./utils');
 
 module.exports = api => {

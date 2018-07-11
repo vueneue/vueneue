@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs-extra');
 const { join } = require('path');
-const Recast = require('./recast');
+const Recast = require('../lib/recast');
 
 module.exports = (api, options) => {
   const packageOverride = {
@@ -36,16 +36,16 @@ module.exports = (api, options) => {
 
   api.extendPackage(packageOverride);
 
-  api.render('./template');
+  api.render('./templates/base');
 
   // Docker option
   if (options.docker) {
-    api.render('./docker');
+    api.render('./templates/docker');
   }
 
   // Typescript plugin: inject definitions files
   if (api.invoking && api.hasPlugin('@vue/cli-plugin-typescript')) {
-    api.render('./typescript');
+    api.render('./templates/typescript');
   }
 
   // Post process files

@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const formatStats = require('@vue/cli-service/lib/commands/build/formatStats');
-const generate = require('../generate');
+const generate = require('../lib/generate');
 
 module.exports = (api, options) => {
   api.registerCommand(
