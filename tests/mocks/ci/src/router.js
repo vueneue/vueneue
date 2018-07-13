@@ -109,6 +109,10 @@ export default () => {
           },
         ],
       },
+      {
+        path: '/plugin',
+        component: () => import('./components/PluginTest'),
+      },
     ],
   });
 };

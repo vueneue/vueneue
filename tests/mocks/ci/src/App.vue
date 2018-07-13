@@ -16,6 +16,7 @@
       <li><router-link to="/middleware-error">middleware-error</router-link></li>
       <li><router-link to="/middleware-error-func">middleware-error-func</router-link></li>
       <li><router-link to="/nested">nested</router-link></li>
+      <li><router-link to="/plugin">plugin</router-link></li>
     </ul>
   </div>
 </template>

@@ -28,4 +28,5 @@ module.exports = {
     },
   },
   middlewares: { tests: '@/middlewares/tests' },
+  plugins: { tests: '@/plugins/tests' },
 };
