@@ -109,7 +109,7 @@ module.exports = (api, options = {}) => {
     };
   }
 
-  // config.plugins.unshift(new WebpackBar(webpackBarConfig));
+  config.plugins.unshift(new WebpackBar(webpackBarConfig));
 
   config.module.rules.push({
     test: /@vueneue\/ssr-core\//,
