@@ -19,9 +19,9 @@ module.exports = api => {
       main: '@/main',
       store: '@/store',
       router: '@/router',
-      middlewares: '@/middlewares',
     },
     plugins: {},
+    middlewares: {},
   };
 
   // Defaults paths to replace

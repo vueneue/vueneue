@@ -27,4 +27,5 @@ module.exports = {
       });
     },
   },
+  middlewares: { tests: '@/middlewares/tests' },
 };

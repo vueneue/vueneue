@@ -1,4 +1,4 @@
-import middlewares from '@/middlewares';
+import middlewares from '../generated/middlewares';
 
 export const handleMiddlewares = async (route, context) => {
   const middlwareContext = {

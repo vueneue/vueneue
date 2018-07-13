@@ -1,0 +1,8 @@
+/* eslint-disable */
+/* tslint:disable */
+
+export default [
+  <% for (const name in middlewares) { %>
+  require('<%= middlewares[name] %>').default,
+  <% } %>
+];

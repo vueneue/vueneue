@@ -15,7 +15,7 @@ module.exports = api => {
         } else if (file === 'tsconfig.json') {
           const tsConfig = JSON.parse(files[file]);
           tsConfig.compilerOptions.paths['neuets'] = [
-            'node_modules/@vueneue/ssr-core/neuets.ts',
+            'node_modules/@vueneue/ssr-core/neuets',
           ];
           files[file] = JSON.stringify(tsConfig, null, 2);
         }

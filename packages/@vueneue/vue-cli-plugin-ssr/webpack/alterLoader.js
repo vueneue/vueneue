@@ -6,7 +6,7 @@ module.exports = async function(content, map, meta) {
   const callback = this.async();
 
   const { api } = this.query;
-  const { plugins, paths, defaultPaths } = api.neue;
+  const { plugins, paths, defaultPaths, middlewares } = api.neue;
 
   /**
    * Replace paths
@@ -35,10 +35,20 @@ module.exports = async function(content, map, meta) {
       join(__dirname, 'templates/plugins.ejs'),
       'utf-8',
     );
-
     content = ejs.render(template, {
       plugins,
     });
+  }
+
+  /**
+   * Middlewares
+   */
+  if (relativePath === 'generated/middlewares.js') {
+    const template = await fs.readFile(
+      join(__dirname, 'templates/middlewares.ejs'),
+      'utf-8',
+    );
+    content = ejs.render(template, { middlewares });
   }
 
   callback(null, content, map, meta);
