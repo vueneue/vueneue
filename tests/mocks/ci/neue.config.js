@@ -13,20 +13,18 @@ const takeSnapshot = name => {
 };
 
 module.exports = {
-  pluginOptions: {
-    ssr: {
-      server(app) {
-        fs.ensureDirSync('snapshots');
+  ssr: {
+    server(app) {
+      fs.ensureDirSync('snapshots');
 
-        app.use(async (ctx, next) => {
-          if (/^\/heapdump/.test(ctx.url)) {
-            await takeSnapshot(ctx.query.name || new Date().getTime());
-            ctx.body = 'ok';
-          } else {
-            await next();
-          }
-        });
-      },
+      app.use(async (ctx, next) => {
+        if (/^\/heapdump/.test(ctx.url)) {
+          await takeSnapshot(ctx.query.name || new Date().getTime());
+          ctx.body = 'ok';
+        } else {
+          await next();
+        }
+      });
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <main-view/>
+    <app-view/>
 
     <ul>
       <li><router-link to="/">home</router-link></li>
@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import MainView from './vueneue/MainView';
+import AppView from './AppView';
 
 export default {
   components: {
-    MainView,
+    AppView,
   },
   head: {
     titleTemplate(title) {

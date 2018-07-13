@@ -5,10 +5,10 @@ const serverStart = require('@vueneue/ssr-server');
 process.env.NODE_ENV = 'production';
 
 let ssr;
-if (existsSync('./vue.config.js')) {
-  const { pluginOptions } = require('./vue.config.js');
-  if (pluginOptions) {
-    ssr = pluginOptions.ssr;
+if (existsSync('./neue.config.js')) {
+  const options = require('./neue.config.js');
+  if (options) {
+    ssr = options.ssr;
   }
 }
 
