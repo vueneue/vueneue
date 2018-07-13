@@ -7,6 +7,9 @@ module.exports = api => {
       .get('app')
       .clear()
       .add(require.resolve('@vueneue/ssr-core/client'));
+
+    // Add alias to vueclass
+    config.resolve.alias.set('vueclass', '@vueneue/ssr-core/vueclass.js');
   });
 
   api.configureWebpack(() => {
