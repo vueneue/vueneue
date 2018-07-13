@@ -1,5 +1,4 @@
-/// <reference path="./global.d.ts"/>
-
+import './global';
 import Vue from 'vue';
 import { Store } from 'vuex';
 import VueRouter, { Route } from 'vue-router';

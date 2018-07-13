@@ -9,7 +9,9 @@ module.exports = api => {
       .add(require.resolve('@vueneue/ssr-core/client'));
 
     // Add alias to vueclass
-    config.resolve.alias.set('vueclass', '@vueneue/ssr-core/vueclass.js');
+    config.resolve.alias
+      .set('neueclass', '@vueneue/ssr-core/neueclass.js')
+      .set('neuets', '@vueneue/ssr-core/neuets.ts');
   });
 
   api.configureWebpack(() => {
