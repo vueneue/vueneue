@@ -14,7 +14,7 @@ module.exports = api => {
       params: {},
       paths: [],
     },
-    templatePath: 'src/vueneue/index.html',
+    templatePath: 'src/index.html',
     paths: {
       main: '@/main',
       store: '@/store',

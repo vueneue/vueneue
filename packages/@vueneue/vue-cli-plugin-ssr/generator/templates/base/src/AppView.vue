@@ -1,5 +1,5 @@
 <template>
-  <div class="main-view">
+  <div class="app-view">
     <!-- Router View -->
     <router-view
       v-if="!error"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ErrorPage from './ErrorPage.vue';
+import ErrorPage from './components/ErrorPage.vue';
 export default {
   components: {
     ErrorPage,
