@@ -26,17 +26,6 @@ module.exports = (api, options) => {
       generate: 'vue-cli-service generate',
     },
     vue: {
-      pluginOptions: {
-        ssr: { server: null, directives: {} },
-        generate: { scanRouter: true, params: {}, paths: [] },
-        paths: {
-          main: '@/main',
-          store: '@/store',
-          router: '@/router',
-          middlewares: '@/middlewares',
-          index: 'src/vueneue/index.html',
-        },
-      },
       pwa: { workboxOptions: { templatedUrls: { '/': 'index.ssr.html' } } },
     },
   };

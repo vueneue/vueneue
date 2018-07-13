@@ -20,6 +20,8 @@ module.exports = api => {
 
   api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
+  require('./lib/loadConfig')(api);
+
   require('./commands/serve')(api, api.service.projectOptions);
   require('./commands/build')(api, api.service.projectOptions);
   require('./commands/start')(api, api.service.projectOptions);

@@ -45,10 +45,9 @@ module.exports = (api, options) => {
 
       const port = await portfinder.getPortPromise();
 
-      const clientConfig = getConfig(api, { vueOptions: options });
+      const clientConfig = getConfig(api);
       const serverConfig = getConfig(api, {
         client: false,
-        vueOptions: options,
       });
 
       // Expose advanced stats

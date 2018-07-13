@@ -15,10 +15,9 @@ module.exports = (api, options) => {
       process.env.NODE_ENV = 'production';
 
       const getConfig = require('../webpack/getSSRConfig');
-      const clientConfig = getConfig(api, { vueOptions: options });
+      const clientConfig = getConfig(api);
       const serverConfig = getConfig(api, {
         client: false,
-        vueOptions: options,
       });
 
       await fs.remove(api.resolve(options.outputDir));

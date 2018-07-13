@@ -7,13 +7,17 @@ const definePlugin = require('./definePlugin');
 
 module.exports = (api, options = {}) => {
   const opts = Object.assign({ client: true, ssr: true }, options);
-  const { client, ssr, vueOptions } = opts;
+  const { client, ssr } = opts;
 
   const chainConfig = api.resolveChainableWebpackConfig();
 
+  /* Todo index path
+  - Get path from pluginOptions.paths.index
+  */
+
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    args[0].template = api.resolve('src/vueneue/index.html');
+    args[0].template = api.resolve(api.neue.templatePath);
     args[0].filename = 'index.ssr.html';
     return args;
   });
@@ -105,14 +109,14 @@ module.exports = (api, options = {}) => {
     };
   }
 
-  config.plugins.unshift(new WebpackBar(webpackBarConfig));
+  // config.plugins.unshift(new WebpackBar(webpackBarConfig));
 
   config.module.rules.push({
     test: /@vueneue\/ssr-core\//,
     enforce: 'pre',
     loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
     options: {
-      vueOptions,
+      api,
     },
   });
 
