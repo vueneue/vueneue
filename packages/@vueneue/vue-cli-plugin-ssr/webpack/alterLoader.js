@@ -1,4 +1,8 @@
-module.exports = function(content, map, meta) {
+const fs = require('fs-extra');
+const { join } = require('path');
+const ejs = require('ejs');
+
+module.exports = async function(content, map, meta) {
   const callback = this.async();
 
   const { api } = this.query;
@@ -21,6 +25,20 @@ module.exports = function(content, map, meta) {
       const newPath = paths[pathName];
       content = content.replace(originalPath, newPath);
     }
+  }
+
+  /**
+   * Plugins
+   */
+  if (relativePath === 'generated/plugins.js') {
+    const template = await fs.readFile(
+      join(__dirname, 'templates/plugins.ejs'),
+      'utf-8',
+    );
+
+    content = ejs.render(template, {
+      plugins,
+    });
   }
 
   callback(null, content, map, meta);

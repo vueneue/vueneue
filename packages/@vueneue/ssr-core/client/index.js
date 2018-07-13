@@ -5,6 +5,7 @@ import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
 import createContext from '../utils/createContext';
 import { createApp, initApp } from '@/main';
+import pluginsInit from '../generated/plugins';
 import notFound from '../utils/notFound';
 
 /**
@@ -24,6 +25,7 @@ import notFound from '../utils/notFound';
   Vue.prototype.$context = context;
 
   // Call app init
+  await pluginsInit(context);
   if (initApp) await initApp(context);
 
   // Add Error page for 404/Not found
