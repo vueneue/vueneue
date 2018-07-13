@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import startApp from './startApp';
 import createContext from '../utils/createContext';
-import { createApp, initApp } from '@/main';
+import createApp from '@/main';
 import pluginsInit from '../generated/plugins';
 import notFound from '../utils/notFound';
 
@@ -19,7 +19,6 @@ export default async ssrContext => {
 
   // Call app init
   await pluginsInit(context);
-  if (initApp) await initApp(context);
 
   // Add Error page for 404/Not found
   notFound(context.router);

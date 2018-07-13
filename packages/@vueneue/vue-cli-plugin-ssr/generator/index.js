@@ -71,11 +71,6 @@ module.exports = (api, options) => {
         // Main file
         let fileContent = files[file];
 
-        // initApp
-        if (!/export\s(async\s)?function\sinitApp/.test(fileContent)) {
-          fileContent += `\nexport async function initApp() {}`;
-        }
-
         // Remove mount
         fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
