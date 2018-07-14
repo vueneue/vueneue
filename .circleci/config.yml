@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8-browsers
+      - image: circleci/node:8
 
     working_directory: ~/repo
 
@@ -20,7 +20,8 @@ jobs:
 
       - save_cache:
           paths:
+            - packages/base
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn test
+      - run: tests/cli test ci
