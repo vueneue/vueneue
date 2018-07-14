@@ -2,7 +2,7 @@ import Vue from 'vue';
 import startApp from './startApp';
 import createContext from '../utils/createContext';
 import createApp from '@/main';
-import pluginsInit from '../generated/plugins';
+import pluginsInit from '!../generated/plugins';
 import notFound from '../utils/notFound';
 
 /**

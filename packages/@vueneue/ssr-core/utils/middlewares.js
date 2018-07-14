@@ -1,7 +1,7 @@
 import { sanitizeComponent } from './asyncData';
 
 export const handleMiddlewares = async (route, context) => {
-  const middlewares = require('../generated/middlewares').default;
+  const middlewares = require('!../generated/middlewares').default;
 
   const { router } = context;
 

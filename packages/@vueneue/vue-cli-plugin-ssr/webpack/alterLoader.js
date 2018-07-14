@@ -3,6 +3,7 @@ const { join } = require('path');
 const ejs = require('ejs');
 
 module.exports = async function(content, map, meta) {
+  this.cacheable(false);
   const callback = this.async();
 
   const { api } = this.query;
