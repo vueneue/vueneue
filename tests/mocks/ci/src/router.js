@@ -39,75 +39,37 @@ export default () => {
       },
       {
         path: '/global-middleware',
-        component: () => import('./components/Middlewares'),
+        component: () => import('./components/MiddlewaresGlobal'),
       },
       {
         path: '/route-middleware',
         component: () => import('./components/Middlewares'),
-        meta: {
-          middlewares: [
-            async ({ store }) => {
-              store.commit('setMiddleware', await asyncTest('routeMiddleware'));
-            },
-          ],
-        },
       },
       {
         path: '/middleware-redirect',
-        component: () => import('./components/Middlewares'),
-        meta: {
-          middlewares: [
-            async ({ redirect }) => {
-              redirect('/');
-            },
-          ],
-        },
+        component: () => import('./components/MiddlewaresRedirect'),
       },
       {
         path: '/middleware-error',
-        component: () => import('./components/Middlewares'),
-        meta: {
-          middlewares: [
-            async () => {
-              throw new Error('middleware');
-            },
-          ],
-        },
+        component: () => import('./components/MiddlewaresError'),
       },
       {
         path: '/middleware-error-func',
-        component: () => import('./components/Middlewares'),
-        meta: {
-          middlewares: [
-            async ({ error }) => {
-              error('middleware-error-func', 403);
-            },
-          ],
-        },
+        component: () => import('./components/MiddlewaresErrorFunc'),
       },
       {
         path: '/nested',
         component: () => import('./components/Parent'),
-        meta: {
-          middlewares: [
-            async ({ store }) => {
-              store.commit('setParent', await asyncTest('parent'));
-            },
-          ],
-        },
         children: [
           {
             path: '/',
             component: () => import('./components/NestedAsyncData'),
-            meta: {
-              middlewares: [
-                async ({ store }) => {
-                  store.commit('setMiddleware', await asyncTest('child'));
-                },
-              ],
-            },
           },
         ],
+      },
+      {
+        path: '/plugin',
+        component: () => import('./components/PluginTest'),
       },
     ],
   });

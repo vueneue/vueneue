@@ -4,11 +4,3 @@
     <is-mounted/>
   </div>
 </template>
-
-<script>
-import { store } from '../middlewares';
-
-export default {
-  middlewares: [store],
-};
-</script>

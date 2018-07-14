@@ -1,6 +1,6 @@
 const { readFileSync } = require('fs-extra');
 const { join } = require('path');
-const Recast = require('./recast');
+const Recast = require('../lib/recast');
 
 module.exports = (api, options) => {
   const packageOverride = {
@@ -9,11 +9,11 @@ module.exports = (api, options) => {
       'vue-router': '^3.0.1',
       'vue-meta': '^1.5.0',
       'vue-class-component': '^6.2.0',
-      'vue-property-decorator': '^6.1.0',
+      'vue-property-decorator': '^7.0.0',
       'vuex-class': '^0.3.1',
       'vue-no-ssr': '^0.2.2',
-      '@vueneue/ssr-server': '^0.2.0',
-      '@vueneue/ssr-core': '^0.2.0',
+      '@vueneue/ssr-server': '^0.3.0',
+      '@vueneue/ssr-core': '^0.3.0',
     },
     devDependencies: {
       'webpack-node-externals': '^1.7.2',
@@ -26,20 +26,22 @@ module.exports = (api, options) => {
       generate: 'vue-cli-service generate',
     },
     vue: {
-      pluginOptions: {
-        ssr: { server: null, directives: {} },
-        generate: { scanRouter: true, params: {}, paths: [] },
-      },
       pwa: { workboxOptions: { templatedUrls: { '/': 'index.ssr.html' } } },
     },
   };
 
   api.extendPackage(packageOverride);
 
-  api.render('./template');
+  api.render('./templates/base');
 
+  // Docker option
   if (options.docker) {
-    api.render('./docker');
+    api.render('./templates/docker');
+  }
+
+  // Typescript plugin: inject definitions files
+  if (api.invoking && api.hasPlugin('@vue/cli-plugin-typescript')) {
+    api.render('./templates/typescript');
   }
 
   // Post process files
@@ -69,11 +71,6 @@ module.exports = (api, options) => {
         // Main file
         let fileContent = files[file];
 
-        // initApp
-        if (!/export\s(async\s)?function\sinitApp/.test(fileContent)) {
-          fileContent += `\nexport async function initApp() {}`;
-        }
-
         // Remove mount
         fileContent = fileContent.replace(/\.\$mount\([^)]*\)/, '');
 
@@ -90,14 +87,14 @@ module.exports = (api, options) => {
     const filesExt = api.hasPlugin('typescript') ? 'ts' : 'js';
     if (!files[`src/router.${filesExt}`]) {
       files[`src/router.${filesExt}`] = readFileSync(
-        join(__dirname, 'router.js'),
+        join(__dirname, 'templates/router.js'),
         'utf-8',
       );
     }
 
     if (!files[`src/store.${filesExt}`]) {
       files[`src/store.${filesExt}`] = readFileSync(
-        join(__dirname, 'store.js'),
+        join(__dirname, 'templates/store.js'),
         'utf-8',
       );
     }

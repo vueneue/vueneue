@@ -1,6 +1,6 @@
 {
   "name": "@vueneue/ssr-server",
-  "version": "0.2.7",
+  "version": "0.3.0-1",
   "description": "VueNeue SSR server with Koa",
   "main": "lib/index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/vueneue/vueneue/issues"
   },
-  "homepage": "https://github.com/vueneue/vueneue#readme",
+  "homepage": "https://vueneue.github.io/docs/",
   "dependencies": {
     "fast-safe-stringify": "^2.0.4",
     "fs-extra": "^6.0.1",

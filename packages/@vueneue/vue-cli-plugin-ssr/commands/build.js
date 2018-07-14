@@ -25,7 +25,9 @@ module.exports = (api, options) => {
     async function(args) {
       const getConfig = require('../webpack/getSSRConfig');
       const clientConfig = getConfig(api);
-      const serverConfig = getConfig(api, { client: false });
+      const serverConfig = getConfig(api, {
+        client: false,
+      });
 
       await fs.remove(api.resolve(options.outputDir));
 

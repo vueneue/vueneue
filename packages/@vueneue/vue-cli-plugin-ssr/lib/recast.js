@@ -154,7 +154,7 @@ class Recast {
   replaceVueCreation() {
     const builder = recast.types.builders;
     const createFunction = recast.parse(`
-export function createApp({ router, store }) {
+export default ({ router, store }) => {
   return;
 }
 `).program.body[0];

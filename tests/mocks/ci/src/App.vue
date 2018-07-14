@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <main-view/>
+    <app-view/>
 
     <ul>
       <li><router-link to="/">home</router-link></li>
@@ -16,16 +16,17 @@
       <li><router-link to="/middleware-error">middleware-error</router-link></li>
       <li><router-link to="/middleware-error-func">middleware-error-func</router-link></li>
       <li><router-link to="/nested">nested</router-link></li>
+      <li><router-link to="/plugin">plugin</router-link></li>
     </ul>
   </div>
 </template>
 
 <script>
-import MainView from './vueneue/MainView';
+import AppView from './AppView';
 
 export default {
   components: {
-    MainView,
+    AppView,
   },
   head: {
     titleTemplate(title) {

@@ -29,7 +29,10 @@ const waitOnPromise = options => {
       const { plugins, deps, mocks } = projects[name] || {};
       await project.addPlugin(plugins);
       await project.addDependency(deps);
-      await project.invokePlugin('@vueneue/ssr', ['--docker', '0']);
+
+      if (!argv.noInvoke)
+        await project.invokePlugin('@vueneue/ssr', ['--docker', '0']);
+
       if (mocks) await fs.copy(mocks, project.path);
       await ws.lernaLink();
       break;

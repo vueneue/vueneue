@@ -48,7 +48,7 @@ module.exports = (api, options) => {
         host,
         port,
         dist: api.resolve(options.outputDir),
-        ssr: options.pluginOptions ? options.pluginOptions.ssr : undefined,
+        ssr: api.neue ? api.neue.ssr : undefined,
       });
     },
   );

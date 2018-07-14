@@ -1,8 +1,9 @@
 {
   "name": "@vueneue/ssr-core",
-  "version": "0.2.7",
+  "version": "0.3.0-1",
   "description": "VueNeue core package",
   "main": "client/index.js",
+  "types": "index.d.ts",
   "scripts": {
     "lint": "eslint './**/*.js'",
     "lint:fix": "eslint --fix './**/*.js'",
@@ -22,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/vueneue/vueneue/issues"
   },
-  "homepage": "https://github.com/vueneue/vueneue#readme",
+  "homepage": "https://vueneue.github.io/docs/",
   "devDependencies": {
     "babel-eslint": "^8.2.5",
     "eslint": "^5.0.1",

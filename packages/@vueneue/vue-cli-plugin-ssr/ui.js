@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 module.exports = api => {
   api.addClientAddon({
     id: 'org.vueneue.webpack.client-addon',
-    path: path.join(__dirname, '../ui-addon-dist'),
+    path: path.join(__dirname, 'ui-addon-dist'),
   });
 
   const { setSharedData, removeSharedData } = api.namespace(

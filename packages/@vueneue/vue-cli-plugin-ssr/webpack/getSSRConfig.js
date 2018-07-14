@@ -13,7 +13,7 @@ module.exports = (api, options = {}) => {
 
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    args[0].template = api.resolve('src/vueneue/index.html');
+    args[0].template = api.resolve(api.neue.templatePath);
     args[0].filename = 'index.ssr.html';
     return args;
   });
@@ -106,6 +106,15 @@ module.exports = (api, options = {}) => {
   }
 
   config.plugins.unshift(new WebpackBar(webpackBarConfig));
+
+  config.module.rules.push({
+    test: /@vueneue\/ssr-core\/generated\.js/,
+    enforce: 'pre',
+    loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
+    options: {
+      api,
+    },
+  });
 
   return config;
 };

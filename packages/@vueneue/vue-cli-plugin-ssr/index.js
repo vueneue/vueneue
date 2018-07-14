@@ -1,4 +1,4 @@
-const definePlugin = require('./lib/webpack/definePlugin');
+const definePlugin = require('./webpack/definePlugin');
 
 module.exports = api => {
   api.chainWebpack(config => {
@@ -7,6 +7,11 @@ module.exports = api => {
       .get('app')
       .clear()
       .add(require.resolve('@vueneue/ssr-core/client'));
+
+    // Add alias to vueclass
+    config.resolve.alias
+      .set('neueclass', '@vueneue/ssr-core/neueclass.js')
+      .set('neuets', '@vueneue/ssr-core/neuets.ts');
   });
 
   api.configureWebpack(() => {
@@ -20,10 +25,12 @@ module.exports = api => {
 
   api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
-  require('./lib/commands/serve')(api, api.service.projectOptions);
-  require('./lib/commands/build')(api, api.service.projectOptions);
-  require('./lib/commands/start')(api, api.service.projectOptions);
-  require('./lib/commands/generate')(api, api.service.projectOptions);
+  require('./lib/loadConfig')(api);
+
+  require('./commands/serve')(api, api.service.projectOptions);
+  require('./commands/build')(api, api.service.projectOptions);
+  require('./commands/start')(api, api.service.projectOptions);
+  require('./commands/generate')(api, api.service.projectOptions);
 };
 
 module.exports.defaultModes = {

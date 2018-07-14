@@ -134,4 +134,15 @@ describe('SSR features', () => {
     await checkText('#parent', 'parent');
     await checkText('#middleware', 'child');
   });
+
+  it('Call plugin init', async () => {
+    await page.goto(`${baseURL}/plugin`);
+    const { state } = await readSSRData();
+    expect(state.plugin).toBe('plugin');
+  });
+
+  it('Display plugin data correctly', async () => {
+    await isMounted();
+    await checkText('#value', 'plugin');
+  });
 });

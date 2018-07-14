@@ -7,6 +7,7 @@ export default () => {
       parent: 'default',
       httpRequest: 'default',
       middleware: 'default',
+      plugin: 'default',
     },
 
     mutations: {
@@ -21,6 +22,9 @@ export default () => {
       },
       setParent(state, value) {
         state.parent = value;
+      },
+      setPlugin(state, value) {
+        state.plugin = value;
       },
     },
 

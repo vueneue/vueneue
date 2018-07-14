@@ -8,18 +8,18 @@ replace:
 <%# REPLACE %>
 <template>
   <div id="app">
-    <main-view/>
+    <app-view/>
   </div>
 </template>
 <%# END_REPLACE %>
 
 <%# REPLACE %>
 <script>
-import MainView from './vueneue/MainView';
+import AppView from './AppView';
 
 export default {
   components: {
-    MainView,
+    AppView,
   },
   head: {
     titleTemplate(title) {
