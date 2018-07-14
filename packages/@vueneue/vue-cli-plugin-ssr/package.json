@@ -29,8 +29,8 @@
   },
   "homepage": "https://vueneue.github.io/docs/",
   "devDependencies": {
-    "@vue/cli-service": "^3.0.0-rc.3",
-    "@vue/eslint-config-prettier": "^3.0.0-rc.3",
+    "@vue/cli-service": "^3.0.0-rc.4",
+    "@vue/eslint-config-prettier": "^3.0.0-rc.4",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
