@@ -12,8 +12,8 @@ module.exports = (api, options) => {
       'vue-property-decorator': '^7.0.0',
       'vuex-class': '^0.3.1',
       'vue-no-ssr': '^0.2.2',
-      '@vueneue/ssr-server': '^0.3.0',
-      '@vueneue/ssr-core': '^0.3.0',
+      '@vueneue/ssr-server': '^0.3.0-1',
+      '@vueneue/ssr-core': '^0.3.0-1',
     },
     devDependencies: {
       'webpack-node-externals': '^1.7.2',
