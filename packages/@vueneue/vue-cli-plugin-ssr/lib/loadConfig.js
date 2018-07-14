@@ -21,7 +21,6 @@ module.exports = api => {
       router: '@/router',
     },
     plugins: {},
-    middlewares: {},
   };
 
   // Defaults paths to replace

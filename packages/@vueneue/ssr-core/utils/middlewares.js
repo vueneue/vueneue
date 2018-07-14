@@ -1,4 +1,3 @@
-import { middlewares } from '!../generated';
 import { sanitizeComponent } from './asyncData';
 
 export const handleMiddlewares = async (route, context) => {
@@ -26,9 +25,8 @@ export const handleMiddlewares = async (route, context) => {
   }
 
   if (runMiddlewares.length) {
-    for (const name of runMiddlewares) {
-      if (typeof middlewares[name] === 'function')
-        await middlewares[name](middlwareContext);
+    for (const func of runMiddlewares) {
+      if (typeof func === 'function') await func(middlwareContext);
     }
   }
 };

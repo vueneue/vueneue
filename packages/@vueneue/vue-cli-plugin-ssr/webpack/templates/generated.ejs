@@ -35,12 +35,3 @@ export const pluginsInit = async (context) => {
   }
   <% } %>
 };
-
-/**
- * Middlewares
- */
-export const middlewares = {
-  <% for (const name in middlewares) { %>
-    '<%= name %>': require('<%= middlewares[name] %>').default,
-  <% } %>
-};

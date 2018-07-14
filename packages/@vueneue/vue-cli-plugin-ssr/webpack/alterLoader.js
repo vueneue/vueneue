@@ -8,7 +8,7 @@ module.exports = async function(content, map, meta) {
 
   const relativePath = this.resourcePath.split('@vueneue/ssr-core/')[1];
   const { api } = this.query;
-  const { plugins, paths, middlewares } = api.neue;
+  const { plugins, paths } = api.neue;
 
   if (relativePath === 'generated.js') {
     const template = await fs.readFile(
@@ -18,7 +18,6 @@ module.exports = async function(content, map, meta) {
 
     content = ejs.render(template, {
       paths,
-      middlewares,
       plugins,
     });
   }

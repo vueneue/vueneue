@@ -27,14 +27,5 @@ module.exports = {
       });
     },
   },
-  middlewares: {
-    child: '@/middlewares/child',
-    error: '@/middlewares/error',
-    errorFunc: '@/middlewares/errorFunc',
-    parent: '@/middlewares/parent',
-    store: '@/middlewares/store',
-    redirect: '@/middlewares/redirect',
-    global: '@/middlewares/global',
-  },
   plugins: { tests: '@/plugins/tests' },
 };

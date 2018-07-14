@@ -9,9 +9,10 @@
 
 <script>
 import { asyncTest } from '../utils';
+import { child } from '../middlewares';
 
 export default {
-  middlewares: ['child'],
+  middlewares: [child],
 
   async asyncData() {
     return {

@@ -3,7 +3,9 @@
 </template>
 
 <script>
+import { errorFunc } from '../middlewares';
+
 export default {
-  middlewares: ['errorFunc'],
+  middlewares: [errorFunc],
 };
 </script>

@@ -10,9 +10,10 @@
 
 <script>
 import { asyncTest } from '../utils';
+import { parent } from '../middlewares';
 
 export default {
-  middlewares: ['parent'],
+  middlewares: [parent],
 
   async asyncData() {
     return {

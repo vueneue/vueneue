@@ -3,7 +3,9 @@
 </template>
 
 <script>
+import { redirect } from '../middlewares';
+
 export default {
-  middlewares: ['redirect'],
+  middlewares: [redirect],
 };
 </script>

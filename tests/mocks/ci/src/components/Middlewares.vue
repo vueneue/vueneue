@@ -6,7 +6,9 @@
 </template>
 
 <script>
+import { store } from '../middlewares';
+
 export default {
-  middlewares: ['store'],
+  middlewares: [store],
 };
 </script>
