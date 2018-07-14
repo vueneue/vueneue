@@ -1,8 +1,7 @@
+import { middlewares } from '!../generated';
 import { sanitizeComponent } from './asyncData';
 
 export const handleMiddlewares = async (route, context) => {
-  const { middlewares } = require('!../generated');
-
   const { router, app } = context;
 
   const middlwareContext = {
@@ -18,7 +17,7 @@ export const handleMiddlewares = async (route, context) => {
     runMiddlewares = [...runMiddlewares, ...app.$options.middlewares];
   }
 
-  const components = router.getMatchedComponents();
+  const components = router.getMatchedComponents(route.path);
   for (const component of components) {
     const Component = sanitizeComponent(component);
     if (Component.options.middlewares) {
