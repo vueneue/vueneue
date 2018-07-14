@@ -6,50 +6,24 @@ module.exports = async function(content, map, meta) {
   this.cacheable(false);
   const callback = this.async();
 
-  const { api } = this.query;
-  const { plugins, paths, defaultPaths, middlewares } = api.neue;
-
-  /**
-   * Replace paths
-   */
   const relativePath = this.resourcePath.split('@vueneue/ssr-core/')[1];
-  const replacePathsFiles = [
-    'client/index.js',
-    'server/index.js',
-    'utils/createContext.js',
-    'utils/middlewares.js',
-  ];
+  const { api } = this.query;
+  const { plugins, paths, middlewares } = api.neue;
 
-  if (replacePathsFiles.indexOf(relativePath) >= 0) {
-    for (const pathName in defaultPaths) {
-      const originalPath = defaultPaths[pathName];
-      const newPath = paths[pathName];
-      content = content.replace(originalPath, newPath);
-    }
-  }
-
-  /**
-   * Plugins
-   */
-  if (relativePath === 'generated/plugins.js') {
-    const template = await fs.readFile(
-      join(__dirname, 'templates/plugins.ejs'),
-      'utf-8',
-    );
-    content = ejs.render(template, {
+  if (relativePath === 'generated.js') {
+    const data = {
+      paths,
+      middlewares,
       plugins,
-    });
-  }
+    };
 
-  /**
-   * Middlewares
-   */
-  if (relativePath === 'generated/middlewares.js') {
     const template = await fs.readFile(
-      join(__dirname, 'templates/middlewares.ejs'),
+      join(__dirname, 'templates/generated.ejs'),
       'utf-8',
     );
-    content = ejs.render(template, { middlewares });
+    content = ejs.render(template, data);
+
+    console.log(content);
   }
 
   callback(null, content, map, meta);

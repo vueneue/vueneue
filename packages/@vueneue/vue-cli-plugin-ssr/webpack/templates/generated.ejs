@@ -1,0 +1,46 @@
+/* eslint-disable */
+/* tslint:disable */
+
+/**
+ * Base files
+ */
+export const createApp = require('<%= paths.main %>').default;
+export const createRouter = require('<%= paths.router %>').default;
+export const createStore = require('<%= paths.store %>').default;
+
+/**
+ * Plugins system
+ */
+const plugins = {};
+<% for (const name in plugins) { %>
+  <% if (plugins[name].ssr === false) { %>
+    if (process.client) {
+      plugins['<%= name %>'] = require('<%= plugins[name].src %>');
+    }
+  <% } else { %>
+     plugins['<%= name %>'] = require('<%= plugins[name].src %>');
+  <% } %>
+<% } %>
+
+export const pluginsInit = async (context) => {
+  <% for (const name in plugins) { %>
+  if (typeof plugins['<%= name %>'].default === 'function') {
+    <% if (plugins[name].ssr === false) { %>
+    if (process.client) {
+      await plugins['<%= name %>'].default(context);
+    }
+    <% } else { %>
+    await plugins['<%= name %>'].default(context);
+    <% } %>
+  }
+  <% } %>
+};
+
+/**
+ * Middlewares
+ */
+export const middlewares = {
+  <% for (const name in middlewares) { %>
+    '<%= name %>': require('<%= middlewares[name] %>').default,
+  <% } %>
+};

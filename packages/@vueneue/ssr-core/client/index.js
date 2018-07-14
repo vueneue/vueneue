@@ -4,8 +4,7 @@ import Vue from 'vue';
 import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
 import createContext from '../utils/createContext';
-import createApp from '@/main';
-import pluginsInit from '!../generated/plugins';
+import { createApp, pluginsInit } from '!../generated';
 import notFound from '../utils/notFound';
 
 /**
