@@ -12,6 +12,8 @@
 import { asyncTest } from '../utils';
 
 export default {
+  middlewares: ['parent'],
+
   async asyncData() {
     return {
       value: await asyncTest('parent'),
