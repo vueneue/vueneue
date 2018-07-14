@@ -32,7 +32,7 @@ const getComponentAsyncData = async (Component, context) => {
 };
 
 // From Nuxt
-const sanitizeComponent = Component => {
+export const sanitizeComponent = Component => {
   // If Component already sanitized
   if (Component.options && Component._Ctor === Component) {
     return Component;

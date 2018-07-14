@@ -1,28 +1,36 @@
-import middlewares from '../generated/middlewares';
+import { sanitizeComponent } from './asyncData';
 
 export const handleMiddlewares = async (route, context) => {
+  const middlewares = require('../generated/middlewares').default;
+
+  const { router } = context;
+
   const middlwareContext = {
     ...context,
-    route: context.router.currentRoute,
-    params: context.router.currentRoute.params,
-    query: context.router.currentRoute.query,
+    route: router.currentRoute,
+    params: router.currentRoute.params,
+    query: router.currentRoute.query,
   };
 
-  if (middlewares) {
-    for (const func of middlewares) {
-      await func(middlwareContext);
+  let runMiddlewares = [];
+
+  // TODO: global middlewares
+  // if (context.app.middlewares) {
+  //   runMiddlewares = [...runMiddlewares, ...context.app.middlewares];
+  // }
+
+  const components = router.getMatchedComponents();
+  for (const component of components) {
+    const Component = sanitizeComponent(component);
+    if (Component.options.middlewares) {
+      runMiddlewares = [...runMiddlewares, ...Component.options.middlewares];
     }
   }
 
-  let routeMiddlewares = [];
-  for (const match of route.matched) {
-    if (match.meta.middlewares)
-      routeMiddlewares = [...routeMiddlewares, ...match.meta.middlewares];
-  }
-
-  if (routeMiddlewares.length) {
-    for (const func of routeMiddlewares) {
-      await func(middlwareContext);
+  if (runMiddlewares.length) {
+    for (const name of runMiddlewares) {
+      if (typeof middlewares[name] === 'function')
+        await middlewares[name](middlwareContext);
     }
   }
 };

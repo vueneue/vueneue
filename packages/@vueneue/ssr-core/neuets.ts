@@ -13,4 +13,5 @@ Component.registerHooks([
   'beforeRouteLeave',
   'asyncData',
   'head',
+  'middlewares',
 ]);
