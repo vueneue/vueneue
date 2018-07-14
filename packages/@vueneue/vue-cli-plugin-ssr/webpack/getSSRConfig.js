@@ -108,7 +108,7 @@ module.exports = (api, options = {}) => {
   config.plugins.unshift(new WebpackBar(webpackBarConfig));
 
   config.module.rules.push({
-    test: /@vueneue\/ssr-core\//,
+    test: /@vueneue\/ssr-core\/generated\.js/,
     enforce: 'pre',
     loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
     options: {

@@ -3,7 +3,7 @@ import { sanitizeComponent } from './asyncData';
 export const handleMiddlewares = async (route, context) => {
   const { middlewares } = require('!../generated');
 
-  const { router } = context;
+  const { router, app } = context;
 
   const middlwareContext = {
     ...context,
@@ -14,10 +14,9 @@ export const handleMiddlewares = async (route, context) => {
 
   let runMiddlewares = [];
 
-  // TODO: global middlewares
-  // if (context.app.middlewares) {
-  //   runMiddlewares = [...runMiddlewares, ...context.app.middlewares];
-  // }
+  if (app.$options.middlewares) {
+    runMiddlewares = [...runMiddlewares, ...app.$options.middlewares];
+  }
 
   const components = router.getMatchedComponents();
   for (const component of components) {

@@ -11,19 +11,16 @@ module.exports = async function(content, map, meta) {
   const { plugins, paths, middlewares } = api.neue;
 
   if (relativePath === 'generated.js') {
-    const data = {
-      paths,
-      middlewares,
-      plugins,
-    };
-
     const template = await fs.readFile(
       join(__dirname, 'templates/generated.ejs'),
       'utf-8',
     );
-    content = ejs.render(template, data);
 
-    console.log(content);
+    content = ejs.render(template, {
+      paths,
+      middlewares,
+      plugins,
+    });
   }
 
   callback(null, content, map, meta);
