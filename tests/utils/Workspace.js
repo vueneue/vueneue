@@ -44,9 +44,7 @@ class Workspace {
       },
     );
 
-    await this.getProject('base').addDependency(
-      '@vueneue/vue-cli-plugin-ssr@0.3.0-0',
-    );
+    await this.getProject('base').addDependency('@vueneue/vue-cli-plugin-ssr');
     await this.lernaLink();
   }
 
