@@ -49,38 +49,38 @@ module.exports = function setupDevServer(serverContext, callback) {
     },
   }).then(middleware => {
     app.use(middleware);
-  });
 
-  const handleCompilation = () => {
-    serverContext.template = readFile('index.ssr.html');
-    clientManifest = JSON.parse(readFile('client-manifest.json'));
-    serverBundle = JSON.parse(readFile('server-bundle.json'));
+    const handleCompilation = () => {
+      serverContext.template = readFile('index.ssr.html');
+      clientManifest = JSON.parse(readFile('client-manifest.json'));
+      serverBundle = JSON.parse(readFile('server-bundle.json'));
 
-    if (clientManifest && serverBundle) {
-      ready(serverBundle, { clientManifest });
-    }
-  };
+      if (clientManifest && serverBundle) {
+        ready(serverBundle, { clientManifest });
+      }
+    };
 
-  compiler.hooks.done.tap('WebapackClientDev', handleCompilation);
+    compiler.hooks.done.tap('WebapackClientDev', handleCompilation);
 
-  const readFile = file => {
-    try {
-      return mfs.readFileSync(path.join(client.output.path, file), 'utf-8');
-    } catch (err) {
-      return 'null';
-    }
-  };
+    const readFile = file => {
+      try {
+        return mfs.readFileSync(path.join(client.output.path, file), 'utf-8');
+      } catch (err) {
+        return 'null';
+      }
+    };
 
-  compiler.compilers[1].watch({}, (err, stats) => {
-    if (err) throw err;
+    compiler.compilers[1].watch({}, (err, stats) => {
+      if (err) throw err;
 
-    stats = stats.toJson();
-    // eslint-disable-next-line
-    stats.errors.forEach(err => console.error(err));
-    // eslint-disable-next-line
-    stats.warnings.forEach(err => console.warn(err));
+      stats = stats.toJson();
+      // eslint-disable-next-line
+      stats.errors.forEach(err => console.error(err));
+      // eslint-disable-next-line
+      stats.warnings.forEach(err => console.warn(err));
 
-    handleCompilation();
+      handleCompilation();
+    });
   });
 
   return readyPromise;

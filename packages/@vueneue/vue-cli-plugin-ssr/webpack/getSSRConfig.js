@@ -11,10 +11,6 @@ module.exports = (api, options = {}) => {
 
   const chainConfig = api.resolveChainableWebpackConfig();
 
-  /* Todo index path
-  - Get path from pluginOptions.paths.index
-  */
-
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
     args[0].template = api.resolve(api.neue.templatePath);
