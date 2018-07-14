@@ -9,9 +9,13 @@ module.exports = api => {
       for (const file in files) {
         if (/src\/main\./.test(file)) {
           files[file] = files[file].replace(
-            /(createApp\s*\(\s*{[^}]*})(\s*\))/,
-            `$1: any$2`,
+            /(export\sdefault\s.*)\(([^)]*)\)/m,
+            `$1($2: any)`,
           );
+
+          if (!/import.*'neuets'/.test(file)) {
+            files[file] = `import 'neuets';\n` + files[file];
+          }
         } else if (file === 'tsconfig.json') {
           const tsConfig = JSON.parse(files[file]);
           tsConfig.compilerOptions.paths['neuets'] = [
