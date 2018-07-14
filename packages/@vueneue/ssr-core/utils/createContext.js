@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import './vuePlugins';
 import { createStore, createRouter } from '!../generated';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';

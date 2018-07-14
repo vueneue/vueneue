@@ -1,3 +1,4 @@
+import '../utils/vuePlugins';
 import Vue from 'vue';
 import startApp from './startApp';
 import createContext from '../utils/createContext';
