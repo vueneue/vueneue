@@ -34,7 +34,6 @@ const waitOnPromise = options => {
         await project.invokePlugin('@vueneue/ssr', ['--docker', '0']);
 
       if (mocks) await fs.copy(mocks, project.path);
-      await ws.lernaLink();
       break;
 
     case 'serve':

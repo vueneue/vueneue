@@ -1,5 +1,6 @@
 if (module.hot) module.hot.accept();
 
+import '../utils/vuePlugins';
 import Vue from 'vue';
 import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
