@@ -3,7 +3,8 @@ node_js:
   - '8'
 script:
   - yarn lint
-  - yarn test
+  - yarn boot
+  - ./tests/cli test ci
 branches:
   only:
   - master

@@ -45,7 +45,6 @@ class Workspace {
     );
 
     await this.getProject('base').addDependency('@vueneue/vue-cli-plugin-ssr');
-    await this.lernaLink();
   }
 
   async cloneBaseProject(name) {

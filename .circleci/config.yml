@@ -14,9 +14,9 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
 
-      - run: yarn install
+      - run: ./.circleci/puppeteer.sh
+      - run: yarn
       - run: yarn boot
-      - run: yarn install
 
       - save_cache:
           paths:
@@ -24,4 +24,4 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: tests/cli test ci
+      - run: ./tests/cli test ci
