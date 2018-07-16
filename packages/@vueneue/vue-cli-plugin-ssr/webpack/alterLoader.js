@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const { join } = require('path');
 const ejs = require('ejs');
+const { parse } = require('../lib/filesRouter');
 
 module.exports = async function(content, map, meta) {
   this.cacheable(false);
@@ -21,6 +22,9 @@ module.exports = async function(content, map, meta) {
       plugins,
     });
   }
+
+  console.dir(await parse(api.resolve(''), 'src/pages'), { depth: null });
+  process.exit();
 
   callback(null, content, map, meta);
 };
