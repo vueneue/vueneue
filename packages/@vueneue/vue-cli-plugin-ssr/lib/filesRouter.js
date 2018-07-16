@@ -6,6 +6,7 @@ const readDir = async (
   subPath,
   output = [],
   parentPath = undefined,
+  isChildren = false,
 ) => {
   const fullPath = path.join(basePath, subPath);
   const results = await fs.readdir(fullPath);
@@ -53,7 +54,7 @@ const readDir = async (
 
     if (parent) {
       parent.children = [];
-      await readDir(fullPath, relativePath, parent.children);
+      await readDir(fullPath, relativePath, parent.children, null, true);
     } else {
       output = [
         ...output,
@@ -75,9 +76,7 @@ const normalizeRoutes = (projectPath, pagesPath, routes, parent) => {
       ? `${parent.metas.path}${route.path}`
       : route.path;
 
-    route.component = route.metas.filepath
-      .replace(projectPath, '')
-      .replace(/^\//, '');
+    route.component = route.metas.filepath;
 
     route.name = route.metas.path
       .replace(/^\//, '')
@@ -85,9 +84,16 @@ const normalizeRoutes = (projectPath, pagesPath, routes, parent) => {
       .replace(/\?/, '')
       .replace(/\//g, '-');
 
-    if (!route.name) route.name = 'home';
+    if (route.metas.isIndex && !/\?$/.test(route.path)) {
+      route.name += 'index';
+    }
+
+    if (parent) {
+      route.path = route.path.replace(/^\//, '');
+    }
 
     if (route.children) {
+      route.name = undefined;
       normalizeRoutes(projectPath, pagesPath, route.children, route);
     }
   }

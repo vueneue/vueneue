@@ -12,19 +12,16 @@ module.exports = async function(content, map, meta) {
   const { plugins, paths } = api.neue;
 
   if (relativePath === 'generated.js') {
-    const template = await fs.readFile(
-      join(__dirname, 'templates/generated.ejs'),
-      'utf-8',
-    );
-
-    content = ejs.render(template, {
+    const routes = await parse(api.resolve(''), 'src/pages');
+    content = await ejs.renderFile(join(__dirname, 'templates/generated.ejs'), {
       paths,
       plugins,
+      routes,
     });
-  }
 
-  console.dir(await parse(api.resolve(''), 'src/pages'), { depth: null });
-  process.exit();
+    // console.log(content);
+    // process.exit();
+  }
 
   callback(null, content, map, meta);
 };

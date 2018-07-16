@@ -34,4 +34,8 @@ export const pluginsInit = async (context) => {
     <% } %>
   }
   <% } %>
+
+  <% if (routes && routes.length) { %>
+  context.router.addRoutes(<%- include('routes', { routes }) %>);
+  <% } %>
 };

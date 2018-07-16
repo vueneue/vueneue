@@ -1,0 +1,12 @@
+[
+  <% routes.forEach(function(route){ %>
+  {
+    path: '<%= route.path %>',
+    name: '<%= route.name %>',
+    component: () => import(/* webpackChunkName: "<%= route.name %>" */ '<%= route.component %>'),
+    <% if (route.children && route.children.length) { %>
+    children: <%- include('routes', { routes: route.children }) -%>
+    <% } %>
+  },
+  <% }) %>
+]
