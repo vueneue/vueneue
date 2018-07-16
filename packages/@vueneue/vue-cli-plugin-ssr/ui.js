@@ -5,10 +5,11 @@ module.exports = api => {
   api.addClientAddon({
     id: 'org.vueneue.webpack.client-addon',
     path: path.join(__dirname, 'ui-addon-dist'),
+    // url: 'http://localhost:8042/index.js',
   });
 
-  const { setSharedData, removeSharedData } = api.namespace(
-    'webpack-dashboard-',
+  const { getSharedData, setSharedData, removeSharedData } = api.namespace(
+    'org.vue.webpack.',
   );
 
   let firstRun = true;
@@ -25,8 +26,12 @@ module.exports = api => {
 
   async function onWebpackMessage({ data: message }) {
     if (message.webpackDashboardData) {
+      const modernMode = getSharedData('modern-mode').value;
       const type = message.webpackDashboardData.type;
+
       for (const data of message.webpackDashboardData.value) {
+        const id = `${type}-${data.type}`;
+
         if (data.type === 'stats') {
           // Stats are read from a file
           const statsFile = path.resolve(
@@ -34,15 +39,43 @@ module.exports = api => {
             `./node_modules/.stats-${type}.json`,
           );
           const value = await fs.readJson(statsFile);
-          setSharedData(`${type}-${data.type}`, value);
+          setSharedData(id, value);
           await fs.remove(statsFile);
         } else if (data.type === 'progress') {
-          setSharedData(`${type}-${data.type}`, data.value);
+          if (type === 'serve' || !modernMode) {
+            setSharedData(id, {
+              [type]: data.value,
+            });
+          } else {
+            // Display two progress bars
+            const progress = getSharedData(id).value;
+            progress[type] = data.value;
+            for (const t of ['build', 'build-modern']) {
+              setSharedData(`${t}-${data.type}`, {
+                build: progress.build || 0,
+                'build-modern': progress['build-modern'] || 0,
+              });
+            }
+          }
         } else {
-          setSharedData(`${type}-${data.type}`, data.value);
+          // Don't display success until both build and build-modern are done
+          if (
+            type !== 'serve' &&
+            modernMode &&
+            data.type === 'status' &&
+            data.value === 'Success'
+          ) {
+            if (type === 'build-modern') {
+              for (const t of ['build', 'build-modern']) {
+                setSharedData(`${t}-status`, data.value);
+              }
+            }
+          } else {
+            setSharedData(id, data.value);
+          }
 
           // Notifications
-          if (type === 'ssr-serve' && data.type === 'status') {
+          if (type === 'serve' && data.type === 'status') {
             if (data.value === 'Failed') {
               api.notify({
                 title: 'Build failed',
@@ -102,7 +135,6 @@ module.exports = api => {
   api.describeTask({
     match: /vue-cli-service ssr:serve/,
     description: 'SSR: Start development server with HMR',
-    icon: 'code',
     prompts: [
       {
         name: 'mode',
@@ -163,7 +195,6 @@ module.exports = api => {
   api.describeTask({
     match: /vue-cli-service ssr:build/,
     description: 'SSR: Make a production build',
-    icon: 'archive',
     prompts: [
       {
         name: 'mode',
@@ -220,7 +251,6 @@ module.exports = api => {
   api.describeTask({
     match: /vue-cli-service ssr:start/,
     description: 'SSR: Start production server',
-    icon: 'send',
     prompts: [
       {
         name: 'mode',
@@ -261,6 +291,11 @@ module.exports = api => {
       if (answers.host) args.push('--host', answers.host);
       if (answers.port) args.push('--port', answers.port);
     },
+  });
+
+  api.describeTask({
+    match: /vue-cli-service generate/,
+    description: 'Generate static website',
   });
 
   // Open app button
