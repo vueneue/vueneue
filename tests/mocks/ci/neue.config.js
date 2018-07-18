@@ -1,6 +1,12 @@
 const fs = require('fs-extra');
-const heapdump = require('heapdump');
+
 const takeSnapshot = name => {
+  let heapdump;
+  try {
+    heapdump = requie('heapdump');
+  } catch (err) {
+    return Promise.reject();
+  }
   return new Promise((resolve, reject) => {
     heapdump.writeSnapshot(
       `snapshots/${name}.heapsnapshot`,

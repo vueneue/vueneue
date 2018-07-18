@@ -4,6 +4,7 @@ const argv = require('yargs').argv;
 const { join } = require('path');
 const execa = require('execa');
 const waitOn = require('wait-on');
+const kill = require('tree-kill');
 const Workspace = require('./utils/Workspace');
 
 const ws = new Workspace(join(__dirname, '..'));
@@ -22,6 +23,11 @@ const waitOnPromise = options => {
   const project = ws.getProject(name);
 
   let server;
+
+  // Force Yarn
+  await ws.vue(['config', '-s', 'packageManager', 'yarn'], {
+    stdio: 'inherit',
+  });
 
   switch (command) {
     case 'create':
@@ -49,7 +55,12 @@ const waitOnPromise = options => {
       break;
 
     case 'test':
-      server = project.cliService('ssr:serve');
+      if (!argv.prod) {
+        server = project.cliService('ssr:serve');
+      } else {
+        await project.cliService('ssr:build', ['--mode', 'production']);
+        server = project.cliService('ssr:start', ['--mode', 'prodction']);
+      }
 
       await waitOnPromise({
         resources: [`tcp:localhost:8080`],
@@ -58,6 +69,10 @@ const waitOnPromise = options => {
 
     case 'test:run':
       const jestArgs = process.argv.slice(4);
+
+      const prodIndex = jestArgs.findIndex(arg => arg === '--prod');
+      if (prodIndex >= 0) jestArgs.splice(prodIndex, 1);
+
       const jest = execa(
         './node_modules/.bin/jest',
         ['--config', `tests/specs/${name}/config.js`, ...jestArgs],
@@ -67,7 +82,10 @@ const waitOnPromise = options => {
       );
 
       jest.on('exit', exitCode => {
-        if (server) server.kill();
+        console.log(`Exit code: ${exitCode}`);
+        if (server) {
+          kill(server.pid);
+        }
         process.exit(exitCode);
       });
       break;

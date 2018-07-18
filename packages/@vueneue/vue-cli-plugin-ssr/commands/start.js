@@ -44,6 +44,9 @@ module.exports = (api, options) => {
 
       const port = await portfinder.getPortPromise();
 
+      // Force production mode
+      process.env.NODE_ENV = 'production';
+
       startServer({
         host,
         port,
