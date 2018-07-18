@@ -18,9 +18,13 @@ const takeSnapshot = name => {
   });
 };
 
+let testApp;
+
 module.exports = {
   ssr: {
     server(app) {
+      testApp = app;
+
       fs.ensureDirSync('snapshots');
 
       app.use(async (ctx, next) => {
@@ -31,21 +35,23 @@ module.exports = {
           await next();
         }
       });
-
-      const signals = ['SIGINT', 'SIGTERM'];
-      for (const signal of signals) {
-        process.on(signal, () => {
-          console.log('server signal ' + signal);
-          app.httpServer.close(() => {
-            console.log('server close');
-            process.exit(0);
-          });
-        });
-      }
     },
   },
   plugins: { tests: '@/plugins/tests' },
 };
+
+console.log('Listen process exit');
+
+const signals = ['SIGINT', 'SIGTERM'];
+for (const signal of signals) {
+  process.on(signal, () => {
+    console.log('server signal ' + signal);
+    testApp.httpServer.close(() => {
+      console.log('server close');
+      process.exit(0);
+    });
+  });
+}
 
 process.on('exit', () => {
   console.log('server exit');

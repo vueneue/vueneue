@@ -89,6 +89,7 @@ const waitOnPromise = options => {
         console.log(`Exit code: ${exitCode}`);
         if (server) {
           console.log('Closing server...');
+          kill(server.pid);
           server.kill('SIGTERM');
         }
         process.exit(exitCode);
