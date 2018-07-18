@@ -4,6 +4,7 @@ const argv = require('yargs').argv;
 const { join } = require('path');
 const execa = require('execa');
 const waitOn = require('wait-on');
+const kill = require('tree-kill');
 const Workspace = require('./utils/Workspace');
 
 const ws = new Workspace(join(__dirname, '..'));
@@ -78,7 +79,7 @@ const waitOnPromise = options => {
       jest.on('exit', exitCode => {
         console.log(`Exit code: ${exitCode}`);
         if (server) {
-          server.kill();
+          kill(server.pid);
         }
         process.exit(exitCode);
       });
