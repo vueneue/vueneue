@@ -56,10 +56,14 @@ const waitOnPromise = options => {
 
     case 'test':
       if (!argv.prod) {
-        server = project.cliService('ssr:serve');
+        server = project.cliService('ssr:serve', [], {
+          stdio: 'inherit',
+        });
       } else {
         await project.cliService('ssr:build', ['--mode', 'production']);
-        server = project.cliService('ssr:start', ['--mode', 'prodction']);
+        server = project.cliService('ssr:start', ['--mode', 'prodction'], {
+          stdio: 'inherit',
+        });
       }
 
       await waitOnPromise({
@@ -83,7 +87,10 @@ const waitOnPromise = options => {
 
       jest.on('exit', exitCode => {
         console.log(`Exit code: ${exitCode}`);
-        if (server) server.kill('SIGTERM');
+        if (server) {
+          console.log('Closing server...');
+          server.kill('SIGTERM');
+        }
         process.exit(exitCode);
       });
       break;

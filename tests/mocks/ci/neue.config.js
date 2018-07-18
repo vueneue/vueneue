@@ -42,11 +42,11 @@ module.exports = {
           });
         });
       }
-
-      process.on('exit', () => {
-        console.log('server exit');
-      });
     },
   },
   plugins: { tests: '@/plugins/tests' },
 };
+
+process.on('exit', () => {
+  console.log('server exit');
+});
