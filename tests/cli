@@ -72,7 +72,10 @@ const waitOnPromise = options => {
       );
 
       jest.on('exit', exitCode => {
-        if (server) server.kill();
+        console.log(`Exit code: ${exitCode}`);
+        if (server) {
+          server.kill();
+        }
         process.exit(exitCode);
       });
       break;
