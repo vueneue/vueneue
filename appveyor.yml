@@ -10,7 +10,7 @@ test_script:
   - node --version
   - yarn --version
   - yarn boot
-  - ./tests/cli test ci
+  - ".\\tests\\cli test ci"
 
 cache:
   - "%LOCALAPPDATA%\\Yarn"
