@@ -84,7 +84,7 @@ const waitOnPromise = options => {
       jest.on('exit', exitCode => {
         console.log(`Exit code: ${exitCode}`);
         if (server) {
-          kill(server.pid);
+          server.kill('SIGINT');
         }
         console.log(server);
         process.exit(exitCode);
