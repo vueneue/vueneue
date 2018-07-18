@@ -10,8 +10,7 @@ test_script:
   - node --version
   - yarn --version
   - "node tests\\cli create ci"
-  - yarn
-  - ps: "node tests\\cli test ci"
+  - "node tests\\cli test ci"
 
 cache:
   - "%LOCALAPPDATA%\\Yarn"
