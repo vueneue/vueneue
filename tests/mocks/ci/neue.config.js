@@ -35,11 +35,17 @@ module.exports = {
       const signals = ['SIGINT', 'SIGTERM'];
       for (const signal of signals) {
         process.on(signal, () => {
-          console.log(app, signal);
-          app.server.close();
-          process.exit(0);
+          console.log('server signal ' + signal);
+          app.httpServer.close(() => {
+            console.log('server close');
+            process.exit(0);
+          });
         });
       }
+
+      process.on('exit', () => {
+        console.log('server exit');
+      });
     },
   },
   plugins: { tests: '@/plugins/tests' },
