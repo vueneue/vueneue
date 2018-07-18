@@ -49,7 +49,12 @@ const waitOnPromise = options => {
       break;
 
     case 'test':
-      server = project.cliService('ssr:serve');
+      if (!argv.prod) {
+        server = project.cliService('ssr:serve');
+      } else {
+        await project.cliService('ssr:build');
+        server = project.cliService('ssr:start');
+      }
 
       await waitOnPromise({
         resources: [`tcp:localhost:8080`],
