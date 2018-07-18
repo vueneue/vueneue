@@ -86,6 +86,7 @@ const waitOnPromise = options => {
         if (server) {
           kill(server.pid);
         }
+        console.log(server);
         process.exit(exitCode);
       });
       break;
