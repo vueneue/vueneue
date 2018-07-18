@@ -63,6 +63,10 @@ const waitOnPromise = options => {
 
     case 'test:run':
       const jestArgs = process.argv.slice(4);
+
+      const prodIndex = jestArgs.findIndex('--prod');
+      if (prodIndex >= 0) jestArgs.splice(prodIndex, 1);
+
       const jest = execa(
         './node_modules/.bin/jest',
         ['--config', `tests/specs/${name}/config.js`, ...jestArgs],
