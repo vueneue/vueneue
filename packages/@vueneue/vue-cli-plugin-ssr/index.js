@@ -24,12 +24,10 @@ module.exports = api => {
       module: {
         rules: [
           {
-            test: /@vueneue\/ssr-core\/generated\.js/,
+            test: /@vueneue(\/|\\)ssr-core(\/|\\)generated\.js/,
             enforce: 'pre',
             loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
-            options: {
-              api,
-            },
+            options: { api },
           },
         ],
       },
