@@ -55,12 +55,12 @@ const waitOnPromise = options => {
       break;
 
     case 'test':
-      if (!argv.prod) {
-        server = project.cliService('ssr:serve');
-      } else {
-        await project.cliService('ssr:build', ['--mode', 'production']);
-        server = project.cliService('ssr:start', ['--mode', 'prodction']);
-      }
+      // if (!argv.prod) {
+      //   server = project.cliService('ssr:serve');
+      // } else {
+      //   await project.cliService('ssr:build', ['--mode', 'production']);
+      //   server = project.cliService('ssr:start', ['--mode', 'prodction']);
+      // }
 
       await waitOnPromise({
         resources: [`tcp:localhost:8080`],
@@ -86,9 +86,9 @@ const waitOnPromise = options => {
         if (server) {
           server.kill('SIGKILL');
         }
-        process.exit(exitCode);
 
         kill(process.pid);
+        process.exit(exitCode);
       });
       break;
   }
