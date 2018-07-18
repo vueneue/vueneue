@@ -18,8 +18,21 @@ module.exports = api => {
     // Add required process vars for Vueneue (for SPA mode only)
     const defines = definePlugin();
     defines.__vueneue = true;
+
     return {
       plugins: [defines],
+      module: {
+        rules: [
+          {
+            test: /@vueneue\/ssr-core\/generated\.js/,
+            enforce: 'pre',
+            loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
+            options: {
+              api,
+            },
+          },
+        ],
+      },
     };
   });
 

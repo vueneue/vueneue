@@ -1,60 +1,72 @@
 <template>
-  <component v-if="addonComponent" ref="addonComponent" :is="addonComponent"/>
+  <div class="vue-webpack-dashboard">
+    <div class="pane-toolbar">
+      <VueIcon icon="dashboard"/>
+      <div class="title">{{ $t('org.vue.vue-webpack.dashboard.title') }}</div>
+
+      <template
+        v-if="mode === 'ssr-serve'"
+      >
+        <VueButton
+          icon-left="open_in_browser"
+          :label="$t('org.vue.vue-webpack.dashboard.open-app')"
+          :disabled="!serveUrl"
+          :href="serveUrl"
+          target="_blank"
+        />
+        <VueIcon
+          icon="lens"
+          class="separator"
+        />
+      </template>
+
+      <VueSwitch
+        v-if="mode !== 'serve' && modernMode"
+        v-model="showModernBuild"
+      >
+        {{ $t('org.vue.vue-webpack.modern-mode') }}
+      </VueSwitch>
+
+      <VueSelect v-model="sizeField">
+        <VueSelectButton value="stats" :label="`${$t('org.vue.vue-webpack.sizes.stats')}`"/>
+        <VueSelectButton value="parsed" :label="`${$t('org.vue.vue-webpack.sizes.parsed')}`"/>
+        <VueSelectButton value="gzip" :label="`${$t('org.vue.vue-webpack.sizes.gzip')}`"/>
+      </VueSelect>
+
+      <VueButton
+        class="icon-button"
+        icon-left="help"
+        v-tooltip="$t('org.vue.vue-webpack.sizes.help')"
+      />
+    </div>
+
+    <div class="content vue-ui-grid default-gap">
+      <BuildStatus />
+      <BuildProgress />
+      <SpeedStats class="span-2"/>
+      <AssetList />
+      <ModuleList />
+    </div>
+
+    <div class="logo">
+      <a href="https://webpack.js.org/" target="_blank">
+        <img src="../assets/webpack.svg" class="webpack-logo">
+      </a>
+    </div>
+  </div>
 </template>
 
 <script>
+import VueWebpackDashboard from '@vue/cli-ui-addon-webpack/src/components/WebpackDashboard';
+import Dashboard from '../mixins/Dashboard';
+
 export default {
-  inject: ['TaskDetails'],
+  extends: VueWebpackDashboard,
+  mixins: [Dashboard],
 
-  data() {
-    return {
-      addonComponent: null,
-    };
-  },
-
-  created() {
-    this.getComponent();
-  },
-
-  mounted() {
-    if (!this.addonComponent) {
-      const interval = setInterval(() => {
-        this.getComponent();
-        if (this.addonComponent) {
-          clearInterval(interval);
-        }
-      }, 500);
-    }
-  },
-
-  methods: {
-    getComponent() {
-      this.addonComponent = ClientAddonApi.components.get(
-        'vue-webpack-dashboard',
-      );
-      if (this.addonComponent) {
-        this.$nextTick(() => {
-          this.setupComponent();
-        });
-      }
-    },
-
-    setupComponent() {
-      if (this.$refs.addonComponent) {
-        const component = this.$refs.addonComponent;
-
-        // Set store variable to take new modes types
-        Vue.set(component.$store.state, 'ssr-build', { stats: null });
-        Vue.set(component.$store.state, 'ssr-serve', { stats: null });
-
-        const mode = (this.mode =
-          this.TaskDetails.task.command.indexOf('vue-cli-service ssr:serve') !==
-          -1
-            ? 'ssr-serve'
-            : 'ssr-build');
-        component.$store.commit('mode', mode);
-        component.syncMode(mode);
-      }
+  getters: {
+    serveUrl() {
+      return this.$sharedData.serveUrl;
     },
   },
 };

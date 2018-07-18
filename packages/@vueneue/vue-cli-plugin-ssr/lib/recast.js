@@ -135,6 +135,9 @@ class Recast {
           const options = node.arguments[0];
           if (options && options.type === 'ObjectExpression') {
             const props = options.properties;
+
+            // TODO: check if property already exists
+
             if (!toEnd) {
               options.properties = [...[].concat(toProperty(code)), ...props];
             } else {
@@ -171,6 +174,9 @@ export default ({ router, store }) => {
             createFunction.declaration.body.body[0] = builder.returnStatement(
               node,
             );
+
+            // TODO: replace $mount()
+
             parentPath.replace(createFunction);
           }
         }
