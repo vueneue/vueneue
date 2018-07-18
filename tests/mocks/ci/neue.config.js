@@ -40,19 +40,11 @@ module.exports = {
   plugins: { tests: '@/plugins/tests' },
 };
 
-console.log('Listen process exit');
-
 const signals = ['SIGINT', 'SIGTERM'];
 for (const signal of signals) {
   process.on(signal, () => {
-    console.log('server signal ' + signal);
     testApp.httpServer.close(() => {
-      console.log('server close');
       process.exit(0);
     });
   });
 }
-
-process.on('exit', () => {
-  console.log('server exit');
-});
