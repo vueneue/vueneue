@@ -45,8 +45,8 @@ module.exports = (api, options = {}) => {
   let config = api.resolveWebpackConfig(chainConfig);
 
   if (client) {
+    config.entry = { app: [require.resolve('@vueneue/ssr-core/client')] };
     config = merge(config, {
-      entry: require.resolve('@vueneue/ssr-core/client'),
       plugins: [
         new VueSSRClientPlugin({
           filename: 'client-manifest.json',
@@ -54,8 +54,8 @@ module.exports = (api, options = {}) => {
       ],
     });
   } else {
+    config.entry = { app: [require.resolve('@vueneue/ssr-core/server')] };
     config = merge(config, {
-      entry: require.resolve('@vueneue/ssr-core/server'),
       target: 'node',
       externals: nodeExternals({
         whitelist: [
