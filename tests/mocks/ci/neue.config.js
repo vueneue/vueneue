@@ -32,9 +32,10 @@ module.exports = {
         }
       });
 
-      const signals = ['SIGINT', 'SIGTERM', 'SIGKILL'];
+      const signals = ['SIGINT', 'SIGTERM'];
       for (const signal of signals) {
         process.on(signal, () => {
+          console.log(app, signal);
           app.server.close();
           process.exit(0);
         });
