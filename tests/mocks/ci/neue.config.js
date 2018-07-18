@@ -31,6 +31,14 @@ module.exports = {
           await next();
         }
       });
+
+      const signals = ['SIGINT', 'SIGTERM', 'SIGKILL'];
+      for (const signal of signals) {
+        process.on(signal, () => {
+          app.server.close();
+          process.exit(0);
+        });
+      }
     },
   },
   plugins: { tests: '@/plugins/tests' },

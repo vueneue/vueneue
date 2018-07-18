@@ -55,17 +55,17 @@ const waitOnPromise = options => {
       break;
 
     case 'test':
-    // if (!argv.prod) {
-    //   server = project.cliService('ssr:serve');
-    // } else {
-    //   await project.cliService('ssr:build', ['--mode', 'production']);
-    //   server = project.cliService('ssr:start', ['--mode', 'prodction']);
-    // }
+      if (!argv.prod) {
+        server = project.cliService('ssr:serve');
+      } else {
+        await project.cliService('ssr:build', ['--mode', 'production']);
+        server = project.cliService('ssr:start', ['--mode', 'prodction']);
+      }
 
-    // await waitOnPromise({
-    //   resources: [`tcp:localhost:8080`],
-    //   timeout: 60 * 1000,
-    // });
+      await waitOnPromise({
+        resources: [`tcp:localhost:8080`],
+        timeout: 60 * 1000,
+      });
 
     case 'test:run':
       const jestArgs = process.argv.slice(4);
@@ -84,7 +84,7 @@ const waitOnPromise = options => {
       jest.on('exit', exitCode => {
         console.log(`Exit code: ${exitCode}`);
         if (server) {
-          server.kill('SIGKILL');
+          server.kill('SIGTERM');
         }
         process.exit(exitCode);
       });
