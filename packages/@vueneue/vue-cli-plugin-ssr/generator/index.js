@@ -90,6 +90,11 @@ module.exports = (api, options) => {
         join(__dirname, 'templates/router.js'),
         'utf-8',
       );
+
+      // Add router to new Vue()
+      const r = new Recast(files[`src/main.${filesExt}`]);
+      r.addToNew('Vue', 'router');
+      files[`src/main.${filesExt}`] = r.print();
     }
 
     if (!files[`src/store.${filesExt}`]) {
@@ -97,6 +102,11 @@ module.exports = (api, options) => {
         join(__dirname, 'templates/store.js'),
         'utf-8',
       );
+
+      // Add store to new Vue()
+      const r = new Recast(files[`src/main.${filesExt}`]);
+      r.addToNew('Vue', 'store');
+      files[`src/main.${filesExt}`] = r.print();
     }
   });
 
