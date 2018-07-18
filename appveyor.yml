@@ -9,7 +9,6 @@ test_script:
   - git --version
   - node --version
   - yarn --version
-  - "node tests\\cli create base"
   - "node tests\\cli create ci"
   - yarn
   - "node tests\\cli test ci"
