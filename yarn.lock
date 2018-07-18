@@ -923,7 +923,7 @@
   version "3.0.0-rc.5"
   resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.0.0-rc.5.tgz#0a61adb1b6af9a2fce75b97cc83c54ee5227f629"
 
-"@vue/cli-plugin-babel@^3.0.0-rc.4":
+"@vue/cli-plugin-babel@^3.0.0-rc.5":
   version "3.0.0-rc.5"
   resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.0.0-rc.5.tgz#73d710f970fd2b08ae13ff4669458c1989a9b058"
   dependencies:
@@ -931,7 +931,7 @@
     "@vue/babel-preset-app" "^3.0.0-rc.5"
     babel-loader "^8.0.0-0"
 
-"@vue/cli-service@^3.0.0-rc.4":
+"@vue/cli-service@^3.0.0-rc.4", "@vue/cli-service@^3.0.0-rc.5":
   version "3.0.0-rc.5"
   resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.0.0-rc.5.tgz#ed931795d7efebcd4afe794fc845874ddfacce63"
   dependencies:

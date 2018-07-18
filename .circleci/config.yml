@@ -24,4 +24,4 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: ./tests/cli test ci --prod
+      - run: ./tests/cli test ci
