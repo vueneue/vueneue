@@ -29,7 +29,6 @@
     "puppeteer": "^1.5.0",
     "request": "^2.87.0",
     "rimraf": "^2.6.2",
-    "tree-kill": "^1.2.0",
     "vue-eslint-parser": "^2.0.3",
     "wait-on": "^2.1.0",
     "yargs": "^12.0.1"

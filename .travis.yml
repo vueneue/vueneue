@@ -5,9 +5,6 @@ script:
   - yarn lint
   - yarn boot
   - ./tests/cli test ci
-branches:
-  only:
-  - master
 cache:
   directories:
     - $HOME/.cache/yarn

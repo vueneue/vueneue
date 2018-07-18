@@ -83,5 +83,7 @@ module.exports = async opts => {
     console.log(`Server started at http://${host}:${port}`);
   });
 
+  app.httpServer = httpServer;
+
   return httpServer;
 };
