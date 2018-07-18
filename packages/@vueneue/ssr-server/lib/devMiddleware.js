@@ -24,7 +24,7 @@ module.exports = function setupDevServer(serverContext, callback) {
   };
 
   // Config for dev middleware
-  client.entry = [client.entry];
+  // client.entry = [client.entry];
   client.output.filename = '[name].js';
   client.plugins.push(new webpack.NoEmitOnErrorsPlugin());
 

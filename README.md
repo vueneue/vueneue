@@ -5,9 +5,9 @@
 </p>
 
 [![npm version](https://badge.fury.io/js/%40vueneue%2Fvue-cli-plugin-ssr.svg)](https://badge.fury.io/js/%40vueneue%2Fvue-cli-plugin-ssr)
-[![Build Status](https://travis-ci.org/vueneue/vueneue.svg?branch=master)](https://travis-ci.org/vueneue/vueneue)
+[![TravisCI](https://travis-ci.org/vueneue/vueneue.svg?branch=master)](https://travis-ci.org/vueneue/vueneue)
 [![CircleCI](https://circleci.com/gh/vueneue/vueneue/tree/master.svg?style=shield)](https://circleci.com/gh/vueneue/vueneue)
-[![Build status](https://ci.appveyor.com/api/projects/status/99ekpjp0nrgnpkwu/branch/master?svg=true)](https://ci.appveyor.com/project/chymz/vueneue/branch/master)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/99ekpjp0nrgnpkwu/branch/master?svg=true)](https://ci.appveyor.com/project/chymz/vueneue/branch/master)
 
 ## Documentation
 
