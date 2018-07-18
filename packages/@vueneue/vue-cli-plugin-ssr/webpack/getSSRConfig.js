@@ -23,6 +23,25 @@ module.exports = (api, options = {}) => {
   chainConfig.plugins.delete('no-emit-on-errors');
   chainConfig.plugins.delete('progress');
 
+  // Disable CSS plugins on server side
+  if (!client) {
+    chainConfig.plugins.delete('optimize-css');
+    chainConfig.plugins.delete('extract-css');
+
+    const cssRulesNames = ['css', 'postcss', 'scss', 'sass', 'less', 'stylus'];
+    const oneOfsNames = ['normal', 'normal-modules', 'vue', 'vue-modules'];
+
+    for (const ruleName of cssRulesNames) {
+      const rule = chainConfig.module.rules.get(ruleName);
+      if (rule) {
+        for (const oneOfName of oneOfsNames) {
+          const oneOf = rule.oneOfs.get(oneOfName);
+          if (oneOf) oneOf.uses.delete('extract-css-loader');
+        }
+      }
+    }
+  }
+
   let config = api.resolveWebpackConfig(chainConfig);
 
   if (client) {
