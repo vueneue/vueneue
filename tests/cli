@@ -58,8 +58,8 @@ const waitOnPromise = options => {
       if (!argv.prod) {
         server = project.cliService('ssr:serve');
       } else {
-        await project.cliService('ssr:build');
-        server = project.cliService('ssr:start');
+        await project.cliService('ssr:build', ['--mode', 'production']);
+        server = project.cliService('ssr:start', ['--mode', 'prodction']);
       }
 
       await waitOnPromise({
