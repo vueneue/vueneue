@@ -24,6 +24,11 @@ const waitOnPromise = options => {
 
   let server;
 
+  // Force Yarn
+  await ws.vue(['config', '-s', 'packageManager', 'yarn'], {
+    stdio: 'inherit',
+  });
+
   switch (command) {
     case 'create':
       await project.create();
