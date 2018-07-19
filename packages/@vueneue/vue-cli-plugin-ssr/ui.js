@@ -159,13 +159,13 @@ module.exports = api => {
       {
         name: 'host',
         type: 'input',
-        default: '0.0.0.0',
+        default: '127.0.0.1',
         description: 'Specify host',
       },
       {
         name: 'port',
         type: 'input',
-        default: 3000,
+        default: 8080,
         description: 'Specify port',
       },
     ],
@@ -281,7 +281,7 @@ module.exports = api => {
       {
         name: 'port',
         type: 'input',
-        default: 3000,
+        default: 8080,
         description: 'Specify port',
       },
     ],
