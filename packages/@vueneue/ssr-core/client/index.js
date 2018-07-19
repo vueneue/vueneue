@@ -4,7 +4,7 @@ import '../utils/vuePlugins';
 import Vue from 'vue';
 import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
-import createContext from '../utils/createContext';
+import { createContext } from '../utils/context';
 import { createApp, pluginsInit } from '!../generated';
 import notFound from '../utils/notFound';
 
@@ -15,14 +15,12 @@ import notFound from '../utils/notFound';
   // Create application
   const context = createContext();
   context.app = createApp(context);
+  context.app.context = context;
 
   // Error handler
   Vue.config.errorHandler = (error, vm, info) => {
     errorHandler(context, { error, vm, info });
   };
-
-  // Context variable
-  Vue.prototype.$context = context;
 
   // Call app init
   await pluginsInit(context);

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { resolveComponentsAsyncData } from '../utils/asyncData';
 import { handleMiddlewares } from '../utils/middlewares';
 import errorHandler from '../utils/errorHandler';
+import { getContext } from '../utils/context';
 
 /**
  * Start application
@@ -39,31 +40,28 @@ export default async context => {
     router.push(url);
 
     router.onReady(async () => {
+      const _context = getContext(context);
+
       try {
         // Middlewares
-        await handleMiddlewares(router.currentRoute, context);
+        await handleMiddlewares(router.currentRoute, _context);
 
         // Store init function
         if (store._actions.onHttpRequest) {
-          await store.dispatch('onHttpRequest', {
-            ...context,
-            route: router.currentRoute,
-            params: router.currentRoute.params,
-            query: router.currentRoute.query,
-          });
+          await store.dispatch('onHttpRequest', _context);
         }
 
         const data = await resolveComponentsAsyncData(
           router.currentRoute,
           router.getMatchedComponents(),
-          context,
+          _context,
         );
 
         ssr.asyncData = data;
         ssr.state = store.state;
         resolve(app);
       } catch (error) {
-        errorHandler(context, {
+        errorHandler(_context, {
           error: error.stack || error.message || error,
           statusCode: error.statusCode || 500,
         });

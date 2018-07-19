@@ -1,7 +1,6 @@
 import '../utils/vuePlugins';
-import Vue from 'vue';
 import startApp from './startApp';
-import createContext from '../utils/createContext';
+import { createContext } from '../utils/context';
 import { createApp, pluginsInit } from '!../generated';
 import notFound from '../utils/notFound';
 
@@ -13,9 +12,6 @@ export default async ssrContext => {
   const context = createContext(ssrContext);
   context.app = createApp(context);
   context.ssr = ssrContext;
-
-  // Context variable
-  Vue.prototype.$context = context;
 
   // Call app init
   await pluginsInit(context);

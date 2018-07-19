@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import errorHandler from '../utils/errorHandler';
 import { resolveComponentsAsyncData } from '../utils/asyncData';
-import { handleHMRAsyncData } from '../utils/hmr';
+import { addHotReload } from '../utils/hmr';
 import { handleMiddlewares } from '../utils/middlewares';
 import { handleHMRMiddlewares } from '../utils/hmr';
+import { getContext } from '../utils/context';
 
 /**
  * Start application
@@ -23,7 +24,6 @@ export default async context => {
    * Handling HMR
    */
   if (process.dev && process.client) {
-    handleHMRAsyncData(context);
     handleHMRMiddlewares(context);
   }
 
@@ -37,8 +37,17 @@ export default async context => {
         next();
       });
 
+      // After each
+      router.afterEach(() => {
+        app.$nextTick(() => {
+          addHotReload(context);
+        });
+      });
+
       // Handling asyncData() method on route change
       router.beforeResolve(async (to, from, next) => {
+        const _context = getContext(context);
+
         try {
           // Middlewares
           await handleMiddlewares(to, context);
@@ -46,7 +55,7 @@ export default async context => {
           await resolveComponentsAsyncData(
             to,
             router.getMatchedComponents(to),
-            context,
+            _context,
           );
 
           if (router.redirected) {
@@ -55,7 +64,7 @@ export default async context => {
             return next(redirectLocation.location);
           }
         } catch (error) {
-          errorHandler(context, { error });
+          errorHandler(_context, { error });
         }
 
         next();
@@ -63,6 +72,8 @@ export default async context => {
 
       // SPA
       if (!process.ssr) {
+        const _context = getContext(context);
+
         try {
           // Store init function on SPA Mode
           if (store._actions.onHttpRequest) {
@@ -78,10 +89,10 @@ export default async context => {
           await resolveComponentsAsyncData(
             router.currentRoute,
             router.getMatchedComponents(),
-            context,
+            _context,
           );
         } catch (error) {
-          errorHandler(context, { error });
+          errorHandler(_context, { error });
         }
       }
 
@@ -89,6 +100,10 @@ export default async context => {
        * Mount app
        */
       if (!process.test) app.$mount('#app');
+
+      app.$nextTick(() => {
+        addHotReload(getContext(context));
+      });
 
       resolve(context);
     });

@@ -1,42 +1,46 @@
-import { resolveComponentsAsyncData } from './asyncData';
 import errorHandler from './errorHandler';
 import { handleMiddlewares } from './middlewares';
+import { applyAsyncData, sanitizeComponent } from './asyncData';
+import { getContext } from './context';
 
-let hmrInstalled = false;
-export const handleHMRAsyncData = context => {
-  if (hmrInstalled) return;
-  hmrInstalled = true;
+const findAsyncDataComponents = (parent, components = []) => {
+  for (const child of parent.$children) {
+    if (child.$vnode.data.routerView) {
+      components.push(child);
+    }
+    if (child.$children.length) {
+      findAsyncDataComponents(child, components);
+    }
+  }
+  return components;
+};
 
-  onHotReload(() => {
-    const { router, store } = context;
-    const route = router.currentRoute;
-    const matched = router.getMatchedComponents();
+export const addHotReload = context => {
+  if (!module.hot) return;
 
-    // Get data
-    resolveComponentsAsyncData(route, matched, context)
-      .then(datas => {
-        // Get instances with asyncData
-        const instances = [];
-        for (const match of router.currentRoute.matched) {
-          if (match.components.default && match.components.default.asyncData) {
-            instances.push(match.instances.default);
-          }
-        }
+  console.log('addHotReload');
 
-        // Set data on components
-        for (const index in datas) {
-          const data = datas[index];
-          const instance = instances[index];
-          if (instance) Object.assign(instance.$data, data);
-        }
-      })
-      .then(() => {
-        store.commit('errorHandler/CLEAR');
-      })
-      .catch(error => {
-        errorHandler(context, { error });
-      });
-  });
+  const { app, router } = context;
+  const components = findAsyncDataComponents(app);
+
+  for (const depth in components) {
+    const component = components[depth];
+    const _forceUpdate = component.$forceUpdate.bind(component.$parent);
+
+    component.$vnode.context.$forceUpdate = async () => {
+      console.log('forceUpdate');
+
+      const routeComponents = router.getMatchedComponents(router.currentRoute);
+      const Component = sanitizeComponent(routeComponents[depth]);
+
+      if (Component && Component.options.asyncData) {
+        const data = await Component.options.asyncData(getContext(context));
+        applyAsyncData(Component, data);
+      }
+
+      return _forceUpdate();
+    };
+  }
 };
 
 export const handleHMRMiddlewares = async context => {

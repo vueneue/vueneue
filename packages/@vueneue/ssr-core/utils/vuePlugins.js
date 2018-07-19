@@ -14,7 +14,7 @@ Vue.use(VueMeta, {
 });
 
 /**
- * VueNeue functions
+ * VueNeue helpers functions
  */
 Vue.use({
   install(Vue) {
