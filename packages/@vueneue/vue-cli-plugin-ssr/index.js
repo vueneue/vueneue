@@ -1,7 +1,11 @@
 const definePlugin = require('./webpack/definePlugin');
-const NeueApi = require('./lib/NeueApi');
+const NeueApi = require('@vueneue/ssr-core/webpack/NeueApi');
+const NeueCorePlugin = require('@vueneue/ssr-core/webpack/NeueCorePlugin');
 
 module.exports = api => {
+  // Install neue API
+  api.neue = new NeueApi(api);
+
   api.chainWebpack(config => {
     // Change main entry
     config.entryPoints
@@ -13,6 +17,9 @@ module.exports = api => {
     config.resolve.alias
       .set('neueclass', '@vueneue/ssr-core/neueclass.js')
       .set('neuets', '@vueneue/ssr-core/neuets.ts');
+
+    // Add NeueCorePlugin
+    config.plugin('neue-core').use(NeueCorePlugin, [{ api }]);
   });
 
   api.configureWebpack(() => {
@@ -22,24 +29,13 @@ module.exports = api => {
 
     return {
       plugins: [defines],
-      module: {
-        rules: [
-          {
-            test: /@vueneue(\/|\\)ssr-core(\/|\\)generated\.js/,
-            enforce: 'pre',
-            loader: '@vueneue/vue-cli-plugin-ssr/webpack/alterLoader.js',
-            options: { api },
-          },
-        ],
-      },
     };
   });
 
+  // ssr-core need to be transpiled
   api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
-  // Install neue API
-  api.neue = new NeueApi(api);
-
+  // Vue CLI commands
   require('./commands/serve')(api, api.service.projectOptions);
   require('./commands/build')(api, api.service.projectOptions);
   require('./commands/start')(api, api.service.projectOptions);

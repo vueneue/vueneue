@@ -1,7 +1,7 @@
 import '../utils/vuePlugins';
 import startApp from './startApp';
 import { createContext } from '../utils/context';
-import { createApp, pluginsInit } from '!../generated';
+import { createApp, pluginsInit } from '../boot';
 import notFound from '../utils/notFound';
 
 /**

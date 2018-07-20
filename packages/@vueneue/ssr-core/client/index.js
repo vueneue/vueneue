@@ -5,7 +5,7 @@ import Vue from 'vue';
 import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
 import { createContext } from '../utils/context';
-import { createApp, pluginsInit } from '!../generated';
+import { createApp, pluginsInit } from '../boot';
 import notFound from '../utils/notFound';
 
 /**

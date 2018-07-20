@@ -30,5 +30,8 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.1",
     "prettier": "^1.13.6"
+  },
+  "dependencies": {
+    "chokidar": "^2.0.4"
   }
 }

@@ -32,14 +32,19 @@ class NeueApi {
     let config = deepClone(defaultConfig);
 
     // Load config in project if exists
-    if (fs.existsSync(this.api.resolve('neue.config.js'))) {
-      config = merge(config, require(this.api.resolve('neue.config.js')));
+    const configPath = this.api.resolve('neue.config.js');
+    if (fs.existsSync(configPath)) {
+      config = merge(config, require(configPath));
+      delete require.cache[configPath];
     }
 
     // Plugins
     for (const pluginName in config.plugins) {
-      if (typeof config[pluginName] === 'string') {
-        config[pluginName] = { src: config[pluginName] };
+      if (typeof config.plugins[pluginName] === 'string') {
+        config.plugins[pluginName] = {
+          src: config.plugins[pluginName],
+          ssr: true,
+        };
       }
     }
 

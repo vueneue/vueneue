@@ -4,6 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 const merge = require('webpack-merge');
 const WebpackBar = require('webpackbar');
 const definePlugin = require('./definePlugin');
+const NeueCorePlugin = require('@vueneue/ssr-core/webpack/NeueCorePlugin');
 
 module.exports = (api, options = {}) => {
   const opts = Object.assign({ client: true, ssr: true }, options);
@@ -53,8 +54,6 @@ module.exports = (api, options = {}) => {
         `Server is running: ${protocol}://${opts.host}:${opts.port}`,
       );
     }
-
-    messages.push(`Mode: ${api.service.mode}`);
 
     args[0].compilationSuccessInfo = { messages };
     return args;
