@@ -1,32 +1,43 @@
 #!/usr/bin/env node
-const { existsSync } = require('fs');
+/* eslint-disable */
+
+const { exists } = require('fs-extra');
 const { resolve } = require('path');
 const serverStart = require('./lib');
 
 // Force production mode
 process.env.NODE_ENV = 'production';
 
-// Read Vue config if exists
-let ssr;
-if (existsSync(resolve('neue.config.js'))) {
-  const options = require(resolve('neue.config.js'));
-  if (options) {
-    ssr = options.ssr;
+(async () => {
+  // Read Vue config if exists
+  let ssr;
+  if (await exists(resolve('neue.config.js'))) {
+    const options = require(resolve('neue.config.js'));
+    if (options) {
+      ssr = options.ssr;
+    }
   }
-}
 
-const server = serverStart({
-  ssr,
-  host: process.env.HOST || '0.0.0.0',
-  port: process.env.PORT || 8080,
-  dist: resolve('dist'),
-});
-
-const cleanExit = () => {
-  server.close(() => {
-    process.exit();
+  // Start server
+  const httpServer = await serverStart({
+    ssr,
+    host: process.env.HOST || '0.0.0.0',
+    port: process.env.PORT || 8080,
+    dist: resolve('dist'),
   });
-};
 
-process.on('SIGINT', cleanExit);
-process.on('SIGTERM', cleanExit);
+  // Handle exit
+  const cleanExit = () => {
+    if (httpServer) {
+      httpServer.close(() => {
+        process.exit();
+      });
+    }
+  };
+
+  process.on('SIGINT', cleanExit);
+  process.on('SIGTERM', cleanExit);
+})().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
