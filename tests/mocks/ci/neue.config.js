@@ -18,8 +18,6 @@ const takeSnapshot = name => {
   });
 };
 
-let testApp;
-
 module.exports = {
   ssr: {
     server(app) {
@@ -39,12 +37,3 @@ module.exports = {
   },
   plugins: { tests: '@/plugins/tests' },
 };
-
-const signals = ['SIGINT', 'SIGTERM'];
-for (const signal of signals) {
-  process.on(signal, () => {
-    testApp.httpServer.close(() => {
-      process.exit(0);
-    });
-  });
-}

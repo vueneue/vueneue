@@ -18,7 +18,12 @@ serverStart({
   port: process.env.PORT || 8080,
   dist: path.resolve('dist'),
 }).then(httpServer => {
-  process.on('SIGINT', () => {
-    httpServer.close();
-  });
+  const signals = ['SIGINT', 'SIGTERM'];
+  for (const signal of signals) {
+    process.on(signal, () => {
+      httpServer.close(() => {
+        process.exit(0);
+      });
+    });
+  }
 });
