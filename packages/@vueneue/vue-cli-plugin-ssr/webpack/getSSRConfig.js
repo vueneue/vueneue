@@ -13,7 +13,7 @@ module.exports = (api, options = {}) => {
 
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    args[0].template = api.resolve(api.neue.templatePath);
+    args[0].template = api.resolve(api.neue.getConfig('templatePath'));
     args[0].filename = 'index.ssr.html';
     return args;
   });
@@ -41,6 +41,22 @@ module.exports = (api, options = {}) => {
       }
     }
   }
+
+  // Friendly Errors with server URL
+  chainConfig.plugin('friendly-errors').tap(args => {
+    const messages = [];
+
+    if (opts.host && opts.port) {
+      const https = api.neue.getConfig('ssr.https');
+      const protocol = https && https.key && https.key ? 'https' : 'http';
+      messages.push(
+        `Server is running: ${protocol}://${opts.host}:${opts.port}`,
+      );
+    }
+
+    args[0].compilationSuccessInfo = { messages };
+    return args;
+  });
 
   let config = api.resolveWebpackConfig(chainConfig);
 

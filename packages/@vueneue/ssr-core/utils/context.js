@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { createStore, createRouter } from '!../generated';
+import { createStore, createRouter } from '../boot';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
 

@@ -45,9 +45,12 @@ module.exports = (api, options) => {
 
       const port = await portfinder.getPortPromise();
 
-      const clientConfig = getConfig(api);
+      const clientConfig = getConfig(api, { server: true, host, port });
       const serverConfig = getConfig(api, {
         client: false,
+        server: true,
+        host,
+        port,
       });
 
       // Expose advanced stats
@@ -62,11 +65,13 @@ module.exports = (api, options) => {
         });
       }
 
+      const ssr = api.neue.getConfig('ssr');
+
       await startServer({
         host,
         port,
         dist: api.resolve(options.outputDir),
-        ssr: api.neue ? api.neue.ssr : undefined,
+        ssr,
         configs: {
           client: clientConfig,
           server: serverConfig,

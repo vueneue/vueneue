@@ -67,7 +67,7 @@ module.exports = (api, options) => {
           return;
         }
         // eslint-disable-next-line
-        console.log(formatStats(stats, options.outputDir, api));
+        console.log(`\n` + formatStats(stats, options.outputDir, api));
       };
 
       if (args.watch) {
