@@ -18,8 +18,6 @@ const findAsyncDataComponents = (parent, components = []) => {
 export const addHotReload = context => {
   if (!module.hot) return;
 
-  console.log('addHotReload');
-
   const { app, router } = context;
   const components = findAsyncDataComponents(app);
 
@@ -28,14 +26,16 @@ export const addHotReload = context => {
     const _forceUpdate = component.$forceUpdate.bind(component.$parent);
 
     component.$vnode.context.$forceUpdate = async () => {
-      console.log('forceUpdate');
-
       const routeComponents = router.getMatchedComponents(router.currentRoute);
       const Component = sanitizeComponent(routeComponents[depth]);
 
-      if (Component && Component.options.asyncData) {
-        const data = await Component.options.asyncData(getContext(context));
-        applyAsyncData(Component, data);
+      try {
+        if (Component && Component.options.asyncData) {
+          const data = await Component.options.asyncData(getContext(context));
+          applyAsyncData(Component, data);
+        }
+      } catch (err) {
+        component.$error(err);
       }
 
       return _forceUpdate();
