@@ -42,6 +42,19 @@ module.exports = (api, options = {}) => {
     }
   }
 
+  // Friendly Errors with server URL
+  chainConfig.plugin('friendly-errors').tap(args => {
+    const { https } = api.neue.ssr;
+    const protocol = https && https.key && https.key ? 'https' : 'http';
+    args[0].compilationSuccessInfo = {
+      messages: [
+        `Server is running: ${protocol}://${opts.host}:${opts.port}`,
+        `Mode: ${api.service.mode}`,
+      ],
+    };
+    return args;
+  });
+
   let config = api.resolveWebpackConfig(chainConfig);
 
   if (client) {

@@ -45,9 +45,12 @@ module.exports = (api, options) => {
 
       const port = await portfinder.getPortPromise();
 
-      const clientConfig = getConfig(api);
+      const clientConfig = getConfig(api, { server: true, host, port });
       const serverConfig = getConfig(api, {
         client: false,
+        server: true,
+        host,
+        port,
       });
 
       // Expose advanced stats

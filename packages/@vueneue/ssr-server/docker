@@ -26,6 +26,8 @@ process.env.NODE_ENV = 'production';
     dist: resolve('dist'),
   });
 
+  console.log(`Server started at http://${host}:${port}`);
+
   // Handle exit
   const cleanExit = () => {
     if (httpServer) {

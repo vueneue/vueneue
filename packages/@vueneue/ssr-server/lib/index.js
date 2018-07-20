@@ -78,10 +78,7 @@ module.exports = async opts => {
     httpServer = require('http').createServer(app.callback());
   }
 
-  httpServer.listen(port, host, () => {
-    // eslint-disable-next-line
-    console.log(`Server started at http://${host}:${port}`);
-  });
+  httpServer.listen(port, host);
 
   app.httpServer = httpServer;
 
