@@ -7,16 +7,23 @@ class NeueCorePlugin {
   constructor({ api }) {
     this.api = api;
     this.neue = api.neue;
+    this.watcher = null;
   }
 
   apply(compiler) {
     this.compiler = compiler;
 
-    compiler.hooks.run.tapPromise('NeueCorePlugin', this.onRun());
-    compiler.hooks.watchRun.tapPromise('NeueCorePlugin', this.onRun());
+    compiler.hooks.run.tapPromise('NeueCorePlugin', async () => {
+      await this.writeBoot();
+    });
 
-    chokidar.watch(this.api.resolve('neue.config.js')).on('all', () => {
-      this.writeBoot();
+    compiler.hooks.watchRun.tapPromise('NeueCorePlugin', async () => {
+      if (!this.watcher) {
+        chokidar.watch(this.api.resolve('neue.config.js')).on('all', () => {
+          this.writeBoot();
+        });
+      }
+      await this.writeBoot();
     });
   }
 
