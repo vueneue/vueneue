@@ -3,7 +3,7 @@ import { createStore, createRouter } from '!../generated';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
 
-export default ssrContext => {
+export const createContext = ssrContext => {
   const router = createRouter();
   const store = createStore();
 
@@ -16,10 +16,12 @@ export default ssrContext => {
     store.replaceState(state);
   }
 
+  // Create context object
   const context = {
     ...ssrContext,
     router,
     store,
+    // Add error helper function
     error(error, statusCode = 500) {
       errorHandler(context, {
         error,
@@ -28,7 +30,21 @@ export default ssrContext => {
     },
   };
 
+  // Add context to all components
   Vue.prototype.$context = context;
 
   return context;
+};
+
+/**
+ * Return a new instance of context with route helpers
+ */
+export const getContext = context => {
+  const { router } = context;
+  return {
+    ...context,
+    route: router.currentRoute,
+    params: router.currentRoute.params,
+    query: router.currentRoute.query,
+  };
 };

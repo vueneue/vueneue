@@ -30,4 +30,4 @@ RUN chown -R node:node /home/node/app
 USER node
 WORKDIR /home/node/app
 
-CMD ["node", "./start.js"]
+CMD ["./node_modules/@vueneue/ssr-server/docker"]

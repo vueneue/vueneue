@@ -52,7 +52,7 @@ export const sanitizeComponent = Component => {
 };
 
 // From Nuxt
-const applyAsyncData = (Component, asyncData) => {
+export const applyAsyncData = (Component, asyncData) => {
   const ComponentData = Component.options.data || noopData;
 
   if (!asyncData && Component.options.hasAsyncData) {

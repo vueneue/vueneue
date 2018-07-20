@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+const { existsSync } = require('fs');
+const { resolve } = require('path');
+const serverStart = require('./lib');
+
+// Force production mode
+process.env.NODE_ENV = 'production';
+
+// Read Vue config if exists
+let ssr;
+if (existsSync(resolve('neue.config.js'))) {
+  const options = require(resolve('neue.config.js'));
+  if (options) {
+    ssr = options.ssr;
+  }
+}
+
+const server = serverStart({
+  ssr,
+  host: process.env.HOST || '0.0.0.0',
+  port: process.env.PORT || 8080,
+  dist: resolve('dist'),
+});
+
+const cleanExit = () => {
+  server.close(() => {
+    process.exit();
+  });
+};
+
+process.on('SIGINT', cleanExit);
+process.on('SIGTERM', cleanExit);
