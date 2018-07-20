@@ -44,14 +44,19 @@ module.exports = (api, options = {}) => {
 
   // Friendly Errors with server URL
   chainConfig.plugin('friendly-errors').tap(args => {
-    const { https } = api.neue.ssr;
-    const protocol = https && https.key && https.key ? 'https' : 'http';
-    args[0].compilationSuccessInfo = {
-      messages: [
+    const messages = [];
+
+    if (opts.host && opts.port) {
+      const https = api.neue.getConfig('ssr.https');
+      const protocol = https && https.key && https.key ? 'https' : 'http';
+      messages.push(
         `Server is running: ${protocol}://${opts.host}:${opts.port}`,
-        `Mode: ${api.service.mode}`,
-      ],
-    };
+      );
+    }
+
+    messages.push(`Mode: ${api.service.mode}`);
+
+    args[0].compilationSuccessInfo = { messages };
     return args;
   });
 
