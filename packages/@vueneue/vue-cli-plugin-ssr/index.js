@@ -1,4 +1,5 @@
 const definePlugin = require('./webpack/definePlugin');
+const NeueApi = require('./lib/NeueApi');
 
 module.exports = api => {
   api.chainWebpack(config => {
@@ -36,7 +37,8 @@ module.exports = api => {
 
   api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
-  require('./lib/loadConfig')(api);
+  // Install neue API
+  api.neue = new NeueApi(api);
 
   require('./commands/serve')(api, api.service.projectOptions);
   require('./commands/build')(api, api.service.projectOptions);

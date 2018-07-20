@@ -10,7 +10,7 @@ module.exports = async function(content, map, meta) {
     `@vueneue${path.sep}ssr-core${path.sep}`,
   )[1];
   const { api } = this.query;
-  const { plugins, paths } = api.neue;
+  const { plugins, paths } = api.neue.getConfig();
 
   if (relativePath === 'generated.js') {
     const template = await fs.readFile(

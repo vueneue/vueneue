@@ -20,7 +20,10 @@ module.exports = async (api, options) => {
     'utf-8',
   );
 
-  const generate = Object.assign({ scanRouter: true }, api.neue.generate || {});
+  const generate = Object.assign(
+    { scanRouter: true },
+    api.neue.getConfig('generate') || {},
+  );
 
   // Fake koa context
   const createKoaContext = () => ({
