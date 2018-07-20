@@ -10,7 +10,11 @@ import notFound from '../utils/notFound';
 export default async ssrContext => {
   // Create app
   const context = createContext(ssrContext);
-  context.app = createApp(context);
+  context.app = createApp({
+    router: context.router,
+    store: context.store,
+  });
+
   context.ssr = ssrContext;
 
   // Call app init
