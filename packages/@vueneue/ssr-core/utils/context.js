@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { createStore, createRouter } from '!../generated';
+import { createStore, createRouter } from '../boot';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
 
@@ -41,6 +41,15 @@ export const createContext = ssrContext => {
  */
 export const getContext = context => {
   const { router } = context;
+
+  if (!context.url) {
+    if (router.currentRoute) {
+      context.url = router.currentRoute.fullPath;
+    } else if (process.client) {
+      context.url = window.location.toString();
+    }
+  }
+
   return {
     ...context,
     route: router.currentRoute,

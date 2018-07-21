@@ -47,11 +47,13 @@ module.exports = (api, options) => {
       // Force production mode
       process.env.NODE_ENV = 'production';
 
+      const { ssr } = api.neue.getConfig();
+
       startServer({
         host,
         port,
         dist: api.resolve(options.outputDir),
-        ssr: api.neue ? api.neue.ssr : undefined,
+        ssr,
       });
     },
   );

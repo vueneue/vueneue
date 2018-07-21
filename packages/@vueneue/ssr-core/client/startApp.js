@@ -75,14 +75,12 @@ export default async context => {
         const _context = getContext(context);
 
         try {
+          // Middlewares
+          await handleMiddlewares(router.currentRoute, _context);
+
           // Store init function on SPA Mode
           if (store._actions.onHttpRequest) {
-            await store.dispatch('onHttpRequest', {
-              ...context,
-              route: router.currentRoute,
-              params: router.currentRoute.params,
-              query: router.currentRoute.query,
-            });
+            await store.dispatch('onHttpRequest', _context);
           }
 
           // first call => asyncData

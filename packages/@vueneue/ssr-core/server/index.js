@@ -1,7 +1,7 @@
 import '../utils/vuePlugins';
 import startApp from './startApp';
 import { createContext } from '../utils/context';
-import { createApp, pluginsInit } from '!../generated';
+import { createApp, pluginsInit } from '../boot';
 import notFound from '../utils/notFound';
 
 /**
@@ -10,7 +10,11 @@ import notFound from '../utils/notFound';
 export default async ssrContext => {
   // Create app
   const context = createContext(ssrContext);
-  context.app = createApp(context);
+  context.app = createApp({
+    router: context.router,
+    store: context.store,
+  });
+
   context.ssr = ssrContext;
 
   // Call app init

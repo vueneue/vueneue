@@ -5,7 +5,7 @@ import Vue from 'vue';
 import startApp from './startApp';
 import errorHandler from '../utils/errorHandler';
 import { createContext } from '../utils/context';
-import { createApp, pluginsInit } from '!../generated';
+import { createApp, pluginsInit } from '../boot';
 import notFound from '../utils/notFound';
 
 /**
@@ -14,8 +14,10 @@ import notFound from '../utils/notFound';
 (async () => {
   // Create application
   const context = createContext();
-  context.app = createApp(context);
-  context.app.context = context;
+  context.app = createApp({
+    router: context.router,
+    store: context.store,
+  });
 
   // Error handler
   Vue.config.errorHandler = (error, vm, info) => {
