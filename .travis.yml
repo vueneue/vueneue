@@ -4,7 +4,7 @@ node_js:
 script:
   - yarn lint
   - yarn boot
-  - ./tests/cli test ci
+  - ./tests/cli test ci --verbose
 cache:
   directories:
     - $HOME/.cache/yarn
