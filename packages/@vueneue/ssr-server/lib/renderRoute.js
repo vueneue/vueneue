@@ -1,10 +1,20 @@
 const htmlBuilder = require('./htmlBuilder');
+const spaRoute = require('./spaRoute');
+const mm = require('micromatch');
 
 module.exports = (serverContext, ssrContext) => {
   return new Promise((resolve, reject) => {
-    const { ctx } = serverContext;
+    const { ctx, spaPaths } = serverContext;
 
     ctx.set('content-type', 'text/html');
+
+    // SPA route
+    if (spaPaths && spaPaths.length && mm.some(ssrContext.url, spaPaths)) {
+      ctx.response.body = spaRoute(serverContext);
+      return resolve(ctx);
+    }
+
+    // SSR route
     serverContext.renderer.renderToString(ssrContext, async (err, html) => {
       if (ssrContext.redirected) {
         ctx.response.status = ssrContext.redirected;
