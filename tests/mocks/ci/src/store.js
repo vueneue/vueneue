@@ -30,7 +30,10 @@ export default () => {
 
     actions: {
       async onHttpRequest({ commit }, { url }) {
-        if (url === '/on-http-request-error') {
+        if (
+          url === '/on-http-request-error' ||
+          url === '/spa/on-http-request-error'
+        ) {
           throw new Error('onHttpREquest error');
         }
         commit('setHttpRequest', 'onHttpRequest');

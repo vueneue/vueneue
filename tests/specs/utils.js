@@ -30,7 +30,7 @@ const readSSRData = async () => {
 
 const isMounted = async () => {
   return page.waitForFunction(
-    'document.querySelector("#mounted").textContent === "true";',
+    'document.querySelector("#mounted") && document.querySelector("#mounted").textContent === "true";',
   );
 };
 
