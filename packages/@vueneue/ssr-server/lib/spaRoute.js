@@ -4,6 +4,6 @@ module.exports = serverContext => {
     .replace('<ssr-body>', '<div id="app"></div>')
     .replace(
       '</body>',
-      `<script data-vue-spa>window.__SPA_ROUTE__=true;</script></body>`,
+      `<script data-vue-ssr-data>window.__DATA__={"spa":true,"components":[],"state":{}}</script></body>`,
     );
 };

@@ -71,7 +71,7 @@ export default async context => {
       });
 
       // SPA
-      if (!process.ssr) {
+      if (!process.ssr || window.__DATA__.spa) {
         const _context = getContext(context);
 
         try {
