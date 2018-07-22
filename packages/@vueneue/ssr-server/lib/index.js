@@ -55,7 +55,6 @@ module.exports = async opts => {
       'utf-8',
     );
 
-    // Add middlewares on Koa
     // Serve static files
     app.use(mount('/', serve(dist)));
   }
