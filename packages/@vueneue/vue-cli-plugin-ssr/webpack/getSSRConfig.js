@@ -13,9 +13,15 @@ module.exports = (api, options = {}) => {
 
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    args[0].template = api.resolve(api.neue.getConfig('templatePath'));
-    args[0].filename = 'index.ssr.html';
-    return args;
+    const [options] = args;
+    options.template = api.resolve(api.neue.getConfig('templatePath'));
+    options.filename = 'index.ssr.html';
+
+    const params = { ...(options.templateParameters || {}), neue: opts };
+
+    options.templateParameters = params;
+
+    return [options];
   });
 
   // Remove dev plugins from @vue/cli-service
