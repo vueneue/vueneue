@@ -10,7 +10,7 @@ export const createContext = ssrContext => {
   // Add errorHandler module to Vuex
   store.registerModule('errorHandler', errorStore);
 
-  // Read data from SSR
+  // Read data from SSR and hydrate store
   if (process.client && process.ssr && window.__DATA__) {
     const { state } = window.__DATA__;
     store.replaceState(state);
