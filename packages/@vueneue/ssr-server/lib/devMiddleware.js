@@ -52,6 +52,7 @@ module.exports = function setupDevServer(serverContext, callback) {
 
     const handleCompilation = () => {
       serverContext.template = readFile('index.ssr.html');
+      serverContext.templateSpa = readFile('index.spa.html');
       clientManifest = JSON.parse(readFile('client-manifest.json'));
       serverBundle = JSON.parse(readFile('server-bundle.json'));
 

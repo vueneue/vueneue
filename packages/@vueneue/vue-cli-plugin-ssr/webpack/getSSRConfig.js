@@ -4,6 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 const merge = require('webpack-merge');
 const WebpackBar = require('webpackbar');
 const definePlugin = require('./definePlugin');
+const HtmlWebpack = require('html-webpack-plugin');
 
 module.exports = (api, options = {}) => {
   const opts = Object.assign({ client: true, ssr: true }, options);
@@ -15,8 +16,31 @@ module.exports = (api, options = {}) => {
   chainConfig.plugin('html').tap(args => {
     args[0].template = api.resolve(api.neue.getConfig('templatePath'));
     args[0].filename = 'index.ssr.html';
+    args[0].templateParameters = { neue: opts };
     return args;
   });
+
+  // Add a index template for SPA pages
+  chainConfig.plugin('html-spa').use(HtmlWebpack, [
+    {
+      template: api.resolve(api.neue.getConfig('templatePath')),
+      filename: 'index.spa.html',
+      templateParameters: {
+        neue: {
+          client: true,
+          ssr: false,
+        },
+      },
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        collapseBooleanAttributes: true,
+        removeScriptTypeAttributes: true,
+      },
+      chunksSortMode: 'none',
+    },
+  ]);
 
   // Remove dev plugins from @vue/cli-service
   chainConfig.plugins.delete('hmr');

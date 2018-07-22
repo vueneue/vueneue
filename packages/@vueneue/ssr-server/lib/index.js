@@ -47,6 +47,11 @@ module.exports = async opts => {
       'utf-8',
     );
 
+    serverContext.templateSpa = readFileSync(
+      join(dist, 'index.spa.html'),
+      'utf-8',
+    );
+
     // Add middlewares on Koa
     app.use(mount('/', serve(dist)));
   }
