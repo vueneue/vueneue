@@ -24,7 +24,7 @@ const plugins = {};
 
 export const pluginsInit = async (context) => {
   <% for (const name in plugins) { %>
-  if (typeof plugins['<%= name %>'].default === 'function') {
+  if (plugins['<%= name %>'] && typeof plugins['<%= name %>'].default === 'function') {
     <% if (plugins[name].ssr === false) { %>
     if (process.client) {
       await plugins['<%= name %>'].default(context);
