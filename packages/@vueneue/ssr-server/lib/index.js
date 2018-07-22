@@ -50,6 +50,11 @@ module.exports = async opts => {
       'utf-8',
     );
 
+    serverContext.templateSpa = readFileSync(
+      join(dist, 'index.spa.html'),
+      'utf-8',
+    );
+
     // Serve static files
     app.use(mount('/', serve(dist)));
   }

@@ -65,13 +65,14 @@ module.exports = (api, options) => {
         });
       }
 
-      const ssr = api.neue.getConfig('ssr');
+      const { ssr, spaPaths } = api.neue.getConfig();
 
       await startServer({
         host,
         port,
         dist: api.resolve(options.outputDir),
         ssr,
+        spaPaths,
         configs: {
           client: clientConfig,
           server: serverConfig,

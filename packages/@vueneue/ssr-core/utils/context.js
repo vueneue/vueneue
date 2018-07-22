@@ -1,4 +1,4 @@
-import Vue from 'vue';
+
 import { createStore, createRouter } from '../boot';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
@@ -10,7 +10,7 @@ export const createContext = ssrContext => {
   // Add errorHandler module to Vuex
   store.registerModule('errorHandler', errorStore);
 
-  // Read data from SSR
+  // Read data from SSR and hydrate store
   if (process.client && process.ssr && window.__DATA__) {
     const { state } = window.__DATA__;
     store.replaceState(state);
@@ -41,11 +41,10 @@ export const createContext = ssrContext => {
  */
 export const getContext = (context, to) => {
   const { router } = context;
-  const route = to || context.route || router.currentRoute;
 
   if (!context.url) {
-    if (route) {
-      context.url = route.fullPath;
+    if (router.currentRoute) {
+      context.url = router.currentRoute.fullPath;
     } else if (process.client) {
       context.url = window.location.toString();
     }

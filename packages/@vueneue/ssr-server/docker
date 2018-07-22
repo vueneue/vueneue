@@ -11,16 +11,20 @@ process.env.NODE_ENV = 'production';
 (async () => {
   // Read Vue config if exists
   let ssr;
+  let spaPaths;
+
   if (await exists(resolve('neue.config.js'))) {
     const options = require(resolve('neue.config.js'));
     if (options) {
       ssr = options.ssr;
+      spaPaths = options.spaPaths;
     }
   }
 
   // Start server
   const httpServer = await serverStart({
     ssr,
+    spaPaths,
     host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 8080,
     dist: resolve('dist'),
