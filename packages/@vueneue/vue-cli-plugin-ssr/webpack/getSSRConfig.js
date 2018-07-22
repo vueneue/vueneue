@@ -14,10 +14,15 @@ module.exports = (api, options = {}) => {
 
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    args[0].template = api.resolve(api.neue.getConfig('templatePath'));
-    args[0].filename = 'index.ssr.html';
-    args[0].templateParameters = { neue: opts };
-    return args;
+    const [options] = args;
+    options.template = api.resolve(api.neue.getConfig('templatePath'));
+    options.filename = 'index.ssr.html';
+
+    const params = { ...(options.templateParameters || {}), neue: opts };
+
+    options.templateParameters = params;
+
+    return [options];
   });
 
   // Add a index template for SPA pages

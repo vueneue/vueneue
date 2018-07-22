@@ -1,4 +1,4 @@
-import Vue from 'vue';
+
 import { createStore, createRouter } from '../boot';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
@@ -39,7 +39,7 @@ export const createContext = ssrContext => {
 /**
  * Return a new instance of context with route helpers
  */
-export const getContext = context => {
+export const getContext = (context, to) => {
   const { router } = context;
 
   if (!context.url) {
@@ -52,8 +52,8 @@ export const getContext = context => {
 
   return {
     ...context,
-    route: router.currentRoute,
-    params: router.currentRoute.params,
-    query: router.currentRoute.query,
+    route,
+    params: route.params,
+    query: route.query,
   };
 };

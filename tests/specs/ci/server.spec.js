@@ -1,6 +1,6 @@
 const { readSSRData, isMounted, checkText, baseURL } = require('../utils');
 
-describe('SSR features', () => {
+describe('Server side', () => {
   beforeAll(async () => {
     await page.goto(baseURL);
   });

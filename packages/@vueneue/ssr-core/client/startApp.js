@@ -46,7 +46,7 @@ export default async context => {
 
       // Handling asyncData() method on route change
       router.beforeResolve(async (to, from, next) => {
-        const _context = getContext(context);
+        const _context = getContext(context, to);
 
         try {
           // Middlewares

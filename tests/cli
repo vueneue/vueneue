@@ -37,8 +37,11 @@ const waitOnPromise = options => {
       await project.addPlugin(plugins);
       await project.addDependency(deps);
 
-      if (!argv.noInvoke)
+      if (!argv.noInvoke) {
         await project.invokePlugin('@vueneue/ssr', ['--docker', '0']);
+      }
+
+      await ws.relink('@vueneue/vue-cli-plugin-ssr');
 
       if (mocks) await fs.copy(mocks, project.path);
       break;

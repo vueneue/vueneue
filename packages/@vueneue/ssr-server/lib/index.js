@@ -37,11 +37,14 @@ module.exports = async opts => {
 
   await readyPromise;
 
-  /**
-   * Server
-   */
+  // Server customization
+  if (ssr && typeof ssr.server === 'function') {
+    ssr.server(app);
+  }
+
+  // In production mode
   if (isProduction) {
-    // In production mode get index.ssr.html file content
+    // Use index.ssr.html file for routes templates
     serverContext.template = readFileSync(
       join(dist, 'index.ssr.html'),
       'utf-8',
@@ -53,14 +56,11 @@ module.exports = async opts => {
     );
 
     // Add middlewares on Koa
+    // Serve static files
     app.use(mount('/', serve(dist)));
   }
 
-  // Server customization
-  if (ssr && typeof ssr.server === 'function') {
-    ssr.server(app);
-  }
-
+  // Main middleware: render routes
   app.use(ctx => {
     const { url } = ctx;
     const ssrContext = { url, ctx };
