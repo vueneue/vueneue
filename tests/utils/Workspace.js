@@ -74,6 +74,14 @@ class Workspace {
   getProject(name) {
     return new Project(this, name);
   }
+
+  async relink(name) {
+    await fs.remove(`node_modules/${name}`);
+    await fs.symlink(
+      join(process.cwd(), `packages/${name}`),
+      `node_modules/${name}`,
+    );
+  }
 }
 
 module.exports = Workspace;
