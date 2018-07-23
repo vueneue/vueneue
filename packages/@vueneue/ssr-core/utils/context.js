@@ -10,7 +10,7 @@ export const createContext = ssrContext => {
   // Add errorHandler module to Vuex
   store.registerModule('errorHandler', errorStore);
 
-  // Read data from SSR
+  // Read data from SSR and hydrate store
   if (process.client && process.ssr && window.__DATA__) {
     const { state } = window.__DATA__;
     store.replaceState(state);
@@ -39,12 +39,13 @@ export const createContext = ssrContext => {
 /**
  * Return a new instance of context with route helpers
  */
-export const getContext = context => {
+export const getContext = (context, to) => {
   const { router } = context;
+  const route = to || context.route || router.currentRoute;
 
   if (!context.url) {
-    if (router.currentRoute) {
-      context.url = router.currentRoute.fullPath;
+    if (route) {
+      context.url = route.fullPath;
     } else if (process.client) {
       context.url = window.location.toString();
     }
@@ -52,8 +53,8 @@ export const getContext = context => {
 
   return {
     ...context,
-    route: router.currentRoute,
-    params: router.currentRoute.params,
-    query: router.currentRoute.query,
+    route,
+    params: route.params,
+    query: route.query,
   };
 };

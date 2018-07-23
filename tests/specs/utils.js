@@ -28,9 +28,13 @@ const readSSRData = async () => {
   return JSON.parse(scriptContent.replace(/^window\.__DATA__=/, ''));
 };
 
+const isSPA = async () => {
+  return (await page.$('script[data-vue-spa]')) !== null;
+};
+
 const isMounted = async () => {
   return page.waitForFunction(
-    'document.querySelector("#mounted").textContent === "true";',
+    'document.querySelector("#mounted") && document.querySelector("#mounted").textContent === "true";',
   );
 };
 
@@ -48,6 +52,7 @@ module.exports = {
   baseURL,
   doRequest,
   readSSRData,
+  isSPA,
   isMounted,
   gotoClick,
   checkText,

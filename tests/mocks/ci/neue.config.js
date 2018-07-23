@@ -35,5 +35,6 @@ module.exports = {
       });
     },
   },
+  spaPaths: ['/spa', '/spa/**/*'],
   plugins: { tests: '@/plugins/tests' },
 };

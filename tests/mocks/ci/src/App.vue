@@ -18,6 +18,23 @@
       <li><router-link to="/nested">nested</router-link></li>
       <li><router-link to="/plugin">plugin</router-link></li>
     </ul>
+
+    <ul>
+      <li><router-link to="/spa">home</router-link></li>
+      <li><router-link to="/spa/async-data">async-data</router-link></li>
+      <li><router-link to="/spa/async-data-store">async-data-store</router-link></li>
+      <li><router-link to="/spa/async-data-error">async-data-error</router-link></li>
+      <li><router-link to="/spa/redirect">redirect</router-link></li>
+      <li><router-link to="/spa/error">error</router-link></li>
+      <li><router-link to="/spa/not-found">not-found</router-link></li>
+      <li><router-link to="/spa/global-middleware">global-middleware</router-link></li>
+      <li><router-link to="/spa/route-middleware">route-middleware</router-link></li>
+      <li><router-link to="/spa/middleware-redirect">middleware-redirect</router-link></li>
+      <li><router-link to="/spa/middleware-error">middleware-error</router-link></li>
+      <li><router-link to="/spa/middleware-error-func">middleware-error-func</router-link></li>
+      <li><router-link to="/spa/nested">nested</router-link></li>
+      <li><router-link to="/spa/plugin">plugin</router-link></li>
+    </ul>
   </div>
 </template>
 

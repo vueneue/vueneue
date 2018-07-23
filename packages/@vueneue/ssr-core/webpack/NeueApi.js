@@ -9,6 +9,7 @@ const defaultConfig = {
     directives: {},
     server: null,
   },
+  spaPaths: [],
   generate: {
     scanRouter: true,
     params: {},

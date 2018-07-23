@@ -1,6 +1,6 @@
 const { gotoClick, checkText, baseURL } = require('../utils');
 
-describe('SSR features in SPA mode', () => {
+describe('Client side', () => {
   beforeAll(async () => {
     await page.goto(baseURL);
   });
