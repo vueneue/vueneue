@@ -12,40 +12,33 @@ module.exports = (api, options = {}) => {
 
   const chainConfig = api.resolveChainableWebpackConfig();
 
+  let htmlOptions = {
+    template: api.resolve(api.neue.getConfig('templatePath')),
+    filename: 'index.ssr.html',
+  };
+
   // Override HTMLWebpackPlugin behavior
   chainConfig.plugin('html').tap(args => {
-    const [options] = args;
-    options.template = api.resolve(api.neue.getConfig('templatePath'));
-    options.filename = 'index.ssr.html';
+    const params = { ...(args[0].templateParameters || {}), neue: opts };
 
-    const params = { ...(options.templateParameters || {}), neue: opts };
+    htmlOptions = {
+      ...args[0],
+      ...htmlOptions,
+      templateParameters: params,
+    };
 
-    options.templateParameters = params;
-
-    return [options];
+    return [htmlOptions];
   });
 
   // Add a index template for SPA pages
-  chainConfig.plugin('html-spa').use(HtmlWebpack, [
-    {
-      template: api.resolve(api.neue.getConfig('templatePath')),
-      filename: 'index.spa.html',
-      templateParameters: {
-        neue: {
-          client: true,
-          ssr: false,
-        },
+  if (api.neue.getConfig('spaPaths')) {
+    chainConfig.plugin('html-spa').use(HtmlWebpack, [
+      {
+        ...htmlOptions,
+        filename: 'index.spa.html',
       },
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        collapseBooleanAttributes: true,
-        removeScriptTypeAttributes: true,
-      },
-      chunksSortMode: 'none',
-    },
-  ]);
+    ]);
+  }
 
   // Remove dev plugins from @vue/cli-service
   chainConfig.plugins.delete('hmr');
