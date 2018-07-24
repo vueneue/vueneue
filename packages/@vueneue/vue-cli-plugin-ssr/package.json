@@ -1,6 +1,6 @@
 {
   "name": "@vueneue/vue-cli-plugin-ssr",
-  "version": "0.3.4",
+  "version": "0.3.8",
   "description": "Vue CLI 3 plugin to build SSR (Server side rendered) applications",
   "main": "index.js",
   "types": "template/src/vueneue/types.d.ts",
@@ -12,7 +12,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .eslintignore .",
     "lint:fix": "eslint --ext .js,.vue --fix --ignore-path .eslintignore .",
     "format": "prettier --ignore-path .gitignore --write ./**/*.{js,vue}",
-    "prepublishOnly": "cd ui-addon && npm run lint --no-fix && npm run build -- --dest ../ui-addon-dist"
+    "prepublishOnly": "cd ui-addon && yarn lint --no-fix && yarn build -- --dest ../ui-addon-dist"
   },
   "keywords": [
     "vue",

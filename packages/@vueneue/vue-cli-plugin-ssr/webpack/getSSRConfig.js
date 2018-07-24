@@ -36,6 +36,13 @@ module.exports = (api, options = {}) => {
       {
         ...htmlOptions,
         filename: 'index.spa.html',
+        templateParameters: {
+          ...htmlOptions.templateParameters,
+          neue: {
+            ssr: false,
+            client: true,
+          },
+        },
       },
     ]);
   }
