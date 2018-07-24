@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import errorHandler from '../utils/errorHandler';
 import { resolveComponentsAsyncData } from '../utils/asyncData';
 import { addHotReload } from '../utils/hmr';
