@@ -18,6 +18,9 @@ export default async context => {
   context.redirect = location => {
     const redirectError = new Error('ROUTER_REDIRECT');
     redirectError.href = router.resolve(location, router.currentRoute).href;
+
+    app.$emit('router.redirect', { href: redirectError.href });
+
     throw redirectError;
   };
 
@@ -27,10 +30,6 @@ export default async context => {
   if (process.dev && process.client) {
     handleHMRMiddlewares(context);
   }
-
-  Vue.prototype.$redirect = function(location) {
-    router.replace(location);
-  };
 
   return new Promise(resolve => {
     router.onReady(async () => {
@@ -43,6 +42,7 @@ export default async context => {
       // After each
       router.afterEach(() => {
         app.$nextTick(() => {
+          // Add hot reload async Data
           addHotReload(context);
         });
       });
@@ -55,6 +55,7 @@ export default async context => {
           // Middlewares
           await handleMiddlewares(to, _context);
 
+          // Resolve asyncData()
           await resolveComponentsAsyncData(
             to,
             router.getMatchedComponents(to),
@@ -65,6 +66,7 @@ export default async context => {
             return next(error.href);
           } else {
             errorHandler(_context, { error });
+            return next(typeof error === 'string' ? new Error(error) : error);
           }
         }
 

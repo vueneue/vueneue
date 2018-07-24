@@ -1,30 +1,25 @@
 <template>
-  <div class="error-page default-layout">
-    <h1>
-      <span>Error {{ code }}</span>
-    </h1>
-    <div class="text-center">
-      <p>Whoops !</p>
+  <div>
+    <h1>Error {{ code }}</h1>
+    <p>Whoops !</p>
 
-      <a
-        v-if="!haveHistory"
-        href="/"
-        class="button"
-        @click.prevent="gotoHome"
-      >
-        Go to home
-      </a>
+    <a
+      v-if="!haveHistory"
+      href="/"
+      class="button"
+      @click.prevent="gotoHome"
+    >
+      Go to home
+    </a>
 
-      <a
-        v-else
-        href="#"
-        class="button"
-        @click.prevent="$router.back()"
-      >
-        Go back
-      </a>
-
-    </div>
+    <a
+      v-else
+      href="#"
+      class="button"
+      @click.prevent="$router.back()"
+    >
+      Go back
+    </a>
     <pre v-if="error && !isProduction">{{ error.stack || error.message || error }}</pre>
   </div>
 </template>

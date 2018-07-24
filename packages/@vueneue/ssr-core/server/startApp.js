@@ -24,12 +24,11 @@ export default async context => {
       redirectError.href = location;
     }
 
-    ssr.redirected = statusCode;
+    app.$emit('router.redirect', { href: redirectError.href });
 
+    ssr.redirected = statusCode;
     throw redirectError;
   };
-
-  Vue.prototype.$redirect = context.redirect;
 
   return new Promise((resolve, reject) => {
     // Attach meta for SSR
