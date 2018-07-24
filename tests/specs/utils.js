@@ -48,6 +48,8 @@ const checkText = async (selector, value) => {
   expect(await page.$eval(selector, el => el.textContent)).toBe(value);
 };
 
+const wait = time => new Promise(resolve => setTimeout(resolve, time));
+
 module.exports = {
   baseURL,
   doRequest,
@@ -56,4 +58,5 @@ module.exports = {
   isMounted,
   gotoClick,
   checkText,
+  wait,
 };

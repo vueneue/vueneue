@@ -5,13 +5,25 @@
     </h1>
     <div class="text-center">
       <p>Whoops !</p>
+
       <a
+        v-if="!haveHistory"
         href="/"
         class="button"
         @click.prevent="gotoHome"
       >
         Go to home
       </a>
+
+      <a
+        v-else
+        href="#"
+        class="button"
+        @click.prevent="$router.back()"
+      >
+        Go back
+      </a>
+
     </div>
     <pre v-if="error && !isProduction">{{ error.stack || error.message || error }}</pre>
   </div>
@@ -43,6 +55,10 @@ export default {
 
     error() {
       if (this.current && this.current.error) return this.current.error;
+    },
+
+    haveHistory() {
+      return process.client && window.history.length > 0;
     },
   },
 

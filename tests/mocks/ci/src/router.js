@@ -34,8 +34,8 @@ export default () => {
         component: () => import('./components/Redirect'),
       },
       {
-        path: '/error',
-        component: () => import('./components/ErrorFunc'),
+        path: '/helpers',
+        component: () => import('./components/HelpersFunc'),
       },
       {
         path: '/global-middleware',
@@ -103,8 +103,8 @@ export default () => {
             component: () => import('./components/Redirect'),
           },
           {
-            path: 'error',
-            component: () => import('./components/ErrorFunc'),
+            path: 'helpers',
+            component: () => import('./components/HelpersFunc'),
           },
           {
             path: 'global-middleware',

@@ -14,14 +14,19 @@ export default async context => {
    * Define redirect function
    */
   context.redirect = (location, statusCode = 301) => {
+    const redirectError = new Error('ROUTER_REDIRECT');
+    redirectError.statusCode = statusCode;
+
     const routerResult = router.resolve(location, router.currentRoute);
-    ctx.response.status = statusCode;
     if (routerResult) {
-      ctx.redirect(routerResult.href);
+      redirectError.href = routerResult.href;
     } else {
-      ctx.redirect(location);
+      redirectError.href = location;
     }
+
     ssr.redirected = statusCode;
+
+    throw redirectError;
   };
 
   Vue.prototype.$redirect = context.redirect;
@@ -61,10 +66,15 @@ export default async context => {
         ssr.state = store.state;
         resolve(app);
       } catch (error) {
-        errorHandler(_context, {
-          error: error.stack || error.message || error,
-          statusCode: error.statusCode || 500,
-        });
+        if (error.message === 'ROUTER_REDIRECT') {
+          ctx.status = error.statusCode;
+          ctx.redirect(error.href);
+        } else {
+          errorHandler(_context, {
+            error: error.stack || error.message || error,
+            statusCode: error.statusCode || 500,
+          });
+        }
 
         ssr.asyncData = [];
         ssr.state = store.state;

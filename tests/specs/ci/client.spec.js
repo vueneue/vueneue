@@ -1,4 +1,4 @@
-const { gotoClick, checkText, baseURL } = require('../utils');
+const { gotoClick, checkText, baseURL, isMounted, wait } = require('../utils');
 
 describe('Client side', () => {
   beforeAll(async () => {
@@ -20,18 +20,30 @@ describe('Client side', () => {
     await checkText('h1', 'Error 500');
   });
 
-  it('$redirect() is called correctly', async () => {
+  it('Context redirect() is called correctly', async () => {
     await gotoClick('/redirect');
     await checkText('h1', 'Home');
   });
 
   it('$error() is called correctly', async () => {
-    await gotoClick('/error');
+    await page.goto(baseURL + '/helpers');
+    await isMounted();
 
-    const button = await page.$('button');
+    const button = await page.$('#error');
     await button.click();
 
     await checkText('h1', 'Error 403');
+  });
+
+  it('$redirect() is called correctly', async () => {
+    await page.goto(baseURL + '/helpers');
+    await isMounted();
+
+    const button = await page.$('#redirect');
+    await button.click();
+
+    await wait(50);
+    await checkText('h1', 'Home');
   });
 
   it('404 not found page is displayed', async () => {

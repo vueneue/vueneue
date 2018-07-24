@@ -16,8 +16,9 @@ export default async context => {
    * Define redirect function
    */
   context.redirect = location => {
-    router.redirected = router.resolve(location, router.currentRoute);
-    router.replace(location);
+    const redirectError = new Error('ROUTER_REDIRECT');
+    redirectError.href = router.resolve(location, router.currentRoute).href;
+    throw redirectError;
   };
 
   /**
@@ -27,7 +28,9 @@ export default async context => {
     handleHMRMiddlewares(context);
   }
 
-  Vue.prototype.$redirect = context.redirect;
+  Vue.prototype.$redirect = function(location) {
+    router.replace(location);
+  };
 
   return new Promise(resolve => {
     router.onReady(async () => {
@@ -50,21 +53,19 @@ export default async context => {
 
         try {
           // Middlewares
-          await handleMiddlewares(to, context);
+          await handleMiddlewares(to, _context);
 
           await resolveComponentsAsyncData(
             to,
             router.getMatchedComponents(to),
             _context,
           );
-
-          if (router.redirected) {
-            const redirectLocation = router.redirected;
-            router.redirected = undefined;
-            return next(redirectLocation.location);
-          }
         } catch (error) {
-          errorHandler(_context, { error });
+          if (error.message === 'ROUTER_REDIRECT') {
+            return next(error.href);
+          } else {
+            errorHandler(_context, { error });
+          }
         }
 
         next();
@@ -90,7 +91,11 @@ export default async context => {
             _context,
           );
         } catch (error) {
-          errorHandler(_context, { error });
+          if (error.message === 'ROUTER_REDIRECT') {
+            window.location.replace(error.href);
+          } else {
+            errorHandler(_context, { error });
+          }
         }
       }
 
