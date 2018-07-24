@@ -43,6 +43,7 @@ export default async context => {
       // After each
       router.afterEach(() => {
         app.$nextTick(() => {
+          // Add hot reload async Data
           addHotReload(context);
         });
       });
@@ -55,6 +56,7 @@ export default async context => {
           // Middlewares
           await handleMiddlewares(to, _context);
 
+          // Resolve asyncData()
           await resolveComponentsAsyncData(
             to,
             router.getMatchedComponents(to),
@@ -65,6 +67,7 @@ export default async context => {
             return next(error.href);
           } else {
             errorHandler(_context, { error });
+            return next(typeof error === 'string' ? new Error(error) : error);
           }
         }
 
