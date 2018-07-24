@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import { resolveComponentsAsyncData } from '../utils/asyncData';
 import { handleMiddlewares } from '../utils/middlewares';
 import errorHandler from '../utils/errorHandler';
