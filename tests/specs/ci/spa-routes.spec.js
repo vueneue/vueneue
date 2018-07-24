@@ -1,4 +1,4 @@
-const { isSPA, checkText, baseURL, isMounted } = require('../utils');
+const { isSPA, checkText, baseURL, isMounted, wait } = require('../utils');
 
 describe('SPA routes', () => {
   it('Call and inject onHttpRequest() data', async () => {
