@@ -18,6 +18,9 @@ export default async context => {
   context.redirect = location => {
     const redirectError = new Error('ROUTER_REDIRECT');
     redirectError.href = router.resolve(location, router.currentRoute).href;
+
+    app.$emit('router.redirect', { href: redirectError.href });
+
     throw redirectError;
   };
 
@@ -27,10 +30,6 @@ export default async context => {
   if (process.dev && process.client) {
     handleHMRMiddlewares(context);
   }
-
-  Vue.prototype.$redirect = function(location) {
-    router.replace(location);
-  };
 
   return new Promise(resolve => {
     router.onReady(async () => {
