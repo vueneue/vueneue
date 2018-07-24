@@ -32,6 +32,8 @@ describe('Client side', () => {
     const button = await page.$('#error');
     await button.click();
 
+    await wait(200);
+
     await checkText('h1', 'Error 403');
   });
 
@@ -42,7 +44,8 @@ describe('Client side', () => {
     const button = await page.$('#redirect');
     await button.click();
 
-    await wait(50);
+    await wait(200);
+
     await checkText('h1', 'Home');
   });
 
