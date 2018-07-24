@@ -37,18 +37,6 @@ describe('Client side', () => {
     await checkText('h1', 'Error 403');
   });
 
-  it('$redirect() is called correctly', async () => {
-    await page.goto(baseURL + '/helpers');
-    await isMounted();
-
-    const button = await page.$('#redirect');
-    await button.click();
-
-    await wait(200);
-
-    await checkText('h1', 'Home');
-  });
-
   it('404 not found page is displayed', async () => {
     await gotoClick('/not-found');
     await checkText('h1', 'Error 404');
