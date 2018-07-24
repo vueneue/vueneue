@@ -18,9 +18,6 @@ Vue.use(VueMeta, {
  */
 Vue.use({
   install(Vue) {
-    Vue.prototype.$redirect = function(location) {
-      this.$context.redirect(location);
-    };
     Vue.prototype.$error = function(error, statusCode = 500) {
       this.$context.error(error, statusCode);
     };

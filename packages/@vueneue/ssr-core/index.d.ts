@@ -25,7 +25,6 @@ declare module 'vue/types/options' {
 declare module 'vue/types/vue' {
   interface Vue {
     $error: (error: any, statusCode?: number) => void;
-    $redirect: (location: any, statusCode?: number) => void;
     $context: {
       app: Vue;
       router: VueRouter;
