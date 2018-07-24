@@ -28,7 +28,9 @@ export default async context => {
     handleHMRMiddlewares(context);
   }
 
-  Vue.prototype.$redirect = context.redirect;
+  Vue.prototype.$redirect = function(location) {
+    router.replace(location);
+  };
 
   return new Promise(resolve => {
     router.onReady(async () => {
