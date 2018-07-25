@@ -112,6 +112,9 @@ export default async context => {
       if (!process.test) app.$mount('#app');
 
       app.$nextTick(() => {
+        // Emi event on app mount
+        app.$emit('app.mounted');
+
         // Add hot reload on pages
         addHotReload(getContext(context));
       });
