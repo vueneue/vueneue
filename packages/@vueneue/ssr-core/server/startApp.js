@@ -54,14 +54,17 @@ export default async context => {
           await store.dispatch('onHttpRequest', _context);
         }
 
-        const data = await resolveComponentsAsyncData(
+        const components = await resolveComponentsAsyncData(
           router.currentRoute,
           router.getMatchedComponents(),
           _context,
         );
 
-        ssr.asyncData = data;
-        ssr.state = store.state;
+        ssr.data = {
+          components,
+          state: store.state,
+        };
+
         resolve(app);
       } catch (error) {
         // Handle redirections
@@ -76,8 +79,11 @@ export default async context => {
           });
         }
 
-        ssr.asyncData = [];
-        ssr.state = store.state;
+        ssr.data = {
+          components: [],
+          state: store.state,
+        };
+
         resolve(app);
       }
     }, reject);

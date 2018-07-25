@@ -29,10 +29,15 @@ module.exports = async (serverContext, ssrContext, html) => {
     body += metas.script.text(bodyOpt);
   }
 
-  body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode({
-    state: ssrContext.state,
-    components: ssrContext.asyncData,
-  })}</script>`;
+  // Add Vuex and components data
+  body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode(
+    ssrContext.data,
+  )}</script>`;
+
+  // Body additions
+  if (ssrContext.bodyAdd) {
+    body += ssrContext.bodyAdd;
+  }
 
   // Replace final html
   let result = serverContext.template
