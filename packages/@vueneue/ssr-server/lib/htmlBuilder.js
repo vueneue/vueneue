@@ -34,6 +34,7 @@ module.exports = async (serverContext, ssrContext, html) => {
     components: ssrContext.asyncData,
   })}</script>`;
 
+  // Replace final html
   let result = serverContext.template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
     .replace(/data-body-attrs(="")?/, bodyAttrs)

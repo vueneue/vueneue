@@ -64,10 +64,12 @@ export default async context => {
         ssr.state = store.state;
         resolve(app);
       } catch (error) {
+        // Handle redirections
         if (error.message === 'ROUTER_REDIRECT') {
           ctx.status = error.statusCode;
           ctx.redirect(error.href);
         } else {
+          // Handle errors
           errorHandler(_context, {
             error: error.stack || error.message || error,
             statusCode: error.statusCode || 500,

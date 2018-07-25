@@ -15,16 +15,18 @@ export default async context => {
    * Define redirect function
    */
   context.redirect = location => {
+    // Build redirect error
     const redirectError = new Error('ROUTER_REDIRECT');
     redirectError.href = router.resolve(location, router.currentRoute).href;
 
+    // Emit event
     app.$emit('router.redirect', { href: redirectError.href });
 
     throw redirectError;
   };
 
   /**
-   * Handling HMR
+   * Handling middlewares HMR
    */
   if (process.dev && process.client) {
     handleHMRMiddlewares(context);
@@ -61,9 +63,11 @@ export default async context => {
             _context,
           );
         } catch (error) {
+          // Handle redirection
           if (error.message === 'ROUTER_REDIRECT') {
             return next(error.href);
           } else {
+            // Handle error
             errorHandler(_context, { error });
             return next(typeof error === 'string' ? new Error(error) : error);
           }
@@ -92,9 +96,11 @@ export default async context => {
             _context,
           );
         } catch (error) {
+          // Handle redirection
           if (error.message === 'ROUTER_REDIRECT') {
             window.location.replace(error.href);
           } else {
+            // Handle error
             errorHandler(_context, { error });
           }
         }
@@ -106,6 +112,7 @@ export default async context => {
       if (!process.test) app.$mount('#app');
 
       app.$nextTick(() => {
+        // Add hot reload on pages
         addHotReload(getContext(context));
       });
 
