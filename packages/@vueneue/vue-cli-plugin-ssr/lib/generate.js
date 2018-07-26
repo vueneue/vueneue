@@ -28,12 +28,10 @@ module.exports = async (api, options) => {
   // Fake koa context
   const createKoaContext = () => ({
     set: () => null,
-    response: {
-      status: null,
-      body: null,
-    },
+    status: null,
+    body: null,
     redirect: function(location) {
-      this.response.body = location;
+      this.body = location;
     },
   });
 
@@ -122,31 +120,30 @@ module.exports = async (api, options) => {
 
     const before = new Date().getTime();
 
-    let response;
+    let routeCtx;
     try {
-      response = (await renderRoute(serverContext, ssrContext)).response;
+      routeCtx = await renderRoute(serverContext, ssrContext);
     } catch (err) {
-      response = err.response;
+      routeCtx = err;
     }
 
+    const { body, status } = routeCtx;
+
     await fs.ensureDir(`${options.outputDir}/${pagePath}`);
-    await fs.writeFileSync(
-      `${options.outputDir}/${pagePath}/index.html`,
-      response.body,
-    );
+    await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
 
     count++;
     const generateTime = new Date().getTime() - before;
 
     let boxFunc = greenBox;
-    if (response.status >= 300 && response.status < 400) {
+    if (status >= 300 && status < 400) {
       boxFunc = yellowBox;
-    } else if (response.status >= 400) {
+    } else if (status >= 400) {
       boxFunc = redBox;
     }
 
     process.stdout.write(
-      `${boxFunc(response.status)}\t${generateTime}ms\t${count}/${
+      `${boxFunc(status)}\t${generateTime}ms\t${count}/${
         generate.paths.length
       }\t${pagePath}\n`,
     );
