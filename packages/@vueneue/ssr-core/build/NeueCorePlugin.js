@@ -3,6 +3,10 @@ const path = require('path');
 const ejs = require('ejs');
 const chokidar = require('chokidar');
 
+/**
+ * This plugin will generate boot.js script with base files paths
+ * and plugins inits
+ */
 class NeueCorePlugin {
   constructor({ api }) {
     this.api = api;

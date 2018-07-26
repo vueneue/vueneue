@@ -3,13 +3,17 @@ const merge = require('lodash/merge');
 const get = require('lodash/get');
 const path = require('path');
 const fs = require('fs-extra');
+const NeueWebpack = require('./NeueWebpack');
 
+/**
+ * Default config
+ */
 const defaultConfig = {
   ssr: {
     directives: {},
     server: null,
   },
-  spaPaths: [],
+  spaPaths: null,
   generate: {
     scanRouter: true,
     params: {},
@@ -24,9 +28,13 @@ const defaultConfig = {
   plugins: {},
 };
 
+/**
+ * Neue API to work with Vue CLI and Webpack
+ */
 class NeueApi {
   constructor(api) {
     this.api = api;
+    this.webpack = new NeueWebpack(this);
   }
 
   getConfig(selector) {

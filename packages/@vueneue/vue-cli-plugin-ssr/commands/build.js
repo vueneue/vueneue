@@ -23,9 +23,8 @@ module.exports = (api, options) => {
       },
     },
     async function(args) {
-      const getConfig = require('../webpack/getSSRConfig');
-      const clientConfig = getConfig(api);
-      const serverConfig = getConfig(api, {
+      const clientConfig = api.neue.webpack.getConfig();
+      const serverConfig = api.neue.webpack.getConfig({
         client: false,
       });
 

@@ -1,11 +1,14 @@
-const definePlugin = require('./webpack/definePlugin');
-const NeueApi = require('@vueneue/ssr-core/webpack/NeueApi');
-const NeueCorePlugin = require('@vueneue/ssr-core/webpack/NeueCorePlugin');
+const webpack = require('webpack');
+const NeueApi = require('@vueneue/ssr-core/build/NeueApi');
+const NeueCorePlugin = require('@vueneue/ssr-core/build/NeueCorePlugin');
 
 module.exports = api => {
   // Install neue API
   api.neue = new NeueApi(api);
 
+  /**
+   * Basic webpack conf for Neue
+   */
   api.chainWebpack(config => {
     // Change main entry
     config.entryPoints
@@ -20,16 +23,11 @@ module.exports = api => {
 
     // Add NeueCorePlugin
     config.plugin('neue-core').use(NeueCorePlugin, [{ api }]);
-  });
 
-  api.configureWebpack(() => {
-    // Add required process vars for Vueneue (for SPA mode only)
-    const defines = definePlugin();
-    defines.__vueneue = true;
-
-    return {
-      plugins: [defines],
-    };
+    // Add DefinePlugin
+    config
+      .plugin('neue-define')
+      .use(webpack.DefinePlugin, [api.neue.webpack.getDefine()]);
   });
 
   // ssr-core need to be transpiled

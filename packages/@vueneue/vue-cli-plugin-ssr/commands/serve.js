@@ -26,7 +26,6 @@ module.exports = (api, options) => {
       },
     },
     async function(args) {
-      const getConfig = require('../webpack/getSSRConfig');
       const projectDevServerOptions = options.devServer || {};
 
       const portfinder = require('portfinder');
@@ -45,10 +44,12 @@ module.exports = (api, options) => {
 
       const port = await portfinder.getPortPromise();
 
-      const clientConfig = getConfig(api, { server: true, host, port });
-      const serverConfig = getConfig(api, {
+      const clientConfig = api.neue.webpack.getConfig({
+        host,
+        port,
+      });
+      const serverConfig = api.neue.webpack.getConfig({
         client: false,
-        server: true,
         host,
         port,
       });

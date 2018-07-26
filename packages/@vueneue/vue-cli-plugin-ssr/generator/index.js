@@ -15,10 +15,6 @@ module.exports = (api, options) => {
       '@vueneue/ssr-server': '^0.3.0',
       '@vueneue/ssr-core': '^0.3.0',
     },
-    devDependencies: {
-      'webpack-node-externals': '^1.7.2',
-      webpackbar: '^2.6.1',
-    },
     scripts: {
       'ssr:serve': 'vue-cli-service ssr:serve',
       'ssr:build': 'vue-cli-service ssr:build',
