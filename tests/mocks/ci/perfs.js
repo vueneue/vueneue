@@ -1,5 +1,7 @@
 /**
- * To execute this script you need a
+ * To execute this script you need
+ * - npm i -g clinic
+ * - npm i heapdump
  */
 
 const execa = require('execa');
@@ -42,7 +44,7 @@ const heapdump = (name = '') => {
 
 (async () => {
   // Build
-  console.log('Builing app...');
+  console.log('Building app...');
   await execa('./node_modules/.bin/vue-cli-service', ['ssr:build']);
 
   // Start node-clinic
