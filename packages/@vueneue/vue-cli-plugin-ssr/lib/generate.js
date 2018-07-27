@@ -1,7 +1,9 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
+const mm = require('micromatch');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
 const renderRoute = require('@vueneue/ssr-server/lib/renderRoute');
+const spaRoute = require('@vueneue/ssr-server/lib/spaRoute');
 
 const whiteBox = str => chalk.bgWhite(chalk.black(` ${str} `));
 const greenBox = str => chalk.bgGreen(chalk.black(` ${str} `));
@@ -9,6 +11,9 @@ const yellowBox = str => chalk.bgYellow(chalk.black(` ${str} `));
 const redBox = str => chalk.bgRed(chalk.black(` ${str} `));
 
 module.exports = async (api, options) => {
+  /**
+   * Get webpack generated files
+   */
   const serverBundle = JSON.parse(
     fs.readFileSync(`${options.outputDir}/server-bundle.json`, 'utf-8'),
   );
@@ -19,13 +24,23 @@ module.exports = async (api, options) => {
     `${options.outputDir}/index.ssr.html`,
     'utf-8',
   );
+  const templateSpa = fs.readFileSync(
+    `${options.outputDir}/index.spa.html`,
+    'utf-8',
+  );
 
+  /**
+   * Get project config
+   */
   const generate = Object.assign(
     { scanRouter: true },
     api.neue.getConfig('generate') || {},
   );
+  const spaPaths = api.neue.getConfig('spaPaths') || [];
 
-  // Fake koa context
+  /**
+   * Create a fake Koa context
+   */
   const createKoaContext = () => ({
     set: () => null,
     status: null,
@@ -35,10 +50,16 @@ module.exports = async (api, options) => {
     },
   });
 
+  /**
+   * Create renderer
+   */
   const renderer = createRenderer(serverBundle, {
     clientManifest,
   });
 
+  /**
+   * Render a page
+   */
   const callRenderer = context => {
     return new Promise((resolve, reject) => {
       renderer.renderToString(context, async err => {
@@ -48,6 +69,9 @@ module.exports = async (api, options) => {
     });
   };
 
+  /**
+   * Return all routes paths defined in application router
+   */
   const getRoutesPaths = (routes, parentPath = '') => {
     let results = [];
 
@@ -69,8 +93,10 @@ module.exports = async (api, options) => {
     return results;
   };
 
+  // Create koa context
   const ctx = createKoaContext();
 
+  // If scanRouter enabled
   if (generate.scanRouter) {
     const firstContext = await callRenderer({ url: '/', ctx });
     const routes = firstContext.router.options.routes;
@@ -80,6 +106,7 @@ module.exports = async (api, options) => {
   // Dedupe array
   generate.paths = [...new Set(generate.paths)];
 
+  // Generate all possible paths with defined params
   if (generate.params) {
     for (const paramName in generate.params) {
       const paramValues = generate.params[paramName];
@@ -104,6 +131,7 @@ module.exports = async (api, options) => {
     }
   }
 
+  // Fake server context
   const serverContext = {
     renderer,
     template,
@@ -117,20 +145,49 @@ module.exports = async (api, options) => {
   let count = 0;
   for (const pagePath of generate.paths) {
     const ssrContext = { url: pagePath, ctx };
-
     const before = new Date().getTime();
 
-    let routeCtx;
-    try {
-      routeCtx = await renderRoute(serverContext, ssrContext);
-    } catch (err) {
-      routeCtx = err;
+    let body,
+      status = null;
+
+    // SPA route
+    if (spaPaths.length && mm.some(ssrContext.url, spaPaths)) {
+      status = 200;
+
+      await fs.ensureDir(`${options.outputDir}/${pagePath}`);
+      await fs.writeFileSync(
+        `${options.outputDir}/${pagePath}/index.html`,
+        spaRoute({ templateSpa }),
+      );
+
+      // SSR route
+    } else {
+      let routeCtx;
+      try {
+        routeCtx = await renderRoute(serverContext, ssrContext);
+      } catch (err) {
+        routeCtx = err;
+      }
+
+      status = routeCtx.status;
+      body = routeCtx.body;
+
+      if (status === 301 || status == 302) {
+        body = `<!DOCTYPE html>
+      <html>
+      <head>
+        <meta http-equiv="refresh" content="0; url=${body}" />
+      </head>
+      <body>Redirecting...</body>
+      </html>`;
+      }
+
+      await fs.ensureDir(`${options.outputDir}/${pagePath}`);
+      await fs.writeFileSync(
+        `${options.outputDir}/${pagePath}/index.html`,
+        body,
+      );
     }
-
-    const { body, status } = routeCtx;
-
-    await fs.ensureDir(`${options.outputDir}/${pagePath}`);
-    await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
 
     count++;
     const generateTime = new Date().getTime() - before;
@@ -150,4 +207,5 @@ module.exports = async (api, options) => {
   }
 
   await fs.remove(`${options.outputDir}/index.ssr.html`);
+  await fs.remove(`${options.outputDir}/index.spa.html`);
 };
