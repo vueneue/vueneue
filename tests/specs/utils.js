@@ -49,7 +49,7 @@ const isMounted = async () => {
 const gotoClick = async url => {
   const link = await page.$(`a[href="${url}"]`);
   await link.click();
-  await wait(50);
+  await wait(100);
 };
 
 const checkText = async (selector, value) => {

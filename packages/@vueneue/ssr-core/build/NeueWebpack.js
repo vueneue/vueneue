@@ -82,13 +82,10 @@ class NeueWebpack {
             if (oneOf) {
               const extractUse = oneOf.uses.get('extract-css-loader');
               if (extractUse) {
-                extractUse
-                  .get('extract-css-loader')
-                  .loader('vue-style-loader')
-                  .options({
-                    sourceMap: true,
-                    shadowMode: false,
-                  });
+                extractUse.loader('vue-style-loader').options({
+                  sourceMap: false,
+                  shadowMode: false,
+                });
               }
             }
           }
