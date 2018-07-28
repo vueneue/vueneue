@@ -1,147 +1,195 @@
-const { readSSRData, isMounted, checkText, baseURL } = require('../utils');
+const { isMounted, checkText, baseURL, gotoPageSSR } = require('../utils');
 
-describe('Server side', () => {
+let $;
+
+describe('Server rendering', () => {
   beforeAll(async () => {
-    await page.goto(baseURL);
+    $ = await gotoPageSSR(baseURL);
   });
 
-  it('Call and inject onHttpRequest() data', async () => {
-    const { state } = await readSSRData();
+  it('onHttpRequest: state injected to __DATA__', async () => {
+    const { state } = $.DATA;
     expect(state.httpRequest).toBe('onHttpRequest');
   });
 
-  it('Display onHttpRequest data correctly', async () => {
+  it('onHttpRequest: state rendered on server side', async () => {
+    expect($('#value').text()).toBe('onHttpRequest');
+  });
+
+  it('onHttpRequest: state displayed on client side', async () => {
     await isMounted();
     await checkText('#value', 'onHttpRequest');
   });
 
-  it('Inject error on onHttpRequest action', async () => {
-    await page.goto(`${baseURL}/on-http-request-error`);
-    const { state } = await readSSRData();
+  it('onHttpRequest: error injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/on-http-request-error`);
+    const { state } = $.DATA;
     expect(state.errorHandler.statusCode).toBe(500);
   });
 
-  it('Display error on onHttpRequest action', async () => {
+  it('onHttpRequest: error rendered on server side', async () => {
+    expect($('h1').text()).toBe('Error 500');
+  });
+
+  it('onHttpRequest: error displayed on client side', async () => {
     await checkText('h1', 'Error 500');
   });
 
-  it('Call asyncData() and inject to component', async () => {
-    await page.goto(`${baseURL}/async-data`);
-    const { components } = await readSSRData();
+  it('asyncData: data injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/async-data`);
+    const { components } = $.DATA;
     expect(components[0]['value']).toBe('asyncData');
   });
 
-  it('Display asyncData() data correctly', async () => {
+  it('asyncData: data rendered on server side', async () => {
+    expect($('#value').text()).toBe('asyncData');
+  });
+
+  it('asyncData: data displayed on client side', async () => {
     await isMounted();
     await checkText('#value', 'asyncData');
   });
 
-  it('Call asyncData() and inject to store', async () => {
-    await page.goto(`${baseURL}/async-data-store`);
-    const { state } = await readSSRData();
+  it('asyncData: state injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/async-data-store`);
+    const { state } = $.DATA;
     expect(state.value).toBe('asyncDataStore');
   });
 
-  it('Display asyncData() store data correctly', async () => {
+  it('asyncData: data rendered on server side', async () => {
+    expect($('#value').text()).toBe('asyncDataStore');
+  });
+
+  it('asyncData: state displayed on client side', async () => {
     await isMounted();
     await checkText('#value', 'asyncDataStore');
   });
 
-  it('Error in asyncData() inject data to errorHandler', async () => {
-    await page.goto(`${baseURL}/async-data-error`);
-    const { state } = await readSSRData();
+  it('asyncData: error injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/async-data-error`);
+    const { state } = $.DATA;
     expect(state.errorHandler.statusCode).toBe(500);
   });
 
-  it('Display error page with statusCode', async () => {
+  it('asyncData: error rendered on server side', async () => {
+    expect($('h1').text()).toBe('Error 500');
+  });
+
+  it('asyncData: error displayed on client side', async () => {
     await checkText('h1', 'Error 500');
   });
 
-  it('Redirect function', async () => {
-    await page.goto(`${baseURL}/redirect`);
+  it('redirect: called correctly', async () => {
+    $ = await gotoPageSSR(`${baseURL}/redirect`);
     await checkText('h1', 'Home');
   });
 
-  it('404 error inject data to store', async () => {
-    await page.goto(`${baseURL}/not-found`);
-    const { state } = await readSSRData();
+  it('router: 404 error injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/not-found`);
+    const { state } = $.DATA;
     expect(state.errorHandler.statusCode).toBe(404);
   });
 
-  it('Display error page with statusCode 404', async () => {
+  it('router: 404 error rendered on server side', async () => {
+    expect($('h1').text()).toBe('Error 404');
+  });
+
+  it('router: 404 error displayed on client side', async () => {
     await checkText('h1', 'Error 404');
   });
 
-  it('Call global middlewares', async () => {
-    await page.goto(`${baseURL}/global-middleware`);
-    const { state } = await readSSRData();
+  it('middlewares: global injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/global-middleware`);
+    const { state } = $.DATA;
     expect(state.middleware).toBe('globalMiddleware');
   });
 
-  it('Display global middlewares data correctly', async () => {
+  it('middlewares: global rendered on server side', async () => {
+    expect($('#value').text()).toBe('globalMiddleware');
+  });
+
+  it('middlewares: global displayed on client side', async () => {
     await isMounted();
     await checkText('#value', 'globalMiddleware');
   });
 
-  it('Call route middlewares', async () => {
-    await page.goto(`${baseURL}/route-middleware`);
-    const { state } = await readSSRData();
+  it('middlewares: route injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/route-middleware`);
+    const { state } = $.DATA;
     expect(state.middleware).toBe('routeMiddleware');
   });
 
-  it('Display route middlewares data correctly', async () => {
+  it('middlewares: route rendered on server side', async () => {
+    expect($('#value').text()).toBe('routeMiddleware');
+  });
+
+  it('middlewares: route displayed on client side', async () => {
     await isMounted();
     await checkText('#value', 'routeMiddleware');
   });
 
-  it('Middleware can redirect', async () => {
-    await page.goto(`${baseURL}/middleware-redirect`);
+  it('middlewares: redirect is called correctly', async () => {
+    $ = await gotoPageSSR(`${baseURL}/middleware-redirect`);
     await checkText('h1', 'Home');
   });
 
-  it('Middleware error', async () => {
-    await page.goto(`${baseURL}/middleware-error`);
-    const { state } = await readSSRData();
+  it('middlewares: error injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/middleware-error`);
+    const { state } = $.DATA;
     expect(state.errorHandler.statusCode).toBe(500);
   });
 
-  it('Middleware error with helper', async () => {
-    await page.goto(`${baseURL}/middleware-error-func`);
-    const { state } = await readSSRData();
+  it('middlewares: error helper function injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/middleware-error-func`);
+    const { state } = $.DATA;
     expect(state.errorHandler.statusCode).toBe(403);
   });
 
-  it('Nested routes asyncData()', async () => {
-    await page.goto(`${baseURL}/nested`);
-    const { components } = await readSSRData();
+  it('asyncData: nested route injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/nested`);
+    const { components } = $.DATA;
     expect(components[0]['value']).toBe('parent');
     expect(components[1]['value']).toBe('child');
   });
 
-  it('Nested routes with correct data displayed', async () => {
+  it('middlewares: global rendered on server side', async () => {
+    expect($('#parent-value').text()).toBe('parent');
+    expect($('#value').text()).toBe('child');
+  });
+
+  it('asyncData: nested route displayed on client side', async () => {
     await isMounted();
     await checkText('#parent-value', 'parent');
     await checkText('#value', 'child');
   });
 
-  it('Nested routes middlewares', async () => {
-    const { state } = await readSSRData();
+  it('middlewares: nested route injected to __DATA__', async () => {
+    const { state } = $.DATA;
     expect(state.parent).toBe('parent');
     expect(state.middleware).toBe('child');
   });
 
-  it('Nested routes with correct data displayed from middlewares', async () => {
+  it('middlewares: global rendered on server side', async () => {
+    expect($('#parent').text()).toBe('parent');
+    expect($('#middleware').text()).toBe('child');
+  });
+
+  it('middlewares: nested route displayed to client side', async () => {
     await checkText('#parent', 'parent');
     await checkText('#middleware', 'child');
   });
 
-  it('Call plugin init', async () => {
-    await page.goto(`${baseURL}/plugin`);
-    const { state } = await readSSRData();
+  it('plugin: state injected to __DATA__', async () => {
+    $ = await gotoPageSSR(`${baseURL}/plugin`);
+    const { state } = $.DATA;
     expect(state.plugin).toBe('plugin');
   });
 
-  it('Display plugin data correctly', async () => {
+  it('plugin: state rendered on server side', async () => {
+    expect($('#value').text()).toBe('plugin');
+  });
+
+  it('plugin: state displayed on client side', async () => {
     await isMounted();
     await checkText('#value', 'plugin');
   });
