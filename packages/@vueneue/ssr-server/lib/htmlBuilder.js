@@ -24,9 +24,13 @@ module.exports = async (serverContext, ssrContext, html) => {
       metas.link.text() +
       metas.style.text() +
       metas.script.text() +
-      metas.noscript.text();
+      metas.noscript.text() +
+      ssrContext.renderStyles() +
+      ssrContext.renderResourceHints();
 
-    head += ssrContext.renderStyles();
+    if (ssrContext.headAdd) {
+      head += ssrContext.headAdd;
+    }
 
     body += metas.script.text(bodyOpt);
   }
