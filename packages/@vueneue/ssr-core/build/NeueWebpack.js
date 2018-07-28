@@ -80,13 +80,16 @@ class NeueWebpack {
           for (const oneOfName of oneOfsNames) {
             const oneOf = rule.oneOfs.get(oneOfName);
             if (oneOf) {
-              oneOf.uses
-                .get('extract-css-loader')
-                .loader('vue-style-loader')
-                .options({
-                  sourceMap: true,
-                  shadowMode: false,
-                });
+              const extractUse = oneOf.uses.get('extract-css-loader');
+              if (extractUse) {
+                extractUse
+                  .get('extract-css-loader')
+                  .loader('vue-style-loader')
+                  .options({
+                    sourceMap: true,
+                    shadowMode: false,
+                  });
+              }
             }
           }
         }
