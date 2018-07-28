@@ -79,7 +79,15 @@ class NeueWebpack {
         if (rule) {
           for (const oneOfName of oneOfsNames) {
             const oneOf = rule.oneOfs.get(oneOfName);
-            if (oneOf) oneOf.uses.delete('extract-css-loader');
+            if (oneOf) {
+              oneOf.uses
+                .get('extract-css-loader')
+                .loader('vue-style-loader')
+                .options({
+                  sourceMap: true,
+                  shadowMode: false,
+                });
+            }
           }
         }
       }

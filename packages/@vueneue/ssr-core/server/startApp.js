@@ -33,9 +33,6 @@ export default async context => {
     // Attach meta for SSR
     if (app.$meta) ssr.meta = app.$meta();
 
-    // Http asyncData
-    ssr.asyncData = {};
-
     // Send router for SSR/Pre-rendering
     ssr.router = router;
 
