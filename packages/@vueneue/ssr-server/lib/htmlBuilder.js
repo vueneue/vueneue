@@ -26,9 +26,7 @@ module.exports = async (serverContext, ssrContext, html) => {
       metas.script.text() +
       metas.noscript.text();
 
-    if (ssrContext.styles) {
-      head += ssrContext.styles;
-    }
+    head += ssrContext.renderStyles();
 
     body += metas.script.text(bodyOpt);
   }
