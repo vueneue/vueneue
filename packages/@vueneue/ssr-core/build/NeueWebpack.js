@@ -59,40 +59,6 @@ class NeueWebpack {
     chainConfig.plugins.delete('no-emit-on-errors');
     chainConfig.plugins.delete('progress');
 
-    // Disable CSS plugins on server side
-    if (!client) {
-      chainConfig.plugins.delete('optimize-css');
-      chainConfig.plugins.delete('extract-css');
-
-      const cssRulesNames = [
-        'css',
-        'postcss',
-        'scss',
-        'sass',
-        'less',
-        'stylus',
-      ];
-      const oneOfsNames = ['normal', 'normal-modules', 'vue', 'vue-modules'];
-
-      for (const ruleName of cssRulesNames) {
-        const rule = chainConfig.module.rules.get(ruleName);
-        if (rule) {
-          for (const oneOfName of oneOfsNames) {
-            const oneOf = rule.oneOfs.get(oneOfName);
-            if (oneOf) {
-              const extractUse = oneOf.uses.get('extract-css-loader');
-              if (extractUse) {
-                extractUse.loader('vue-style-loader').options({
-                  sourceMap: false,
-                  shadowMode: false,
-                });
-              }
-            }
-          }
-        }
-      }
-    }
-
     // Friendly Errors with server URL
     chainConfig.plugin('friendly-errors').tap(args => {
       const messages = [];
@@ -157,6 +123,39 @@ class NeueWebpack {
       // Remove
       chainConfig.node.clear();
       chainConfig.optimization.splitChunks(false);
+
+      // Disable CSS plugins on server side
+      chainConfig.plugins.delete('optimize-css');
+      chainConfig.plugins.delete('extract-css');
+
+      const cssRulesNames = [
+        'css',
+        'postcss',
+        'scss',
+        'sass',
+        'less',
+        'stylus',
+      ];
+      const oneOfsNames = ['normal', 'normal-modules', 'vue', 'vue-modules'];
+
+      for (const ruleName of cssRulesNames) {
+        const rule = chainConfig.module.rules.get(ruleName);
+        if (rule) {
+          for (const oneOfName of oneOfsNames) {
+            const oneOf = rule.oneOfs.get(oneOfName);
+            if (oneOf) {
+              const extractUse = oneOf.uses.get('extract-css-loader');
+              if (extractUse) {
+                // Use vue-style-loader to inject CSS of components on server side
+                extractUse.loader('vue-style-loader').options({
+                  sourceMap: false,
+                  shadowMode: false,
+                });
+              }
+            }
+          }
+        }
+      }
 
       // Webpack Bar config
       webpackBarConfig = { name: 'Server', color: 'orange' };
