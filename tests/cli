@@ -21,6 +21,15 @@ const waitOnPromise = options => {
   }
 
   const [command, name] = argv._;
+
+  switch (command) {
+    case 'link':
+      await ws.relink('@vueneue/vue-cli-plugin-ssr');
+      await ws.relink('@vueneue/ssr-core');
+      await ws.relink('@vueneue/ssr-server');
+      return;
+  }
+
   const project = ws.getProject(name);
 
   let server;
