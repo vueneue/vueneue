@@ -68,8 +68,9 @@ export default async context => {
             return next(error.href);
           } else {
             // Handle error
+            app.$emit('router.error', error);
             errorHandler(_context, { error });
-            return next(typeof error === 'string' ? new Error(error) : error);
+            return next();
           }
         }
 
