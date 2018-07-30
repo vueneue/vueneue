@@ -25,10 +25,14 @@ module.exports = async (api, options) => {
     `${options.outputDir}/index.ssr.html`,
     'utf-8',
   );
-  const templateSpa = fs.readFileSync(
-    `${options.outputDir}/index.spa.html`,
-    'utf-8',
-  );
+
+  let templateSpa = '';
+  if (fs.existsSync(`${options.outputDir}/index.spa.html`)) {
+    templateSpa = fs.readFileSync(
+      `${options.outputDir}/index.spa.html`,
+      'utf-8',
+    );
+  }
 
   /**
    * Get project config
@@ -217,7 +221,7 @@ const buildPage = async ({
   let status = null;
 
   // SPA route
-  if (spaPaths.length && mm.some(ssrContext.url, spaPaths)) {
+  if (templateSpa && spaPaths.length && mm.some(ssrContext.url, spaPaths)) {
     status = await buildSPAPage({ templateSpa, options, pagePath });
 
     // SSR route
