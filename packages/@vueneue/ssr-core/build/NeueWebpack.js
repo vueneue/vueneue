@@ -162,6 +162,9 @@ class NeueWebpack {
 
       // Webpack Bar config
       webpackBarConfig = { name: 'Server', color: 'orange' };
+
+      // MJS extension files
+      chainConfig.resolve.extensions.prepend('.mjs');
     }
 
     // Replace define plugin
