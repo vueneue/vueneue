@@ -33,6 +33,12 @@ module.exports = api => {
   // ssr-core need to be transpiled
   api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
 
+  // Apollo whitelists
+  if (api.hasPlugin('apollo')) {
+    api.neue.webpack.nodeExternalsWhitelist.push(/vue-apollo/);
+    api.neue.webpack.nodeExternalsWhitelist.push(/vue-cli-plugin-apollo/);
+  }
+
   // Vue CLI commands
   require('./commands/serve')(api, api.service.projectOptions);
   require('./commands/build')(api, api.service.projectOptions);

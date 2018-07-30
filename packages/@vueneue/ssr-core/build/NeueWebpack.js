@@ -7,6 +7,7 @@ const HtmlWebpack = require('html-webpack-plugin');
 class NeueWebpack {
   constructor(neue) {
     this.neue = neue;
+    this.nodeExternalsWhitelist = [];
   }
 
   getConfig(options = {}) {
@@ -114,6 +115,8 @@ class NeueWebpack {
               /\.css$/,
               /\?vue&type=style/,
               ...this.neue.api.service.projectOptions.transpileDependencies,
+              ...this.nodeExternalsWhitelist,
+              ...(this.neue.getConfig('nodeExternalsWhitelist') || []),
             ],
           }),
         )

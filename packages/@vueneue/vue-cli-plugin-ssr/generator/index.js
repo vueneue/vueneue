@@ -26,12 +26,11 @@ module.exports = (api, options) => {
     },
   };
 
-  api.extendPackage(packageOverride);
-
+  // Base templates
   api.render('./templates/base');
 
   // Docker option
-  if (options.docker) {
+  if (api.invoking && options.docker) {
     api.render('./templates/docker');
   }
 
@@ -107,8 +106,10 @@ module.exports = (api, options) => {
   });
 
   // Plugins
-  const cliPlugins = ['typescript', 'pwa', 'i18n'];
+  const cliPlugins = ['typescript', 'pwa', 'i18n', 'apollo'];
   for (const pluginName of cliPlugins) {
-    require(`./plugins/${pluginName}`)(api);
+    require(`./plugins/${pluginName}`)(api, packageOverride);
   }
+
+  api.extendPackage(packageOverride);
 };
