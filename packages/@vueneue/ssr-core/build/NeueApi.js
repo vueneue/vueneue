@@ -53,8 +53,7 @@ class NeueApi {
 
     // Apollo whitelists
     if (api.hasPlugin('apollo')) {
-      api.nodeExternalsWhitelist.push(/vue-apollo/);
-      api.nodeExternalsWhitelist.push(/vue-cli-plugin-apollo/);
+      this.nodeExternalsWhitelist.push(/vue-apollo/, /vue-cli-plugin-apollo/);
     }
   }
 
