@@ -44,11 +44,8 @@ module.exports = (api, options) => {
 
       const port = await portfinder.getPortPromise();
 
-      const clientConfig = api.neue.webpack.getConfig({
-        host,
-        port,
-      });
-      const serverConfig = api.neue.webpack.getConfig({
+      const clientConfig = api.neue.getWebpackConfig({ host, port });
+      const serverConfig = api.neue.getWebpackConfig({
         client: false,
         host,
         port,

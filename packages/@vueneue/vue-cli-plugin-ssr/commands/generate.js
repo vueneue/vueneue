@@ -14,10 +14,8 @@ module.exports = (api, options) => {
       // Force production mode
       process.env.NODE_ENV = 'production';
 
-      const clientConfig = api.neue.webpack.getConfig();
-      const serverConfig = api.neue.webpack.getConfig({
-        client: false,
-      });
+      const clientConfig = api.neue.getWebpackConfig();
+      const serverConfig = api.neue.getWebpackConfig({ client: false });
 
       await fs.remove(api.resolve(options.outputDir));
 
