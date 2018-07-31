@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 export default (context, data) => {
   const { error, info, vm } = data;
+  const { store, router } = context;
 
   if (process.client) {
     if (process.env.NODE_ENV !== 'production') {
@@ -12,7 +13,6 @@ export default (context, data) => {
     }
   }
 
-  const { store, router } = context;
   if (!data.statusCode) data.statusCode = 500;
   data.route = router.currentRoute;
   store.commit('errorHandler/SET', data);

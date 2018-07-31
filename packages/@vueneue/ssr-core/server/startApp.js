@@ -33,9 +33,6 @@ export default async context => {
     // Attach meta for SSR
     if (app.$meta) ssr.meta = app.$meta();
 
-    // Http asyncData
-    ssr.asyncData = {};
-
     // Send router for SSR/Pre-rendering
     ssr.router = router;
 
@@ -54,28 +51,36 @@ export default async context => {
           await store.dispatch('onHttpRequest', _context);
         }
 
-        const data = await resolveComponentsAsyncData(
+        const components = await resolveComponentsAsyncData(
           router.currentRoute,
           router.getMatchedComponents(),
           _context,
         );
 
-        ssr.asyncData = data;
-        ssr.state = store.state;
+        ssr.data = {
+          components,
+          state: store.state,
+        };
+
         resolve(app);
       } catch (error) {
+        // Handle redirections
         if (error.message === 'ROUTER_REDIRECT') {
           ctx.status = error.statusCode;
           ctx.redirect(error.href);
         } else {
+          // Handle errors
           errorHandler(_context, {
             error: error.stack || error.message || error,
             statusCode: error.statusCode || 500,
           });
         }
 
-        ssr.asyncData = [];
-        ssr.state = store.state;
+        ssr.data = {
+          components: [],
+          state: store.state,
+        };
+
         resolve(app);
       }
     }, reject);

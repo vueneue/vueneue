@@ -20,7 +20,9 @@
     >
       Go back
     </a>
+
     <pre v-if="error && !isProduction">{{ error.stack || error.message || error }}</pre>
+
   </div>
 </template>
 

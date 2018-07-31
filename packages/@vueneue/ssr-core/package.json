@@ -32,6 +32,9 @@
     "prettier": "^1.13.6"
   },
   "dependencies": {
-    "chokidar": "^2.0.4"
+    "chokidar": "^2.0.4",
+    "lodash": "^4.17.10",
+    "webpack-node-externals": "^1.7.2",
+    "webpackbar": "^2.6.1"
   }
 }

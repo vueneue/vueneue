@@ -1,14 +1,20 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
+const mm = require('micromatch');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
 const renderRoute = require('@vueneue/ssr-server/lib/renderRoute');
+const spaRoute = require('@vueneue/ssr-server/lib/spaRoute');
 
 const whiteBox = str => chalk.bgWhite(chalk.black(` ${str} `));
 const greenBox = str => chalk.bgGreen(chalk.black(` ${str} `));
 const yellowBox = str => chalk.bgYellow(chalk.black(` ${str} `));
 const redBox = str => chalk.bgRed(chalk.black(` ${str} `));
+const blueBox = str => chalk.bgBlue(chalk.black(` ${str} `));
 
 module.exports = async (api, options) => {
+  /**
+   * Get webpack generated files
+   */
   const serverBundle = JSON.parse(
     fs.readFileSync(`${options.outputDir}/server-bundle.json`, 'utf-8'),
   );
@@ -20,27 +26,33 @@ module.exports = async (api, options) => {
     'utf-8',
   );
 
+  let templateSpa = '';
+  if (fs.existsSync(`${options.outputDir}/index.spa.html`)) {
+    templateSpa = fs.readFileSync(
+      `${options.outputDir}/index.spa.html`,
+      'utf-8',
+    );
+  }
+
+  /**
+   * Get project config
+   */
   const generate = Object.assign(
     { scanRouter: true },
     api.neue.getConfig('generate') || {},
   );
+  const spaPaths = api.neue.getConfig('spaPaths') || [];
 
-  // Fake koa context
-  const createKoaContext = () => ({
-    set: () => null,
-    response: {
-      status: null,
-      body: null,
-    },
-    redirect: function(location) {
-      this.response.body = location;
-    },
-  });
-
+  /**
+   * Create renderer
+   */
   const renderer = createRenderer(serverBundle, {
     clientManifest,
   });
 
+  /**
+   * Render a page
+   */
   const callRenderer = context => {
     return new Promise((resolve, reject) => {
       renderer.renderToString(context, async err => {
@@ -50,6 +62,9 @@ module.exports = async (api, options) => {
     });
   };
 
+  /**
+   * Return all routes paths defined in application router
+   */
   const getRoutesPaths = (routes, parentPath = '') => {
     let results = [];
 
@@ -71,10 +86,12 @@ module.exports = async (api, options) => {
     return results;
   };
 
-  const ctx = createKoaContext();
-
+  // If scanRouter enabled
   if (generate.scanRouter) {
-    const firstContext = await callRenderer({ url: '/', ctx });
+    const firstContext = await callRenderer({
+      url: '/',
+      ctx: createKoaContext(),
+    });
     const routes = firstContext.router.options.routes;
     generate.paths = getRoutesPaths(routes);
   }
@@ -82,6 +99,7 @@ module.exports = async (api, options) => {
   // Dedupe array
   generate.paths = [...new Set(generate.paths)];
 
+  // Generate all possible paths with defined params
   if (generate.params) {
     for (const paramName in generate.params) {
       const paramValues = generate.params[paramName];
@@ -106,51 +124,139 @@ module.exports = async (api, options) => {
     }
   }
 
+  // Fake server context
   const serverContext = {
     renderer,
     template,
-    ctx,
   };
 
   process.stdout.write(
     whiteBox(`Generating ${generate.paths.length} routes...`) + `\n`,
   );
 
-  let count = 0;
+  // const promises = [];
+
   for (const pagePath of generate.paths) {
-    const ssrContext = { url: pagePath, ctx };
+    await buildPage({
+      options,
+      pagePath,
+      serverContext,
+      templateSpa,
+      spaPaths,
+    });
 
-    const before = new Date().getTime();
-
-    let response;
-    try {
-      response = (await renderRoute(serverContext, ssrContext)).response;
-    } catch (err) {
-      response = err.response;
-    }
-
-    await fs.ensureDir(`${options.outputDir}/${pagePath}`);
-    await fs.writeFileSync(
-      `${options.outputDir}/${pagePath}/index.html`,
-      response.body,
-    );
-
-    count++;
-    const generateTime = new Date().getTime() - before;
-
-    let boxFunc = greenBox;
-    if (response.status >= 300 && response.status < 400) {
-      boxFunc = yellowBox;
-    } else if (response.status >= 400) {
-      boxFunc = redBox;
-    }
-
-    process.stdout.write(
-      `${boxFunc(response.status)}\t${generateTime}ms\t${count}/${
-        generate.paths.length
-      }\t${pagePath}\n`,
-    );
+    // promises.push(
+    //   buildPage({
+    //     options,
+    //     pagePath,
+    //     serverContext,
+    //     templateSpa,
+    //     spaPaths,
+    //   }),
+    // );
   }
 
+  // await Promise.all(promises);
+
   await fs.remove(`${options.outputDir}/index.ssr.html`);
+  await fs.remove(`${options.outputDir}/index.spa.html`);
 };
+
+const redirectPage = url => {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="refresh" content="0; url=${url}" />
+</head>
+<body>Redirecting...</body>
+</html>`;
+};
+
+const buildSSRPage = async ({
+  options,
+  serverContext,
+  ssrContext,
+  pagePath,
+}) => {
+  let routeCtx;
+  try {
+    routeCtx = await renderRoute(serverContext, ssrContext);
+  } catch (err) {
+    routeCtx = err;
+  }
+
+  const status = routeCtx.status;
+  let body = routeCtx.body;
+
+  if (status === 301 || status == 302) {
+    body = redirectPage(body);
+  }
+
+  await fs.ensureDir(`${options.outputDir}/${pagePath}`);
+  await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
+
+  return status;
+};
+
+const buildSPAPage = async ({ templateSpa, options, pagePath }) => {
+  await fs.ensureDir(`${options.outputDir}/${pagePath}`);
+  await fs.writeFileSync(
+    `${options.outputDir}/${pagePath}/index.html`,
+    spaRoute({ templateSpa }),
+  );
+  return 'SPA';
+};
+
+const buildPage = async ({
+  serverContext,
+  templateSpa,
+  options,
+  pagePath,
+  spaPaths,
+}) => {
+  const ctx = createKoaContext();
+  const ssrContext = { url: pagePath, ctx };
+  const before = new Date().getTime();
+
+  let status = null;
+
+  // SPA route
+  if (templateSpa && spaPaths.length && mm.some(ssrContext.url, spaPaths)) {
+    status = await buildSPAPage({ templateSpa, options, pagePath });
+
+    // SSR route
+  } else {
+    serverContext = { ...serverContext, ctx };
+    status = await buildSSRPage({
+      options,
+      serverContext,
+      ssrContext,
+      pagePath,
+    });
+  }
+
+  const generateTime = new Date().getTime() - before;
+
+  let boxFunc = greenBox;
+  if (status === 'SPA') {
+    boxFunc = blueBox;
+  } else if (status >= 300 && status < 400) {
+    boxFunc = yellowBox;
+  } else if (status >= 400) {
+    boxFunc = redBox;
+  }
+
+  process.stdout.write(`${boxFunc(status)}\t${generateTime}ms\t${pagePath}\n`);
+};
+
+/**
+ * Create a fake Koa context
+ */
+const createKoaContext = () => ({
+  set: () => null,
+  status: null,
+  body: null,
+  redirect: function(location) {
+    this.body = location;
+  },
+});

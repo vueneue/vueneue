@@ -1,5 +1,7 @@
 /**
- * To execute this script you need a
+ * To execute this script you need
+ * - npm i -g clinic
+ * - npm i heapdump
  */
 
 const execa = require('execa');
@@ -42,7 +44,7 @@ const heapdump = (name = '') => {
 
 (async () => {
   // Build
-  console.log('Builing app...');
+  console.log('Building app...');
   await execa('./node_modules/.bin/vue-cli-service', ['ssr:build']);
 
   // Start node-clinic
@@ -59,6 +61,16 @@ const heapdump = (name = '') => {
     { path: '/middleware-redirect' },
     { path: '/middleware-error' },
     { path: '/middleware-error-func', heapdump: true },
+    // Next turn
+    { path: '/', wait: 2000 },
+    { path: '/async-data' },
+    { path: '/async-data-error' },
+    { path: '/async-data-store' },
+    { path: '/nested' },
+    { path: '/route-middleware' },
+    { path: '/middleware-redirect' },
+    { path: '/middleware-error' },
+    { path: '/middleware-error-func', heapdump: true },
   ];
 
   // Add heapdump: true to route to create a heap snaphop after route execution
@@ -67,12 +79,12 @@ const heapdump = (name = '') => {
   for (const route of routes) {
     await httpBench(route.path);
 
-    if (route.heapdump) {
-      console.log('Heapdump');
-      await heapdump(route.path.replace(/\//, '-'));
-    }
+    // if (route.heapdump) {
+    //   console.log('Heapdump');
+    //   await heapdump(route.path.replace(/\//, '-'));
+    // }
 
-    await wait(1000);
+    await wait(route.wait || 1000);
   }
 
   clinic.kill('SIGINT');

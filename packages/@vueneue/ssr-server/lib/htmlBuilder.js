@@ -24,16 +24,28 @@ module.exports = async (serverContext, ssrContext, html) => {
       metas.link.text() +
       metas.style.text() +
       metas.script.text() +
-      metas.noscript.text();
+      metas.noscript.text() +
+      ssrContext.renderStyles() +
+      ssrContext.renderResourceHints();
+
+    if (ssrContext.headAdd) {
+      head += ssrContext.headAdd;
+    }
 
     body += metas.script.text(bodyOpt);
   }
 
-  body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode({
-    state: ssrContext.state,
-    components: ssrContext.asyncData,
-  })}</script>`;
+  // Add Vuex and components data
+  body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode(
+    ssrContext.data,
+  )}</script>`;
 
+  // Body additions
+  if (ssrContext.bodyAdd) {
+    body += ssrContext.bodyAdd;
+  }
+
+  // Replace final html
   let result = serverContext.template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
     .replace(/data-body-attrs(="")?/, bodyAttrs)

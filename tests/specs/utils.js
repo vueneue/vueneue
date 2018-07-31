@@ -1,4 +1,5 @@
 const request = require('request');
+const cheerio = require('cheerio');
 
 const baseURL = 'http://localhost:8080';
 
@@ -20,12 +21,19 @@ const doRequest = async (url, options) => {
   });
 };
 
-const readSSRData = async () => {
-  const scriptContent = await page.$eval(
-    'script[data-vue-ssr-data]',
-    el => el.textContent,
-  );
-  return JSON.parse(scriptContent.replace(/^window\.__DATA__=/, ''));
+const gotoPageSSR = async url => {
+  const response = await page.goto(url);
+  const responseBody = await response.text();
+
+  const $ = cheerio.load(responseBody);
+
+  const scriptContent = $('script[data-vue-ssr-data]')
+    .html()
+    .replace(/^window\.__DATA__=/, '');
+
+  $.DATA = JSON.parse(scriptContent);
+
+  return $;
 };
 
 const isSPA = async () => {
@@ -41,7 +49,7 @@ const isMounted = async () => {
 const gotoClick = async url => {
   const link = await page.$(`a[href="${url}"]`);
   await link.click();
-  await wait(50);
+  await wait(100);
 };
 
 const checkText = async (selector, value) => {
@@ -51,9 +59,9 @@ const checkText = async (selector, value) => {
 const wait = time => new Promise(resolve => setTimeout(resolve, time));
 
 module.exports = {
+  gotoPageSSR,
   baseURL,
   doRequest,
-  readSSRData,
   isSPA,
   isMounted,
   gotoClick,
