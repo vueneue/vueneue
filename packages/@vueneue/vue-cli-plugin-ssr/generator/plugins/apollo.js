@@ -2,7 +2,7 @@ module.exports = (api, packageOverride) => {
   if (api.hasPlugin('apollo')) {
     // Add depedencies
     packageOverride.dependencies['isomorphic-fetch'] = '^2.2.1';
-    packageOverride.dependencies['js-cookies'] = '^1.0.2';
+    packageOverride.dependencies['js-cookie'] = '^2.2.0';
     packageOverride.dependencies['koa-cookie'] = '^1.0.0';
 
     // Render template
@@ -33,16 +33,22 @@ module.exports = (api, packageOverride) => {
             .replace(/ssr:\s?false/, 'ssr: !!process.server')
             .replace(
               'localStorage.setItem(AUTH_TOKEN, token)',
-              `if (process.client) require('js-cookies').set(AUTH_TOKEN, token)`,
+              `if (process.client) require('js-cookie').set(AUTH_TOKEN, token)`,
             )
             .replace(
               'localStorage.removeItem(AUTH_TOKEN)',
-              `if (process.client) require('js-cookies').remove(AUTH_TOKEN)`,
+              `if (process.client) require('js-cookie').remove(AUTH_TOKEN)`,
             )
             .replace(
-              /export function createProvider\(([^)]*)\) \{/,
-              `export function createProvider($1) {
-                defaultOptions.getAuth = getAuth(AUTH_TOKEN, options.ctx)`,
+              /createProvider.*{$/,
+              `$0
+  defaultOptions.getAuth = getAuth(AUTH_TOKEN, options.ctx)\n`,
+            )
+            .replace(
+              /^Object.*\$filesRoot([^}]|\n)*\}\);?/m,
+              `if (!Vue.prototype.hasOwnProperty("$filesRoot")) {
+  $0
+}`,
             );
         }
       }

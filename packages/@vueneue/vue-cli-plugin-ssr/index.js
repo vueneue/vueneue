@@ -8,8 +8,8 @@ module.exports = api => {
 
   // Apollo whitelists
   if (api.hasPlugin('apollo')) {
-    api.neue.webpack.nodeExternalsWhitelist.push(/vue-apollo/);
-    api.neue.webpack.nodeExternalsWhitelist.push(/vue-cli-plugin-apollo/);
+    api.neue.nodeExternalsWhitelist.push(/vue-apollo/);
+    api.neue.nodeExternalsWhitelist.push(/vue-cli-plugin-apollo/);
   }
 
   // Vue CLI commands
