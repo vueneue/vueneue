@@ -12,12 +12,11 @@ import notFound from '../utils/notFound';
  * Vue start
  */
 (async () => {
-  // Create application
+  // Create context
   const context = createContext();
-  context.app = createApp({
-    router: context.router,
-    store: context.store,
-  });
+
+  // Create application
+  context.app = createApp(context);
 
   // Error handler
   Vue.config.errorHandler = (error, vm, info) => {
