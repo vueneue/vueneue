@@ -1,4 +1,4 @@
-const { readFileSync } = require('fs-extra');
+const { readFileSync, existsSync } = require('fs-extra');
 const { join } = require('path');
 const Koa = require('koa');
 const mount = require('koa-mount');
@@ -50,10 +50,12 @@ module.exports = async opts => {
       'utf-8',
     );
 
-    serverContext.templateSpa = readFileSync(
-      join(dist, 'index.spa.html'),
-      'utf-8',
-    );
+    if (existsSync(join(dist, 'index.spa.html'))) {
+      serverContext.templateSpa = readFileSync(
+        join(dist, 'index.spa.html'),
+        'utf-8',
+      );
+    }
 
     // Serve static files
     app.use(mount('/', serve(dist)));

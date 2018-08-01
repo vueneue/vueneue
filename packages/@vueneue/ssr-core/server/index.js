@@ -8,14 +8,12 @@ import notFound from '../utils/notFound';
  * Vue start
  */
 export default async ssrContext => {
-  // Create app
+  // Create context
   const context = createContext(ssrContext);
-  context.app = createApp({
-    router: context.router,
-    store: context.store,
-  });
-
   context.ssr = ssrContext;
+
+  // Create application
+  context.app = createApp(context);
 
   // Call app init
   await pluginsInit(context);
