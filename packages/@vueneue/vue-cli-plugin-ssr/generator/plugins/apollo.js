@@ -1,3 +1,6 @@
+const fs = require('fs');
+const stringifyJs = require('javascript-stringify');
+
 module.exports = (api, packageOverride) => {
   if (api.hasPlugin('apollo')) {
     // Add depedencies
@@ -31,6 +34,7 @@ module.exports = (api, packageOverride) => {
 
           files[file] = files[file]
             .replace(/ssr:\s?false/, 'ssr: !!process.server')
+            .replace('Vue.use(VueApollo)', '')
             .replace(
               'localStorage.setItem(AUTH_TOKEN, token)',
               `if (process.client) require('js-cookie').set(AUTH_TOKEN, token)`,
@@ -40,17 +44,48 @@ module.exports = (api, packageOverride) => {
               `if (process.client) require('js-cookie').remove(AUTH_TOKEN)`,
             )
             .replace(
-              /createProvider.*{$/,
-              `$0
-  defaultOptions.getAuth = getAuth(AUTH_TOKEN, options.ctx)\n`,
+              /(createProvider.*\n)/,
+              `$1\tdefaultOptions.getAuth = getAuth(AUTH_TOKEN, options.ctx)\n`,
             )
             .replace(
-              /^Object.*\$filesRoot([^}]|\n)*\}\);?/m,
-              `if (!Vue.prototype.hasOwnProperty("$filesRoot")) {
-  $0
-}`,
+              /^(Object.*\$filesRoot([^}]|\n)*\}\);?)/m,
+              `if (!Vue.prototype.hasOwnProperty("$filesRoot")) {\n$1\n}`,
             );
         }
+      }
+    });
+
+    api.onCreateComplete(() => {
+      // Get config path
+      const neueConfigPath = api.resolve('neue.config.js');
+
+      // Config already defined
+      if (fs.existsSync(neueConfigPath)) {
+        // Add plugin
+        const neueConfig = require(neueConfigPath);
+        neueConfig.plugins.apollo = '@/plugins/apollo';
+
+        // Read original file
+        const configContent = fs.readFileSync(neueConfigPath, 'utf-8');
+
+        // Write changes
+        fs.writeFileSync(
+          neueConfigPath,
+          configContent.replace(
+            /^module\.exports.*(\{(\n|.)*\})/gm,
+            `module.exports = {${stringifyJs(neueConfig, null, 2)}}`,
+          ),
+        );
+      } else {
+        // Create config file
+        fs.writeFileSync(
+          neueConfigPath,
+          `module.exports = {
+  plugins: {
+    apollo: '@/plugins/apollo'
+  }
+}`,
+        );
       }
     });
   }
