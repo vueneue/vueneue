@@ -6,6 +6,12 @@ module.exports = api => {
   // Install Neue API
   api.neue = new NeueApi(api);
 
+  // Apollo whitelists
+  if (api.hasPlugin('apollo')) {
+    api.neue.nodeExternalsWhitelist.push(/vue-apollo/);
+    api.neue.nodeExternalsWhitelist.push(/vue-cli-plugin-apollo/);
+  }
+
   // Vue CLI commands
   require('./commands/serve')(api, projectOptions);
   require('./commands/build')(api, projectOptions);

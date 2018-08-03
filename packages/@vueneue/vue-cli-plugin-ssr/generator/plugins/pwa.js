@@ -8,8 +8,8 @@ module.exports = api => {
     api.postProcessFiles(files => {
       if (files[mainPath]) {
         files[mainPath] = files[mainPath].replace(
-          `import './registerServiceWorker'`,
-          `if (process.client) require('./registerServiceWorker')`,
+          /^import.*(\.\/registerServiceWorker).*$/,
+          `if (process.client) require('$2')`,
         );
       }
     });
