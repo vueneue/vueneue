@@ -35,6 +35,10 @@ module.exports = (serverContext, ssrContext, html) => {
     body += metas.script.text(bodyOpt);
   }
 
+  if (ssrContext.data.state.errorHandler.route) {
+    delete ssrContext.data.state.errorHandler.route.matched;
+  }
+
   // Add Vuex and components data
   body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode(
     ssrContext.data,
