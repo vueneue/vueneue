@@ -1,6 +1,6 @@
 const jsonEncode = require('fast-safe-stringify');
 
-module.exports = async (serverContext, ssrContext, html) => {
+module.exports = (serverContext, ssrContext, html) => {
   // Metas
   const bodyOpt = { body: true };
 
