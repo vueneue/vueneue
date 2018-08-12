@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@vue/cli-ui-addon-webpack": "^3.0.0-rc.4",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -22,7 +22,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-progress-path": "^0.0.2",
-    "vue-template-compiler": "^2.5.16"
+    "vue-template-compiler": "^2.5.17"
   },
   "browserslist": [
     "> 1%",
