@@ -35,7 +35,10 @@ const waitOnPromise = options => {
   let server;
 
   // Force Yarn
-  await fs.writeFile(join(os.homedir(), '.vuerc'), JSON.stringify({}));
+  const vuercPath = join(os.homedir(), '.vuerc');
+
+  if (!(await fs.exists(vuercPath)))
+    await fs.writeFile(vuercPath, JSON.stringify({}));
   await ws.vue(['config', '-s', 'packageManager', 'yarn'], {
     stdio: 'inherit',
   });
