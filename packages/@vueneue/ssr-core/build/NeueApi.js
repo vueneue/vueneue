@@ -49,7 +49,9 @@ class NeueApi {
     });
 
     // ssr-core need to be transpiled
-    api.service.projectOptions.transpileDependencies.push(/@vueneue\/ssr-core/);
+    api.service.projectOptions.transpileDependencies.push(
+      /@vueneue(\\|\/)ssr-core/,
+    );
 
     // Apollo whitelists
     if (api.hasPlugin('apollo')) {
