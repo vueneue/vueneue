@@ -1,19 +1,9 @@
----
-extend: '@vue/cli-service/generator/template/src/App.vue'
-replace:
-  - !!js/regexp /<template>[^]*?<\/template>/
-  - !!js/regexp /<script>[^]*?<\/script>/
----
-
-<%# REPLACE %>
 <template>
   <div id="app">
     <app-view/>
   </div>
 </template>
-<%# END_REPLACE %>
 
-<%# REPLACE %>
 <script>
 import AppView from './AppView';
 
@@ -36,4 +26,13 @@ export default {
   },
 };
 </script>
-<%# END_REPLACE %>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+</style>

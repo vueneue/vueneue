@@ -1,6 +1,6 @@
 const jsonEncode = require('fast-safe-stringify');
 
-module.exports = async (serverContext, ssrContext, html) => {
+module.exports = (serverContext, ssrContext, html) => {
   // Metas
   const bodyOpt = { body: true };
 
@@ -33,6 +33,10 @@ module.exports = async (serverContext, ssrContext, html) => {
     }
 
     body += metas.script.text(bodyOpt);
+  }
+
+  if (ssrContext.data.state.errorHandler.route) {
+    delete ssrContext.data.state.errorHandler.route.matched;
   }
 
   // Add Vuex and components data

@@ -33,7 +33,7 @@ declare module 'vue/types/vue' {
       route: Route;
       query: any;
       params: any;
-      reditect: (location: any, statusCode?: number) => void;
+      redirect: (location: any, statusCode?: number) => void;
       error: (error: any, statusCode?: number) => void;
     };
   }
