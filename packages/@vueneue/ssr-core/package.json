@@ -33,9 +33,7 @@
   },
   "dependencies": {
     "chokidar": "^2.0.4",
-    "core-js": "^2.5.7",
     "lodash": "^4.17.10",
-    "regenerator-runtime": "^0.12.1",
     "webpack-node-externals": "^1.7.2",
     "webpackbar": "^2.6.1"
   }
