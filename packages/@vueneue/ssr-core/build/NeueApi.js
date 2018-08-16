@@ -294,6 +294,25 @@ class NeueApi {
         }
       }
 
+      chainConfig.performance.hints(false);
+      chainConfig.performance.maxAssetSize(Infinity);
+
+      // Change babel configs
+      chainConfig.module.rules
+        .get('js')
+        .uses.get('babel-loader')
+        .options({
+          presets: [
+            [
+              '@vue/app',
+              {
+                targets: { node: 'current' },
+                exclude: ['transform-regenerator'],
+              },
+            ],
+          ],
+        });
+
       // Webpack Bar config
       webpackBarConfig = { name: 'Server', color: 'orange' };
     }
