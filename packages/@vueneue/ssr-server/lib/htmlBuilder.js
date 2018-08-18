@@ -53,8 +53,10 @@ module.exports = (serverContext, ssrContext, html) => {
   let result = serverContext.template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
     .replace(/data-body-attrs(="")?/, bodyAttrs)
-    .replace('<ssr-head>', head)
-    .replace('<ssr-body>', body);
+    .replace(/<ssr-head\/?>/, head)
+    .replace(/<ssr-body\/?>/, body)
+    .replace('</ssr-head>', '')
+    .replace('</ssr-body>', '');
 
   return result;
 };
