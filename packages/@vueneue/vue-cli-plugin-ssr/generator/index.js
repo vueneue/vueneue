@@ -14,6 +14,8 @@ module.exports = (api, options) => {
       'vue-no-ssr': '^0.2.2',
       '@vueneue/ssr-server': '^0.3.0',
       '@vueneue/ssr-core': '^0.3.0',
+      'regenerator-runtime': '^0.12.1',
+      'core-js': '^2.5.7',
     },
     scripts: {
       'ssr:serve': 'vue-cli-service ssr:serve',
