@@ -3,6 +3,7 @@ import startApp from './startApp';
 import { createContext } from '../utils/context';
 import { createApp, pluginsInit } from '../boot';
 import notFound from '../utils/notFound';
+import getRedirectFunction from '../utils/redirect';
 
 /**
  * Vue start
@@ -14,6 +15,9 @@ export default async ssrContext => {
 
   // Create application
   context.app = createApp(context);
+
+  // Add redirect function
+  context.redirect = getRedirectFunction(context);
 
   // Call app init
   await pluginsInit(context);

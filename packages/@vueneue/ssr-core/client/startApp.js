@@ -12,20 +12,6 @@ export default async context => {
   const { app, router, store } = context;
 
   /**
-   * Define redirect function
-   */
-  context.redirect = location => {
-    // Build redirect error
-    const redirectError = new Error('ROUTER_REDIRECT');
-    redirectError.href = router.resolve(location, router.currentRoute).href;
-
-    // Emit event
-    app.$emit('router.redirect', { href: redirectError.href });
-
-    throw redirectError;
-  };
-
-  /**
    * Handling middlewares HMR
    */
   if (process.dev && process.client) {

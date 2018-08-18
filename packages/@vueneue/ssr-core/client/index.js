@@ -7,6 +7,7 @@ import errorHandler from '../utils/errorHandler';
 import { createContext } from '../utils/context';
 import { createApp, pluginsInit } from '../boot';
 import notFound from '../utils/notFound';
+import getRedirectFunction from '../utils/redirect';
 
 /**
  * Vue start
@@ -22,6 +23,9 @@ import notFound from '../utils/notFound';
   Vue.config.errorHandler = (error, vm, info) => {
     errorHandler(context, { error, vm, info });
   };
+
+  // Add redirect function
+  context.redirect = getRedirectFunction(context);
 
   // Call app init
   await pluginsInit(context);
