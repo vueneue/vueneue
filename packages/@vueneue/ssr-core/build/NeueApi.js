@@ -166,6 +166,7 @@ class NeueApi {
       htmlOptions = {
         ...args[0],
         ...htmlOptions,
+        inject: false,
         templateParameters: params,
       };
 
@@ -173,21 +174,20 @@ class NeueApi {
     });
 
     // Add a index template for SPA pages
-    if (this.getConfig('spaPaths')) {
-      chainConfig.plugin('html-spa').use(HtmlWebpack, [
-        {
-          ...htmlOptions,
-          filename: 'index.spa.html',
-          templateParameters: {
-            ...htmlOptions.templateParameters,
-            neue: {
-              ssr: false,
-              client: true,
-            },
+    chainConfig.plugin('html-spa').use(HtmlWebpack, [
+      {
+        ...htmlOptions,
+        filename: 'index.spa.html',
+        inject: true,
+        templateParameters: {
+          ...htmlOptions.templateParameters,
+          neue: {
+            ssr: false,
+            client: true,
           },
         },
-      ]);
-    }
+      },
+    ]);
 
     // Remove dev plugins from @vue/cli-service
     chainConfig.plugins.delete('hmr');

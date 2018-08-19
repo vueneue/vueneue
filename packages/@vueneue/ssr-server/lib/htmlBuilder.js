@@ -1,13 +1,20 @@
 const jsonEncode = require('fast-safe-stringify');
 
 module.exports = (serverContext, ssrContext, html) => {
-  // Metas
-  const bodyOpt = { body: true };
-
   let body = html;
   let head = '';
   let bodyAttrs = '';
   let htmlAttrs = '';
+
+  // Add Vuex and components data
+  body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode(
+    ssrContext.data,
+  )}</script>`;
+
+  // Body additions
+  if (typeof ssrContext.bodyAdd === 'string') {
+    body += ssrContext.bodyAdd;
+  }
 
   /**
    * Handle vue-meta
@@ -32,29 +39,17 @@ module.exports = (serverContext, ssrContext, html) => {
       head += ssrContext.headAdd;
     }
 
-    body += metas.script.text(bodyOpt);
-  }
-
-  if (ssrContext.data.state.errorHandler.route) {
-    delete ssrContext.data.state.errorHandler.route.matched;
-  }
-
-  // Add Vuex and components data
-  body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode(
-    ssrContext.data,
-  )}</script>`;
-
-  // Body additions
-  if (ssrContext.bodyAdd) {
-    body += ssrContext.bodyAdd;
+    body += ssrContext.renderScripts();
   }
 
   // Replace final html
   let result = serverContext.template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
     .replace(/data-body-attrs(="")?/, bodyAttrs)
-    .replace('<ssr-head>', head)
-    .replace('<ssr-body>', body);
+    .replace(/<ssr-head\/?>/, head)
+    .replace(/<ssr-body\/?>/, body)
+    .replace('</ssr-head>', '')
+    .replace('</ssr-body>', '');
 
   return result;
 };

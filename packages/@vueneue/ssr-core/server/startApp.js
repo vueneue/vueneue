@@ -9,26 +9,6 @@ import { getContext } from '../utils/context';
 export default async context => {
   const { app, router, store, ctx, url, ssr } = context;
 
-  /**
-   * Define redirect function
-   */
-  context.redirect = (location, statusCode = 301) => {
-    const redirectError = new Error('ROUTER_REDIRECT');
-    redirectError.statusCode = statusCode;
-
-    const routerResult = router.resolve(location, router.currentRoute);
-    if (routerResult) {
-      redirectError.href = routerResult.href;
-    } else {
-      redirectError.href = location;
-    }
-
-    app.$emit('router.redirect', { href: redirectError.href });
-
-    ssr.redirected = statusCode;
-    throw redirectError;
-  };
-
   return new Promise((resolve, reject) => {
     // Attach meta for SSR
     if (app.$meta) ssr.meta = app.$meta();
