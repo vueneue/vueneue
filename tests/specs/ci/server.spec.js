@@ -84,6 +84,11 @@ describe('Server rendering', () => {
     await checkText('h1', 'Home');
   });
 
+  it('redirect: working in navigation guards', async () => {
+    $ = await gotoPageSSR(`${baseURL}/redirect-nav-guard`);
+    await checkText('h1', 'Home');
+  });
+
   it('router: 404 error injected to __DATA__', async () => {
     $ = await gotoPageSSR(`${baseURL}/not-found`);
     const { state } = $.DATA;
