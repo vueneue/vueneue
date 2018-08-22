@@ -34,6 +34,10 @@ export default () => {
         component: () => import('./components/Redirect'),
       },
       {
+        path: '/redirect-nav-guard',
+        component: () => import('./components/RedirectHelper'),
+      },
+      {
         path: '/helpers',
         component: () => import('./components/HelpersFunc'),
       },
@@ -101,6 +105,10 @@ export default () => {
           {
             path: 'redirect',
             component: () => import('./components/Redirect'),
+          },
+          {
+            path: 'redirect-nav-guard',
+            component: () => import('./components/RedirectHelper'),
           },
           {
             path: 'helpers',

@@ -4,6 +4,7 @@ import { addHotReload } from '../utils/hmr';
 import { handleMiddlewares } from '../utils/middlewares';
 import { handleHMRMiddlewares } from '../utils/hmr';
 import { getContext } from '../utils/context';
+import { doRedirect } from '../utils/redirect';
 
 /**
  * Start application
@@ -85,7 +86,7 @@ export default async context => {
         } catch (error) {
           // Handle redirection
           if (error.message === 'ROUTER_REDIRECT') {
-            window.location.replace(error.href);
+            doRedirect(_context, error);
           } else {
             // Handle error
             errorHandler(_context, { error });

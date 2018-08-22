@@ -4,7 +4,14 @@ import { global } from './middlewares';
 
 Vue.config.productionTip = false;
 
-export default ({ router, store }) => {
+export default ({ router, redirect, store }) => {
+  router.beforeEach((to, from, next) => {
+    if (/redirect-nav-guard/.test(to.path)) {
+      redirect('/?redirect=true&from=beforeEach');
+    }
+    next();
+  });
+
   return new Vue({
     router,
     store,

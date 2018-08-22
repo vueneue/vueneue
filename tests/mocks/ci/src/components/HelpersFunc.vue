@@ -6,6 +6,12 @@
     >
       error
     </button>
+    <button
+      id="redirect"
+      @click="$redirect('/')"
+    >
+      redirect
+    </button>
     <is-mounted/>
   </div>
 </template>
