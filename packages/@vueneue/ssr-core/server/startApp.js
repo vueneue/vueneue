@@ -2,12 +2,13 @@ import { resolveComponentsAsyncData } from '../utils/asyncData';
 import { handleMiddlewares } from '../utils/middlewares';
 import errorHandler from '../utils/errorHandler';
 import { getContext } from '../utils/context';
+import { doRedirect } from '../utils/redirect';
 
 /**
  * Start application
  */
 export default async context => {
-  const { app, router, store, ctx, url, ssr } = context;
+  const { app, router, store, url, ssr } = context;
 
   return new Promise((resolve, reject) => {
     // Attach meta for SSR
@@ -46,8 +47,7 @@ export default async context => {
       } catch (error) {
         // Handle redirections
         if (error.message === 'ROUTER_REDIRECT') {
-          ctx.status = error.statusCode;
-          ctx.redirect(error.href);
+          doRedirect(_context, error);
         } else {
           // Handle errors
           errorHandler(_context, {
