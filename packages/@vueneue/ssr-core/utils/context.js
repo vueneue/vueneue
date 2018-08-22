@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { createStore, createRouter } from '../boot';
 import errorStore from './errorStore';
 import errorHandler from './errorHandler';
+import { doRedirect } from './redirect';
 
 export const createContext = ssrContext => {
   const router = createRouter();
@@ -20,8 +21,7 @@ export const createContext = ssrContext => {
   const context = {
     ...ssrContext,
     router,
-    store,
-    // Add error helper function
+    store, // Add error helper function
     error(error, statusCode = 500) {
       errorHandler(context, {
         error,
@@ -32,6 +32,28 @@ export const createContext = ssrContext => {
 
   // Add context to all components
   Vue.prototype.$context = context;
+
+  // Error handler
+  Vue.config.errorHandler = (error, vm, info) => {
+    if (error.message === 'ROUTER_REDIRECT') {
+      return doRedirect(context, error);
+    }
+    errorHandler(context, {
+      error,
+      vm,
+      info,
+    });
+  };
+
+  // Catch redirect in router
+  router.onError(err => {
+    if (err.message === 'ROUTER_REDIRECT') {
+      doRedirect(getContext(context), {
+        href: err.href,
+        statusCode: err.statusCode,
+      });
+    }
+  });
 
   return context;
 };

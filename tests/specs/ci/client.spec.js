@@ -42,6 +42,18 @@ describe('Client side', () => {
     await checkText('h1', 'Error 403');
   });
 
+  it('helper: redirect working', async () => {
+    await page.goto(baseURL + '/helpers');
+    await isMounted();
+
+    const button = await page.$('#redirect');
+    await button.click();
+
+    await wait(200);
+
+    await checkText('h1', 'Home');
+  });
+
   it('middlewares: global state is displayed', async () => {
     await gotoClick('/global-middleware');
     await checkText('#value', 'globalMiddleware');

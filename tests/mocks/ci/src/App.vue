@@ -8,6 +8,7 @@
       <li><router-link to="/async-data-store">async-data-store</router-link></li>
       <li><router-link to="/async-data-error">async-data-error</router-link></li>
       <li><router-link to="/redirect">redirect</router-link></li>
+      <li><router-link to="/redirect-nav-guard">redirect-nav-guard</router-link></li>
       <li><router-link to="/helpers">helpers</router-link></li>
       <li><router-link to="/not-found">not-found</router-link></li>
       <li><router-link to="/global-middleware">global-middleware</router-link></li>
@@ -25,6 +26,7 @@
       <li><router-link to="/spa/async-data-store">async-data-store</router-link></li>
       <li><router-link to="/spa/async-data-error">async-data-error</router-link></li>
       <li><router-link to="/spa/redirect">redirect</router-link></li>
+      <li><router-link to="/spa/redirect-nav-guard">redirect-nav-guard</router-link></li>
       <li><router-link to="/spa/helpers">helpers</router-link></li>
       <li><router-link to="/spa/not-found">not-found</router-link></li>
       <li><router-link to="/spa/global-middleware">global-middleware</router-link></li>
