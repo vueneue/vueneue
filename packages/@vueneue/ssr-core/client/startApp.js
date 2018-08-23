@@ -23,7 +23,9 @@ export default async context => {
     router.onReady(async () => {
       // Clear errors on route leave
       router.beforeEach((to, from, next) => {
-        store.commit('errorHandler/CLEAR');
+        if (store.state.errorHandler.error) {
+          store.commit('errorHandler/CLEAR');
+        }
         next();
       });
 
