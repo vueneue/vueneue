@@ -47,9 +47,9 @@ export default async context => {
 
           // Resolve asyncData()
           await resolveComponentsAsyncData(
+            _context,
             to,
             router.getMatchedComponents(to),
-            _context,
           );
         } catch (error) {
           // Handle redirection
@@ -80,11 +80,7 @@ export default async context => {
           }
 
           // first call => asyncData
-          await resolveComponentsAsyncData(
-            router.currentRoute,
-            router.getMatchedComponents(),
-            _context,
-          );
+          await resolveComponentsAsyncData(_context);
         } catch (error) {
           // Handle redirection
           if (error.message === 'ROUTER_REDIRECT') {

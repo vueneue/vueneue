@@ -32,11 +32,7 @@ export default async context => {
           await store.dispatch('onHttpRequest', _context);
         }
 
-        const components = await resolveComponentsAsyncData(
-          router.currentRoute,
-          router.getMatchedComponents(),
-          _context,
-        );
+        const components = await resolveComponentsAsyncData(_context);
 
         ssr.data = {
           components,
