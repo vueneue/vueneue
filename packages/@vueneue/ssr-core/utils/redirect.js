@@ -27,7 +27,6 @@ export const getRedirect = context => {
 
 export const doRedirect = ({ ctx, ssr, router }, { href, statusCode }) => {
   if (process.client) {
-    console.log('doRedirect');
     router.replace(href);
   } else {
     if (typeof href === 'object') {

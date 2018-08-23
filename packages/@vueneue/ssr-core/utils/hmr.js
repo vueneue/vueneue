@@ -45,9 +45,7 @@ export const addHotReload = context => {
 
 export const handleHMRMiddlewares = async context => {
   onHotReload(() => {
-    handleMiddlewares(context.router.currentRoute, context).catch(error =>
-      errorHandler(context, { error }),
-    );
+    handleMiddlewares(context).catch(error => errorHandler(context, { error }));
   });
 };
 

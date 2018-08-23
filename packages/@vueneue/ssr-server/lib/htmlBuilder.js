@@ -25,21 +25,26 @@ module.exports = (serverContext, ssrContext, html) => {
     bodyAttrs = metas.bodyAttrs.text();
     htmlAttrs = metas.htmlAttrs.text();
 
+    // Inject metas to head
     head =
       metas.meta.text() +
       metas.title.text() +
       metas.link.text() +
       metas.style.text() +
       metas.script.text() +
-      metas.noscript.text() +
-      ssrContext.renderStyles() +
-      ssrContext.renderResourceHints();
+      metas.noscript.text();
+  }
 
-    if (ssrContext.headAdd) {
-      head += ssrContext.headAdd;
-    }
+  // Build head
+  if (ssrContext.headAdd) head += ssrContext.headAdd;
+  head += ssrContext.renderStyles() + ssrContext.renderResourceHints();
 
-    body += ssrContext.renderScripts();
+  // Build body
+  body += ssrContext.renderScripts();
+
+  // Body additions
+  if (typeof ssrContext.bodyAdd === 'string') {
+    body += ssrContext.bodyAdd;
   }
 
   // Replace final html

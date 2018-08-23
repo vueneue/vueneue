@@ -2,7 +2,11 @@ import Vue from 'vue';
 
 const noopData = () => ({});
 
-export const resolveComponentsAsyncData = (route, components, context) => {
+export const resolveComponentsAsyncData = (context, route, components) => {
+  const { router } = context;
+  if (!route) route = router.currentRoute;
+  if (!components) components = router.getMatchedComponents(route);
+
   return Promise.all(
     components.map(component => {
       const Component = sanitizeComponent(component);
