@@ -21,15 +21,19 @@ module.exports = async opts => {
     serverContext.renderer = createRenderer(serverBundle, {
       clientManifest,
       directives: ssr ? ssr.directives : undefined,
+      shouldPreload: ssr ? ssr.shouldPreload : undefined,
+      shouldPrefetch: ssr ? ssr.shouldPrefetch : undefined,
     });
     readyPromise = Promise.resolve();
   } else {
     readyPromise = require('./devMiddleware')(
       serverContext,
-      (bundle, options) => {
+      (bundle, { clientManifest }) => {
         serverContext.renderer = createRenderer(bundle, {
-          ...options,
+          clientManifest,
           directives: ssr ? ssr.directives : undefined,
+          shouldPreload: ssr ? ssr.shouldPreload : undefined,
+          shouldPrefetch: ssr ? ssr.shouldPrefetch : undefined,
         });
       },
     );
