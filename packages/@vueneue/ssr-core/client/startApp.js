@@ -43,7 +43,7 @@ export default async context => {
 
         try {
           // Middlewares
-          await handleMiddlewares(to, _context);
+          await handleMiddlewares(_context, to);
 
           // Resolve asyncData()
           await resolveComponentsAsyncData(
@@ -72,7 +72,7 @@ export default async context => {
 
         try {
           // Middlewares
-          await handleMiddlewares(router.currentRoute, _context);
+          await handleMiddlewares(_context);
 
           // Store init function on SPA Mode
           if (store._actions.onHttpRequest) {

@@ -25,7 +25,7 @@ export default async context => {
 
       try {
         // Middlewares
-        await handleMiddlewares(router.currentRoute, _context);
+        await handleMiddlewares(_context);
 
         // Store init function
         if (store._actions.onHttpRequest) {

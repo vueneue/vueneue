@@ -1,13 +1,15 @@
 import { sanitizeComponent } from './asyncData';
 
-export const handleMiddlewares = async (route, context) => {
+export const handleMiddlewares = async (context, route) => {
   const { router, app } = context;
+
+  if (!route) route = router.currentRoute;
 
   const middlwareContext = {
     ...context,
-    route: router.currentRoute,
-    params: router.currentRoute.params,
-    query: router.currentRoute.query,
+    route,
+    params: route.params,
+    query: route.query,
   };
 
   let runMiddlewares = [];
