@@ -1,6 +1,6 @@
 {
   "name": "@vueneue/vue-cli-plugin-ssr",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "Vue CLI 3 plugin to build SSR (Server side rendered) applications",
   "main": "index.js",
   "types": "template/src/vueneue/types.d.ts",
