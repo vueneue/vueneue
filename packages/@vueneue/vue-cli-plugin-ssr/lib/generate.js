@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 const chalk = require('chalk');
 const mm = require('micromatch');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
@@ -192,8 +193,13 @@ const buildSSRPage = async ({
     body = redirectPage(body);
   }
 
-  await fs.ensureDir(`${options.outputDir}/${pagePath}`);
-  await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
+  if (!/\.html?$/.test(pagePath)) {
+    await fs.ensureDir(`${options.outputDir}/${pagePath}`);
+    await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
+  } else {
+    await fs.ensureDir(`${options.outputDir}/${path.dirname(pagePath)}`);
+    await fs.writeFileSync(`${options.outputDir}/${pagePath}`, body);
+  }
 
   return status;
 };
