@@ -5,7 +5,7 @@ const mm = require('micromatch');
 module.exports = async (serverContext, ssrContext) => {
   const { ctx, spaPaths, renderer } = serverContext;
 
-  ctx.set('content-type', 'text/html');
+  ctx.set('content-type', 'text/html; charset=utf-8');
 
   // SPA route
   if (spaPaths && spaPaths.length && mm.some(ssrContext.url, spaPaths)) {

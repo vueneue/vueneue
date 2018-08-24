@@ -18,6 +18,7 @@ module.exports = async opts => {
   if (isProduction) {
     const serverBundle = require(join(dist, 'server-bundle.json'));
     const clientManifest = require(join(dist, 'client-manifest.json'));
+    serverContext.clientManifest = clientManifest;
     serverContext.renderer = createRenderer(serverBundle, {
       clientManifest,
       directives: ssr ? ssr.directives : undefined,
@@ -29,6 +30,7 @@ module.exports = async opts => {
     readyPromise = require('./devMiddleware')(
       serverContext,
       (bundle, { clientManifest }) => {
+        serverContext.clientManifest = clientManifest;
         serverContext.renderer = createRenderer(bundle, {
           clientManifest,
           directives: ssr ? ssr.directives : undefined,
