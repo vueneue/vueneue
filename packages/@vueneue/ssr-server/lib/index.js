@@ -3,12 +3,13 @@ const { join } = require('path');
 const Koa = require('koa');
 const mount = require('koa-mount');
 const serve = require('koa-static');
+const Critters = require('@vueneue/critters');
 
 const createRenderer = require('./createRenderer');
 const renderRoute = require('./renderRoute');
 
 module.exports = async opts => {
-  const { dist, host, port, ssr } = opts;
+  const { dist, host, port, ssr, css } = opts;
 
   const app = new Koa();
   const isProduction = process.env.NODE_ENV === 'production';
@@ -22,9 +23,21 @@ module.exports = async opts => {
     serverContext.renderer = createRenderer(serverBundle, {
       clientManifest,
       directives: ssr ? ssr.directives : undefined,
-      shouldPreload: ssr ? ssr.shouldPreload : undefined,
-      shouldPrefetch: ssr ? ssr.shouldPrefetch : undefined,
-    });
+
+    // Critical CSS: fetch all css files
+    if (css && css.critical) {
+      css.critters = new Critters({
+        style: false, // vue-style-loader handle inline component style already
+      });
+
+      css.files = clientManifest.all
+        .filter(filepath => /\.css$/.test(filepath))
+        .reduce((result, filepath) => {
+          result[`/${filepath}`] = readFileSync(join(dist, filepath), 'utf-8');
+          return result;
+        }, {});
+    }
+
     readyPromise = Promise.resolve();
   } else {
     readyPromise = require('./devMiddleware')(

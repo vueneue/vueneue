@@ -29,7 +29,7 @@ module.exports = async (serverContext, ssrContext) => {
       ctx.status = 200;
     }
 
-    ctx.body = htmlBuilder(serverContext, ssrContext, html);
+    ctx.body = await htmlBuilder(serverContext, ssrContext, html);
     return ctx;
 
     // On error

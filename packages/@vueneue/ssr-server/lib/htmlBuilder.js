@@ -1,6 +1,6 @@
 const jsonEncode = require('fast-safe-stringify');
 
-module.exports = (serverContext, ssrContext, html) => {
+module.exports = async (serverContext, ssrContext, html) => {
   const { template, css } = serverContext;
 
   let body = html;
@@ -65,6 +65,11 @@ module.exports = (serverContext, ssrContext, html) => {
     .replace(/<ssr-body\/?>/, body)
     .replace('</ssr-head>', '')
     .replace('</ssr-body>', '');
+
+  // Run critical CSS
+  if (css.critters) {
+    result = await css.critters.process(result, css.files);
+  }
 
   return result;
 };

@@ -5,6 +5,7 @@ const mm = require('micromatch');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
 const renderRoute = require('@vueneue/ssr-server/lib/renderRoute');
 const spaRoute = require('@vueneue/ssr-server/lib/spaRoute');
+const Critters = require('@vueneue/critters');
 
 const whiteBox = str => chalk.bgWhite(chalk.black(` ${str} `));
 const greenBox = str => chalk.bgGreen(chalk.black(` ${str} `));
@@ -44,6 +45,23 @@ module.exports = async (api, options) => {
   );
   const spaPaths = api.neue.getConfig('spaPaths') || [];
   const css = api.neue.getConfig('css') || {};
+
+  // Critical CSS
+  if (css.critical) {
+    css.critters = new Critters({
+      style: false, // vue-style-loader handle inline component style already
+    });
+
+    css.files = clientManifest.all
+      .filter(filepath => /\.css$/.test(filepath))
+      .reduce((result, filepath) => {
+        result[`/${filepath}`] = fs.readFileSync(
+          path.join(options.outputDir, filepath),
+          'utf-8',
+        );
+        return result;
+      }, {});
+  }
 
   /**
    * Create renderer
