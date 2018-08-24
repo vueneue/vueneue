@@ -48,9 +48,7 @@ module.exports = async (api, options) => {
 
   // Critical CSS
   if (css.critical) {
-    css.critters = new Critters({
-      style: false, // vue-style-loader handle inline component style already
-    });
+    css.critters = new Critters();
 
     css.files = clientManifest.all
       .filter(filepath => /\.css$/.test(filepath))

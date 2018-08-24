@@ -20,6 +20,7 @@ const defaultConfig = () => ({
   },
   css: {
     extract: false,
+    critical: false,
   },
   spaPaths: null,
   generate: {
