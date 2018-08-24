@@ -36,7 +36,7 @@ module.exports = async opts => {
     });
 
     // Critical CSS: fetch all css files
-    if (css && css.critical) {
+    if (css && css.critical && isProduction) {
       css.critters = new Critters();
 
       css.files = clientManifest.all
