@@ -41,12 +41,9 @@ module.exports = async (serverContext, ssrContext, html) => {
   if (ssrContext.headAdd) head += ssrContext.headAdd;
 
   // Handle styles
-  if (css.extract) {
-    head += ssrContext.renderStyles();
-  } else {
-    head += ssrContext.styles;
-  }
+  head += ssrContext.renderStyles();
 
+  // Resource hints
   head += ssrContext.renderResourceHints();
 
   // Build body
