@@ -43,6 +43,7 @@ module.exports = async (api, options) => {
     api.neue.getConfig('generate') || {},
   );
   const spaPaths = api.neue.getConfig('spaPaths') || [];
+  const css = api.neue.getConfig('css') || {};
 
   /**
    * Create renderer
@@ -127,6 +128,7 @@ module.exports = async (api, options) => {
 
   // Fake server context
   const serverContext = {
+    css,
     renderer,
     template,
   };

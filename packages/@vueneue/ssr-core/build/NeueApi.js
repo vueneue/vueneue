@@ -18,6 +18,9 @@ const defaultConfig = () => ({
     directives: {},
     server: null,
   },
+  css: {
+    extract: false,
+  },
   spaPaths: null,
   generate: {
     scanRouter: true,
@@ -260,11 +263,10 @@ class NeueApi {
       // Remove
       chainConfig.node.clear();
       chainConfig.optimization.splitChunks(false);
+      chainConfig.performance.hints(false);
+      chainConfig.performance.maxAssetSize(Infinity);
 
-      // Disable CSS plugins on server side
-      chainConfig.plugins.delete('optimize-css');
-      chainConfig.plugins.delete('extract-css');
-
+      // Disable some CSS configurations
       const cssRulesNames = [
         'css',
         'postcss',
@@ -273,7 +275,11 @@ class NeueApi {
         'less',
         'stylus',
       ];
-      const oneOfsNames = ['normal', 'normal-modules', 'vue', 'vue-modules'];
+      const oneOfsNames = ['vue', 'vue-modules'];
+
+      if (!this.getConfig('css.extract')) {
+        oneOfsNames.push('normal', 'normal-modules');
+      }
 
       for (const ruleName of cssRulesNames) {
         const rule = chainConfig.module.rules.get(ruleName);
@@ -284,18 +290,12 @@ class NeueApi {
               const extractUse = oneOf.uses.get('extract-css-loader');
               if (extractUse) {
                 // Use vue-style-loader to inject CSS of components on server side
-                extractUse.loader('vue-style-loader').options({
-                  sourceMap: false,
-                  shadowMode: false,
-                });
+                extractUse.loader('vue-style-loader');
               }
             }
           }
         }
       }
-
-      chainConfig.performance.hints(false);
-      chainConfig.performance.maxAssetSize(Infinity);
 
       // Change babel configs
       chainConfig.module.rules

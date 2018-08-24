@@ -1,6 +1,8 @@
 const jsonEncode = require('fast-safe-stringify');
 
 module.exports = (serverContext, ssrContext, html) => {
+  const { template, css } = serverContext;
+
   let body = html;
   let head = '';
   let bodyAttrs = '';
@@ -37,7 +39,15 @@ module.exports = (serverContext, ssrContext, html) => {
 
   // Build head
   if (ssrContext.headAdd) head += ssrContext.headAdd;
-  head += ssrContext.renderStyles() + ssrContext.renderResourceHints();
+
+  // Handle styles
+  if (css.extract) {
+    head += ssrContext.renderStyles();
+  } else {
+    head += ssrContext.styles;
+  }
+
+  head += ssrContext.renderResourceHints();
 
   // Build body
   body += ssrContext.renderScripts();
@@ -48,7 +58,7 @@ module.exports = (serverContext, ssrContext, html) => {
   }
 
   // Replace final html
-  let result = serverContext.template
+  let result = template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
     .replace(/data-body-attrs(="")?/, bodyAttrs)
     .replace(/<ssr-head\/?>/, head)
