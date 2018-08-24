@@ -218,6 +218,9 @@ class NeueApi {
     // Webpack Bar config
     let webpackBarConfig = { name: 'Client', color: 'green' };
 
+    // CSS handling
+    this.handleCSS(chainConfig, opts);
+
     if (client) {
       /**
        * Client side
@@ -265,37 +268,6 @@ class NeueApi {
       chainConfig.optimization.splitChunks(false);
       chainConfig.performance.hints(false);
       chainConfig.performance.maxAssetSize(Infinity);
-
-      // Disable some CSS configurations
-      const cssRulesNames = [
-        'css',
-        'postcss',
-        'scss',
-        'sass',
-        'less',
-        'stylus',
-      ];
-      const oneOfsNames = ['vue', 'vue-modules'];
-
-      if (!this.getConfig('css.extract')) {
-        oneOfsNames.push('normal', 'normal-modules');
-      }
-
-      for (const ruleName of cssRulesNames) {
-        const rule = chainConfig.module.rules.get(ruleName);
-        if (rule) {
-          for (const oneOfName of oneOfsNames) {
-            const oneOf = rule.oneOfs.get(oneOfName);
-            if (oneOf) {
-              const extractUse = oneOf.uses.get('extract-css-loader');
-              if (extractUse) {
-                // Use vue-style-loader to inject CSS of components on server side
-                extractUse.loader('vue-style-loader');
-              }
-            }
-          }
-        }
-      }
 
       // Change babel configs
       chainConfig.module.rules
@@ -379,6 +351,49 @@ class NeueApi {
       'process.spa': ssr ? 'false' : 'true',
       'process.ssr': ssr ? 'true' : 'false',
     };
+  }
+
+  /**
+   * Handle CSS configurations
+   */
+  handleCSS(chainConfig) {
+    // CSS rules names
+    const cssRulesNames = ['css', 'postcss', 'scss', 'sass', 'less', 'stylus'];
+    const oneOfsNames = [];
+
+    // No extract: All CSS will be inlined
+    if (!this.getConfig('css.extract')) {
+      oneOfsNames.push('normal', 'normal-modules', 'vue', 'vue-modules');
+    } else {
+      oneOfsNames.push('vue', 'vue-modules');
+    }
+
+    // Replace extract css loader by vue style loader
+    if (oneOfsNames.length) {
+      for (const ruleName of cssRulesNames) {
+        const rule = chainConfig.module.rules.get(ruleName);
+        if (rule) {
+          for (const oneOfName of oneOfsNames) {
+            const oneOf = rule.oneOfs.get(oneOfName);
+            if (oneOf) {
+              const extractUse = oneOf.uses.get('extract-css-loader');
+              if (extractUse) {
+                oneOf.uses.delete('extract-css-loader');
+
+                oneOf
+                  .use('vue-style-loader')
+                  .before('css-loader')
+                  .loader('vue-style-loader')
+                  .options({
+                    sourceMap: false,
+                    shadowMode: false,
+                  });
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 

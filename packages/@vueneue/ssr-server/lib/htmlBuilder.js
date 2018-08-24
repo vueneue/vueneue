@@ -1,7 +1,7 @@
 const jsonEncode = require('fast-safe-stringify');
 
 module.exports = (serverContext, ssrContext, html) => {
-  const { template, css } = serverContext;
+  const { template } = serverContext;
 
   let body = html;
   let head = '';
@@ -41,12 +41,9 @@ module.exports = (serverContext, ssrContext, html) => {
   if (ssrContext.headAdd) head += ssrContext.headAdd;
 
   // Handle styles
-  if (css.extract) {
-    head += ssrContext.renderStyles();
-  } else {
-    head += ssrContext.styles;
-  }
+  head += ssrContext.renderStyles();
 
+  // Resource hints
   head += ssrContext.renderResourceHints();
 
   // Build body
