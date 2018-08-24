@@ -21,3 +21,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+h2 {
+  background: red;
+  color: #fff;
+}
+</style>
