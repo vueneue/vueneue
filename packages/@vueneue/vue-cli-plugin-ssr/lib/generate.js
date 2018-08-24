@@ -145,17 +145,11 @@ module.exports = async (api, options) => {
   }
 
   // Fake server context
-  const serverContext = {
-    css,
-    renderer,
-    template,
-  };
+  const serverContext = { css, renderer, template };
 
   process.stdout.write(
     whiteBox(`Generating ${generate.paths.length} routes...`) + `\n`,
   );
-
-  // const promises = [];
 
   for (const pagePath of generate.paths) {
     await buildPage({
@@ -165,19 +159,20 @@ module.exports = async (api, options) => {
       templateSpa,
       spaPaths,
     });
-
-    // promises.push(
-    //   buildPage({
-    //     options,
-    //     pagePath,
-    //     serverContext,
-    //     templateSpa,
-    //     spaPaths,
-    //   }),
-    // );
   }
 
-  // await Promise.all(promises);
+  // Parallel execution
+  // await Promise.all(
+  //   generate.paths.map(pagePath =>
+  //     buildPage({
+  //       options,
+  //       pagePath,
+  //       serverContext,
+  //       templateSpa,
+  //       spaPaths,
+  //     }),
+  //   ),
+  // );
 
   await fs.remove(`${options.outputDir}/index.ssr.html`);
   await fs.remove(`${options.outputDir}/index.spa.html`);

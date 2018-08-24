@@ -15,14 +15,25 @@ module.exports = async opts => {
   const isProduction = process.env.NODE_ENV === 'production';
   const serverContext = { ...opts, app };
 
+  // Vue renderer base options
+  const rendererOptions = {
+    directives: ssr ? ssr.directives : undefined,
+    shouldPreload: ssr ? ssr.shouldPreload : undefined,
+    shouldPrefetch: ssr ? ssr.shouldPrefetch : undefined,
+  };
+
   let readyPromise;
+
   if (isProduction) {
+    // Production
+
     const serverBundle = require(join(dist, 'server-bundle.json'));
     const clientManifest = require(join(dist, 'client-manifest.json'));
     serverContext.clientManifest = clientManifest;
     serverContext.renderer = createRenderer(serverBundle, {
+      ...rendererOptions,
       clientManifest,
-      directives: ssr ? ssr.directives : undefined,
+    });
 
     // Critical CSS: fetch all css files
     if (css && css.critical) {
@@ -40,15 +51,15 @@ module.exports = async opts => {
 
     readyPromise = Promise.resolve();
   } else {
+    // Development mode
+
     readyPromise = require('./devMiddleware')(
       serverContext,
       (bundle, { clientManifest }) => {
         serverContext.clientManifest = clientManifest;
         serverContext.renderer = createRenderer(bundle, {
+          ...rendererOptions,
           clientManifest,
-          directives: ssr ? ssr.directives : undefined,
-          shouldPreload: ssr ? ssr.shouldPreload : undefined,
-          shouldPrefetch: ssr ? ssr.shouldPrefetch : undefined,
         });
       },
     );
