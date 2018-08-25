@@ -37,6 +37,13 @@ module.exports = async (api, options) => {
   }
 
   /**
+   * Create renderer
+   */
+  const renderer = createRenderer(serverBundle, {
+    clientManifest,
+  });
+
+  /**
    * Get project config
    */
   const generate = Object.assign(
@@ -46,11 +53,13 @@ module.exports = async (api, options) => {
   const spaPaths = api.neue.getConfig('spaPaths') || [];
   const css = api.neue.getConfig('css') || {};
 
+  // Fake server context
+  const serverContext = { css, renderer, template };
+
   // Critical CSS
   if (css.critical) {
-    css.critters = new Critters();
-
-    css.files = clientManifest.all
+    serverContext.critters = new Critters();
+    serverContext.cssFiles = clientManifest.all
       .filter(filepath => /\.css$/.test(filepath))
       .reduce((result, filepath) => {
         result[`/${filepath}`] = fs.readFileSync(
@@ -60,13 +69,6 @@ module.exports = async (api, options) => {
         return result;
       }, {});
   }
-
-  /**
-   * Create renderer
-   */
-  const renderer = createRenderer(serverBundle, {
-    clientManifest,
-  });
 
   /**
    * Render a page
@@ -141,9 +143,6 @@ module.exports = async (api, options) => {
       generate.paths = [...newPaths];
     }
   }
-
-  // Fake server context
-  const serverContext = { css, renderer, template };
 
   process.stdout.write(
     whiteBox(`Generating ${generate.paths.length} routes...`) + `\n`,
