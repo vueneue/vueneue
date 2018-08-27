@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 const chalk = require('chalk');
 const mm = require('micromatch');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
@@ -42,6 +43,7 @@ module.exports = async (api, options) => {
     api.neue.getConfig('generate') || {},
   );
   const spaPaths = api.neue.getConfig('spaPaths') || [];
+  const css = api.neue.getConfig('css') || {};
 
   /**
    * Create renderer
@@ -125,16 +127,11 @@ module.exports = async (api, options) => {
   }
 
   // Fake server context
-  const serverContext = {
-    renderer,
-    template,
-  };
+  const serverContext = { css, renderer, template };
 
   process.stdout.write(
     whiteBox(`Generating ${generate.paths.length} routes...`) + `\n`,
   );
-
-  // const promises = [];
 
   for (const pagePath of generate.paths) {
     await buildPage({
@@ -144,19 +141,20 @@ module.exports = async (api, options) => {
       templateSpa,
       spaPaths,
     });
-
-    // promises.push(
-    //   buildPage({
-    //     options,
-    //     pagePath,
-    //     serverContext,
-    //     templateSpa,
-    //     spaPaths,
-    //   }),
-    // );
   }
 
-  // await Promise.all(promises);
+  // Parallel execution
+  // await Promise.all(
+  //   generate.paths.map(pagePath =>
+  //     buildPage({
+  //       options,
+  //       pagePath,
+  //       serverContext,
+  //       templateSpa,
+  //       spaPaths,
+  //     }),
+  //   ),
+  // );
 
   await fs.remove(`${options.outputDir}/index.ssr.html`);
   await fs.remove(`${options.outputDir}/index.spa.html`);
@@ -192,8 +190,13 @@ const buildSSRPage = async ({
     body = redirectPage(body);
   }
 
-  await fs.ensureDir(`${options.outputDir}/${pagePath}`);
-  await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
+  if (!/\.html?$/.test(pagePath)) {
+    await fs.ensureDir(`${options.outputDir}/${pagePath}`);
+    await fs.writeFileSync(`${options.outputDir}/${pagePath}/index.html`, body);
+  } else {
+    await fs.ensureDir(`${options.outputDir}/${path.dirname(pagePath)}`);
+    await fs.writeFileSync(`${options.outputDir}/${pagePath}`, body);
+  }
 
   return status;
 };

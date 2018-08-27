@@ -52,6 +52,7 @@ export default {
 
     error() {
       if (this.current && this.current.error) return this.current.error;
+      return null;
     },
 
     haveHistory() {
@@ -62,7 +63,7 @@ export default {
   methods: {
     gotoHome() {
       this.$store.commit('errorHandler/CLEAR');
-      if (this.$router.currentRoute.path != '/') {
+      if (this.$router.currentRoute.path !== '/') {
         this.$router.replace('/');
       }
     },

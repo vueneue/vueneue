@@ -1,3 +1,4 @@
+import './styles.css';
 import Vue from 'vue';
 import App from './App.vue';
 import { global } from './middlewares';

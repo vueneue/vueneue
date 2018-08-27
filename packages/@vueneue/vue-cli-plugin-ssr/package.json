@@ -35,7 +35,7 @@
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
-    "eslint-plugin-vue": "^4.5.0",
+    "eslint-plugin-vue": "^4.7.1",
     "prettier": "^1.13.5",
     "vue-eslint-parser": "^2.0.3"
   },

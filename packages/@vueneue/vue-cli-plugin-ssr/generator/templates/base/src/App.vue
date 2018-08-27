@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AppView from './AppView';
+import AppView from './AppView.vue';
 
 export default {
   components: {
