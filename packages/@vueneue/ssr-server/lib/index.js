@@ -37,7 +37,7 @@ module.exports = async opts => {
 
     // Critical CSS: fetch all css files
     if (css && css.critical && isProduction) {
-      serverContext.critters = new Critters();
+      serverContext.critters = new Critters(css.critical);
       serverContext.cssFiles = clientManifest.all
         .filter(filepath => /\.css$/.test(filepath))
         .reduce((result, filepath) => {
