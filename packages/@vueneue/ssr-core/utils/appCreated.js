@@ -7,7 +7,7 @@ export const getAppCreated = context => {
 
   addCallback.run = () => {
     for (const cb of callbacks) {
-      cb(context);
+      cb(context.app);
     }
   };
 
