@@ -1,6 +1,6 @@
 {
   "name": "@vueneue/ssr-core",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "description": "VueNeue core package",
   "main": "client/index.js",
   "types": "index.d.ts",
