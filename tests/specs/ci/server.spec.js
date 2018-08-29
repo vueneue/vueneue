@@ -198,4 +198,8 @@ describe('Server rendering', () => {
     await isMounted();
     await checkText('#value', 'plugin');
   });
+
+  it('plugin: appCreated is called', async () => {
+    expect($('#app-created').text()).toBe('yes');
+  });
 });

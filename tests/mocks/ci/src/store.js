@@ -8,6 +8,7 @@ export default () => {
       httpRequest: 'default',
       middleware: 'default',
       plugin: 'default',
+      pluginAppCreated: 'no',
     },
 
     mutations: {
@@ -25,6 +26,9 @@ export default () => {
       },
       setPlugin(state, value) {
         state.plugin = value;
+      },
+      setPluginAppCreated(state, value) {
+        state.pluginAppCreated = value;
       },
     },
 
