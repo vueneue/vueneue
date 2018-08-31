@@ -21,10 +21,7 @@ module.exports = (api, packageOverride) => {
               'export default ({ router, store }) => {',
               `export default ({ router, store, ctx }) => {`,
             )
-            .replace(
-              'createProvider().provide()',
-              'createProvider({ ctx }).provide()',
-            );
+            .replace('createProvider()', 'createProvider({ ctx })');
         }
 
         // Rewrite vue-apollo.js
@@ -46,10 +43,6 @@ module.exports = (api, packageOverride) => {
             .replace(
               /(createProvider.*\n)/,
               `$1\tdefaultOptions.getAuth = getAuth(AUTH_TOKEN, options.ctx)\n`,
-            )
-            .replace(
-              /^(Object.*\$filesRoot([^}]|\n)*\}\);?)/m,
-              `if (!Vue.prototype.hasOwnProperty("$filesRoot")) {\n$1\n}`,
             );
         }
       }

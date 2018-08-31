@@ -49,11 +49,6 @@ module.exports = (serverContext, ssrContext, html) => {
   // Build body
   body += ssrContext.renderScripts();
 
-  // Body additions
-  if (typeof ssrContext.bodyAdd === 'string') {
-    body += ssrContext.bodyAdd;
-  }
-
   // Replace final html
   let result = template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
