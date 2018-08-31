@@ -55,11 +55,6 @@ class NeueApi {
     api.service.projectOptions.transpileDependencies.push(
       /@vueneue(\\|\/)ssr-core/,
     );
-
-    // Apollo whitelists
-    if (api.hasPlugin('apollo')) {
-      this.nodeExternalsWhitelist.push(/vue-apollo/, /vue-cli-plugin-apollo/);
-    }
   }
 
   /**
