@@ -156,35 +156,30 @@ class NeueApi {
 
     // Override HTMLWebpackPlugin behavior
     chainConfig.plugin('html').tap(args => {
-      const params = {
-        ...(args[0].templateParameters || {}),
+      const params = merge({}, args[0].templateParameters || {}, {
         neue: opts,
-      };
+      });
 
-      htmlOptions = {
-        ...args[0],
-        ...htmlOptions,
-        inject: false,
-        templateParameters: params,
-      };
-
-      return [htmlOptions];
+      return [
+        merge({}, args[0] || {}, htmlOptions, {
+          inject: false,
+          templateParameters: params,
+        }),
+      ];
     });
 
     // Add a index template for SPA pages
     chainConfig.plugin('html-spa').use(HtmlWebpack, [
-      {
-        ...htmlOptions,
+      merge({}, htmlOptions, {
         filename: 'index.spa.html',
         inject: true,
-        templateParameters: {
-          ...htmlOptions.templateParameters,
+        templateParameters: merge({}, htmlOptions.templateParameters, {
           neue: {
             ssr: false,
             client: true,
           },
-        },
-      },
+        }),
+      }),
     ]);
 
     // Remove dev plugins from @vue/cli-service
@@ -246,13 +241,12 @@ class NeueApi {
         .target('node')
         .externals(
           nodeExternals({
-            whitelist: [
-              /\.css$/,
-              /\?vue&type=style/,
-              ...this.api.service.projectOptions.transpileDependencies,
-              ...this.nodeExternalsWhitelist,
-              ...(this.getConfig('nodeExternalsWhitelist') || []),
-            ],
+            whitelist: [].concat(
+              [/\.css$/, /\?vue&type=style/],
+              this.api.service.projectOptions.transpileDependencies || [],
+              this.nodeExternalsWhitelist || [],
+              this.getConfig('nodeExternalsWhitelist') || [],
+            ),
           }),
         )
         .output.filename('server-bundle.js')
