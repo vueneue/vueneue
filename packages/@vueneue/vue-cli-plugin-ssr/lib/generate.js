@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
 const mm = require('micromatch');
+const merge = require('lodash/merge');
 const createRenderer = require('@vueneue/ssr-server/lib/createRenderer');
 const renderRoute = require('@vueneue/ssr-server/lib/renderRoute');
 const spaRoute = require('@vueneue/ssr-server/lib/spaRoute');
@@ -81,7 +82,7 @@ module.exports = async (api, options) => {
       if (finalPath !== '') results.push(finalPath);
 
       if (route.children) {
-        results = [...results, ...getRoutesPaths(route.children, routePath)];
+        results = [].concat(results, getRoutesPaths(route.children, routePath));
       }
     }
 
@@ -99,7 +100,7 @@ module.exports = async (api, options) => {
   }
 
   // Dedupe array
-  generate.paths = [...new Set(generate.paths)];
+  generate.paths = Array.from(new Set(generate.paths));
 
   // Generate all possible paths with defined params
   if (generate.params) {
@@ -122,7 +123,7 @@ module.exports = async (api, options) => {
         }
       });
 
-      generate.paths = [...newPaths];
+      generate.paths = Array.from(newPaths);
     }
   }
 
@@ -229,7 +230,7 @@ const buildPage = async ({
 
     // SSR route
   } else {
-    serverContext = { ...serverContext, ctx };
+    serverContext = merge({}, serverContext, { ctx });
     status = await buildSSRPage({
       options,
       serverContext,

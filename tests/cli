@@ -63,6 +63,10 @@ const waitOnPromise = options => {
       project.cliService('ssr:serve');
       break;
 
+    case 'relink':
+      await ws.relink('@vueneue/vue-cli-plugin-ssr');
+      break;
+
     case 'build':
       project.cliService('ssr:build');
       break;

@@ -2,6 +2,7 @@ import 'isomorphic-fetch';
 import Vue from 'vue';
 import VueApollo from 'vue-apollo';
 import ApolloSSR from 'vue-apollo/ssr';
+import App from '../App.vue';
 
 if (!Vue.prototype.hasOwnProperty('$apollo')) {
   Vue.use(VueApollo);
@@ -37,7 +38,7 @@ export default async ({ appCreated }) => {
           try {
             await ApolloSSR.prefetchAll(
               app.$apolloProvider,
-              matchedComponents,
+              [App, ...matchedComponents],
               {
                 route,
                 store,
