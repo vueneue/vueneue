@@ -1,6 +1,6 @@
 {
   "name": "@vueneue/ssr-server",
-  "version": "0.3.21",
+  "version": "0.3.22",
   "description": "VueNeue SSR server with Koa",
   "main": "lib/index.js",
   "scripts": {
