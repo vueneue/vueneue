@@ -6,7 +6,7 @@ module.exports = (serverContext, ssrContext, html) => {
   let body = html;
   let head = '';
   let bodyAttrs = '';
-  let htmlAttrs = '';
+  let htmlAttrs = 'data-vue-meta-server-rendered ';
 
   // Add Vuex and components data
   body += `<script data-vue-ssr-data>window.__DATA__=${jsonEncode(
@@ -24,8 +24,8 @@ module.exports = (serverContext, ssrContext, html) => {
   if (ssrContext.meta) {
     const metas = ssrContext.meta.inject();
 
-    bodyAttrs = metas.bodyAttrs.text();
-    htmlAttrs = metas.htmlAttrs.text();
+    bodyAttrs += metas.bodyAttrs.text();
+    htmlAttrs += metas.htmlAttrs.text();
 
     // Inject metas to head
     head =
@@ -53,8 +53,8 @@ module.exports = (serverContext, ssrContext, html) => {
   let result = template
     .replace(/data-html-attrs(="")?/, htmlAttrs)
     .replace(/data-body-attrs(="")?/, bodyAttrs)
-    .replace(/<ssr-head\/?>/, head)
-    .replace(/<ssr-body\/?>/, body)
+    .replace(/<ssr-head\s*\/?>/, head)
+    .replace(/<ssr-body\s*\/?>/, body)
     .replace('</ssr-head>', '')
     .replace('</ssr-body>', '');
 
