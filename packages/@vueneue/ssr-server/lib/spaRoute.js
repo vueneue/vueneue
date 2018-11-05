@@ -1,8 +1,8 @@
 module.exports = serverContext => {
   return serverContext.templateSpa
-    .replace(/<ssr-head\/?>/, '')
+    .replace(/<ssr-head\s*\/?>/, '')
     .replace(
-      /<ssr-body\/?>/,
+      /<ssr-body\s*\/?>/,
       `<div id="app"></div>
       <script data-vue-spa>window.__SPA_ROUTE__=true;</script>`,
     )
