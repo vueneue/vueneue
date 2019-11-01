@@ -1,3 +1,5 @@
+# DEPRECATED: go to [UVue](https://universal-vue.github.io/docs/)
+
 <p align="center">
   <img src="https://s3.eu-west-2.amazonaws.com/yabab/vueneue.png" alt="VueNeue">
   <br>
